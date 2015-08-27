@@ -1,0 +1,18 @@
+{
+  "name": "om-axsys-client",
+  "version": "0.1.0",
+  "author": {
+    "name": "Praveen Kumar",
+    "email": "3.pravin@gmail.com"
+  },
+  "scripts": {
+    "test": "gulp --verbose"
+  },
+  "devDependencies": {
+    "chai": "^3.2.0",
+    "gulp": "^3.9.0",
+    "karma": "^0.13.9",
+    "mocha": "^2.2.5",
+    "sinon": "^1.16.1"
+  }
+}
