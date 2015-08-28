@@ -7,11 +7,11 @@
   },
   "scripts": {
     "test": "gulp test lint --verbose"
-
   },
   "devDependencies": {
     "babel": "^5.8.23",
     "babel-eslint": "^4.1.0",
+    "browserify": "^11.0.1",
     "chai": "^3.2.0",
     "eslint": "^1.2.1",
     "eslint-plugin-react": "^3.3.0",
@@ -23,6 +23,7 @@
     "gulp-sourcemaps": "^1.5.2",
     "karma": "^0.13.9",
     "mocha": "^2.2.5",
-    "sinon": "^1.16.1"
+    "sinon": "^1.16.1",
+    "watchify": "^3.3.1"
   }
 }
