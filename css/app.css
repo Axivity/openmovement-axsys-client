@@ -1,0 +1,62 @@
+@media screen and (max-width: 740px){
+    .ax-master-content {
+        border-right: none;
+    }
+}
+
+.row {
+    max-width:120rem;
+}
+
+.ax-ui-content {
+    margin: 10px 0 0 0;
+}
+
+.ax-master-content {
+    border-right:1px solid;
+    border-color: #e1e1e1;
+}
+
+.icon-bar {
+    height: 75%;
+    background-color: white;
+}
+
+.icon-bar > * i {
+    color: black;
+    font-size: 1.2rem;
+}
+
+.list-header-icon {
+    vertical-align: center;
+    text-align: center;
+    display: inline-block;
+    font-size: 2.4rem;
+}
+
+.list-item-icon {
+    font-size:1.2rem;
+    margin: 0 0.2rem 0 0.2rem;
+}
+
+.list-item-icons {
+    margin:0 0.5rem 0 0.2rem;
+}
+
+.list-item-ruler {
+    width: 90%;
+}
+
+.unstyled {
+    list-style: none;
+}
+
+.custom-table {
+    margin: 1rem 0.2rem 0 2rem;
+
+}
+
+#chartdiv {
+    width	: 100%;
+    height	: 500px;
+}
