@@ -6,7 +6,8 @@
     "email": "3.pravin@gmail.com"
   },
   "scripts": {
-    "test": "gulp test lint --verbose"
+    "test": "gulp test lint --verbose",
+    "start": "gulp server --verbose"
   },
   "devDependencies": {
     "babel": "^5.8.23",
@@ -20,6 +21,7 @@
     "gulp-concat": "^2.6.0",
     "gulp-eslint": "^1.0.0",
     "gulp-mocha": "^2.1.3",
+    "gulp-nodemon": "^2.0.4",
     "gulp-sourcemaps": "^1.5.2",
     "karma": "^0.13.9",
     "mocha": "^2.2.5",

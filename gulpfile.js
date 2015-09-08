@@ -8,9 +8,10 @@ var babel       = require("gulp-babel");
 var concat      = require("gulp-concat");
 var mocha       = require('gulp-mocha');
 var eslint      = require('gulp-eslint');
-var spawn       = require('child_process').spawn;
+//var spawn       = require('child_process').spawn;
+var nodemon     = require('gulp-nodemon');
 
-var node;
+//var node;
 
 gulp.task("build-es6", ["test", "lint"], function () {
     return gulp.src(["lib/**/*.js", "src/**/*.js"])
@@ -41,17 +42,27 @@ gulp.task('lint', function() {
         .pipe(eslint.failOnError());
 });
 
+gulp.task('server', function () {
+    'use strict';
+    nodemon({
+        script: 'server.js',
+        ext: 'html js'
+    }).on('restart', function() {
+        console.log('Restarted server');
+    });
 
-gulp.task('server', function() {
-    if (node) node.kill();
-    node = spawn('node', ['server.js'], {stdio: 'inherit'});
-    node.on('close', function (code) {
-        if (code === 8) {
-            gulp.log('Error detected, waiting for changes...');
-        }
-    });
-    gulp.run('server');
-    gulp.watch(['./app.js', './lib/**/*.js'], function() {
-        gulp.run('server')
-    });
 });
+
+//gulp.task('server', function() {
+//    if (node) node.kill();
+//    node = spawn('node', ['server.js'], {stdio: 'inherit'});
+//    node.on('close', function (code) {
+//        if (code === 8) {
+//            gulp.log('Error detected, waiting for changes...');
+//        }
+//    });
+//    gulp.run('server');
+//    gulp.watch(['./app.js', './lib/**/*.js'], function() {
+//        gulp.run('server')
+//    });
+//});
