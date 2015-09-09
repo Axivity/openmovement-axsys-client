@@ -1,13 +1,13 @@
 *********************************************************************************
 Third party software used:
 
-    Jason S. Kerchner base class (http://livingmachines.net)
-    Licensed under BSD license: http://livingmachines.net/license/
+Jason S. Kerchner base class (http://livingmachines.net)
+Licensed under BSD license: http://livingmachines.net/license/
 
-    David Knape & Patrick Mineault Bezier curves drawing logic.
+David Knape & Patrick Mineault Bezier curves drawing logic.
 
-    Code optimization made using Closure Compiling service:
-    http://closure-compiler.appspot.com/home
+Code optimization made using Closure Compiling service:
+http://closure-compiler.appspot.com/home
 
 Libraries used for exporting:
 
@@ -28,4 +28,5 @@ Libraries used for exporting:
 
     SheetJS.js: https://github.com/SheetJS/js-xlsx
     https://github.com/SheetJS/js-xlsx/blob/master/LICENSE
+
 *********************************************************************************
