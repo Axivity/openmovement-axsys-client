@@ -17,10 +17,10 @@ export default class DevicesListItem extends Component {
                 </div>
 
                 <div className="large-9 small-9 medium-9 columns">
-                    <div className="row">
+                    <div className="row clearfix">
 
                         {device.doc.serialNumber}
-                        <span className="list-item-icons">
+                        <span className="list-item-icons right">
                             <a href=""><i className="fi-target-two list-item-icon"></i></a>
                             <a href=""><i className="fi-info list-item-icon"></i></a>
                             <a href=""><i className="fi-battery-half list-item-icon"></i></a>

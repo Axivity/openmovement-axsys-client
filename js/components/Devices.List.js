@@ -15,7 +15,6 @@ export default class DevicesList extends Component {
 
         return (
             <div>
-                {console.log(devices)}
                 { devices.map((device) => {
                     return (
                         <DeviceListItem
