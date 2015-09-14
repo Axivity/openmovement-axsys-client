@@ -5801,14 +5801,14 @@
 	    }
 
 	    /**
-	     * Gets the view, applying any `transforms` to the `start` and `end` positions.
+	     * Gets the components, applying any `transforms` to the `start` and `end` positions.
 	     *
 	     * @private
-	     * @param {number} start The start of the view.
-	     * @param {number} end The end of the view.
-	     * @param {Array} [transforms] The transformations to apply to the view.
+	     * @param {number} start The start of the components.
+	     * @param {number} end The end of the components.
+	     * @param {Array} [transforms] The transformations to apply to the components.
 	     * @returns {Object} Returns an object containing the `start` and `end`
-	     *  positions of the view.
+	     *  positions of the components.
 	     */
 	    function getView(start, end, transforms) {
 	      var index = -1,
@@ -8977,13 +8977,13 @@
 	     * @returns {Object} Returns `object`.
 	     * @example
 	     *
-	     * var view = {
+	     * var components = {
 	     *   'label': 'docs',
 	     *   'onClick': function() { console.log('clicked ' + this.label); }
 	     * };
 	     *
-	     * _.bindAll(view);
-	     * jQuery('#docs').on('click', view.onClick);
+	     * _.bindAll(components);
+	     * jQuery('#docs').on('click', components.onClick);
 	     * // => logs 'clicked docs' when the element is clicked
 	     */
 	    function bindAll(object) {
@@ -15025,7 +15025,7 @@
 
 		// http://www.freesoft.org/CIE/RFC/1942/18.htm
 		// http://www.w3.org/TR/CSS2/tables.html#width-layout
-		// http://dev.w3.org/csswg/css3-tables-algorithms/Overview.src.htm
+		// http://dev.w3.org/csswg/css3-tables-algorithms/Overview.js.htm
 		var minW = autoMin + starMaxMin * starColumns.length;
 		var maxW = autoMax + starMaxMax * starColumns.length;
 		if (minW >= availableWidth) {
@@ -19611,7 +19611,7 @@
 	      this.detectIncompleteChar = utf16DetectIncompleteChar;
 	      break;
 	    case 'base64':
-	      // Base-64 stores 3 bytes in 4 chars, and pads the remainder.
+	      // Base-64 reducers 3 bytes in 4 chars, and pads the remainder.
 	      this.surrogateSize = 3;
 	      this.detectIncompleteChar = base64DetectIncompleteChar;
 	      break;

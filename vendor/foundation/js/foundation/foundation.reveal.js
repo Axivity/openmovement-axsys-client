@@ -433,7 +433,7 @@
           iframe = $('iframe', video);
 
       if (iframe.length > 0) {
-        iframe.attr('data-src', iframe[0].src);
+        iframe.attr('data-js', iframe[0].src);
         iframe.attr('src', iframe.attr('src'));
         video.hide();
       }
@@ -444,9 +444,9 @@
           iframe = video.find('iframe');
 
       if (iframe.length > 0) {
-        var data_src = iframe.attr('data-src');
+        var data_src = iframe.attr('data-js');
         if (typeof data_src === 'string') {
-          iframe[0].src = iframe.attr('data-src');
+          iframe[0].src = iframe.attr('data-js');
         } else {
           var src = iframe[0].src;
           iframe[0].src = undefined;

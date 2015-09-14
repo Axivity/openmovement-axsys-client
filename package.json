@@ -7,11 +7,14 @@
   },
   "scripts": {
     "test": "gulp test lint --verbose",
-    "start": "gulp server --verbose"
+    "start": "gulp server --verbose",
+    "dist": "gulp dist --verbose",
+    "test-dist": "gulp test-dist --verbose"
   },
   "devDependencies": {
     "babel": "^5.8.23",
     "babel-eslint": "^4.1.0",
+    "babelify": "^6.3.0",
     "browserify": "^11.0.1",
     "chai": "^3.2.0",
     "eslint": "^1.2.1",
@@ -23,15 +26,24 @@
     "gulp-mocha": "^2.1.3",
     "gulp-nodemon": "^2.0.4",
     "gulp-sourcemaps": "^1.5.2",
+    "gulp-streamify": "^1.0.2",
+    "gulp-uglify": "^1.4.1",
     "karma": "^0.13.9",
     "mocha": "^2.2.5",
+    "react-redux": "^2.1.1",
+    "reactify": "^1.1.1",
     "sinon": "^1.16.1",
-    "watchify": "^3.3.1"
+    "vinyl-buffer": "^1.0.0",
+    "vinyl-source-stream": "^1.1.0",
+    "watchify": "^3.4.0"
   },
   "dependencies": {
     "angular": "^1.4.5",
     "express.io": "^1.1.13",
     "foundation-sites": "^5.5.2",
+    "react": "^0.13.3",
+    "redux": "^2.0.0",
+    "redux-thunk": "^0.1.0",
     "uglify": "^0.1.5"
   }
 }

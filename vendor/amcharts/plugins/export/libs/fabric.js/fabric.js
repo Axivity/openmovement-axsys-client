@@ -875,7 +875,7 @@ fabric.Collection = {
       boundsOfCurveCache = { },
       _join = Array.prototype.join;
 
-  /* Adapted from http://dxr.mozilla.org/mozilla-central/source/content/svg/content/src/nsSVGPathDataParser.cpp
+  /* Adapted from http://dxr.mozilla.org/mozilla-central/source/content/svg/content/js/nsSVGPathDataParser.cpp
    * by Andrea Bogazzi code is under MPL. if you don't have a copy of the license you can take it here
    * http://mozilla.org/MPL/2.0/
    */
@@ -5336,7 +5336,7 @@ fabric.Pattern = fabric.util.createClass(/** @lends fabric.Pattern.prototype */ 
           this.source = new Function(fabric.util.getFunctionBody(options.source));
         }
         else {
-          // img src string
+          // img js string
           var _this = this;
           this.source = fabric.util.createImage();
           fabric.util.loadImage(options.source, function(img) {
@@ -17166,7 +17166,7 @@ fabric.util.object.extend(fabric.Object.prototype, /** @lends fabric.Object.prot
      * @return {String} String representation of an instance
      */
     toString: function() {
-      return '#<fabric.Image: { src: "' + this.getSrc() + '" }>';
+      return '#<fabric.Image: { js: "' + this.getSrc() + '" }>';
     },
 
     /**

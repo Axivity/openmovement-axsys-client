@@ -8,20 +8,12 @@ var babel       = require("gulp-babel");
 var concat      = require("gulp-concat");
 var mocha       = require('gulp-mocha');
 var eslint      = require('gulp-eslint');
-//var spawn       = require('child_process').spawn;
 var nodemon     = require('gulp-nodemon');
-
-//var node;
-
-gulp.task("build-es6", ["test", "lint"], function () {
-    return gulp.src(["lib/**/*.js", "src/**/*.js"])
-        .pipe(sourcemaps.init())
-        .pipe(babel())
-        .pipe(concat("all.js"))
-        .pipe(sourcemaps.write("."))
-        .pipe(gulp.dest("dist"));
-});
-
+var uglify      = require('gulp-uglify');
+var browserify  = require('browserify');
+var babelify    = require('babelify');
+var source      = require('vinyl-source-stream');
+var buffer      = require('vinyl-buffer');
 
 gulp.task('test', function () {
     var babel_c = require('babel/register');
@@ -36,7 +28,7 @@ gulp.task('test', function () {
 });
 
 gulp.task('lint', function() {
-    return gulp.src('./src/*.js')
+    return gulp.src('./js/*.js')
         .pipe(eslint())
         .pipe(eslint.format())
         .pipe(eslint.failOnError());
@@ -53,16 +45,38 @@ gulp.task('server', function () {
 
 });
 
-//gulp.task('server', function() {
-//    if (node) node.kill();
-//    node = spawn('node', ['server.js'], {stdio: 'inherit'});
-//    node.on('close', function (code) {
-//        if (code === 8) {
-//            gulp.log('Error detected, waiting for changes...');
-//        }
-//    });
-//    gulp.run('server');
-//    gulp.watch(['./app.js', './lib/**/*.js'], function() {
-//        gulp.run('server')
-//    });
-//});
+gulp.task('dist', function() {
+    var options = {
+        entries: ['./js/Index.js'],
+        debug: true
+    };
+
+    browserify(options)
+        .transform(babelify)
+        .bundle()
+        .on('error', function(err) {console.error(err); this.emit('end');} )
+        .pipe(source('all.min.js'))
+        .pipe(buffer())
+        //.pipe(sourcemaps.init({loadMaps: true}))
+        //.pipe(uglify())
+        //.pipe(sourcemaps.write('./'))
+        .pipe(gulp.dest('dist'));
+});
+
+gulp.task('test-dist', function() {
+    var options = {
+        entries: ['./test/test-redux-wiring.js'],
+        debug: true
+    };
+
+    browserify(options)
+        .transform(babelify)
+        .bundle()
+        .on('error', function(err) {console.error(err); this.emit('end');} )
+        .pipe(source('test.min.js'))
+        .pipe(buffer())
+        .pipe(sourcemaps.init({loadMaps: true}))
+        .pipe(uglify())
+        .pipe(sourcemaps.write('./'))
+        .pipe(gulp.dest('dist'));
+});

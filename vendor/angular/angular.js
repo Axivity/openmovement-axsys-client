@@ -446,15 +446,15 @@ function baseExtend(dst, objs, deep) {
  * @kind function
  *
  * @description
- * Extends the destination object `dst` by copying own enumerable properties from the `src` object(s)
- * to `dst`. You can specify multiple `src` objects. If you want to preserve original objects, you can do so
+ * Extends the destination object `dst` by copying own enumerable properties from the `js` object(s)
+ * to `dst`. You can specify multiple `js` objects. If you want to preserve original objects, you can do so
  * by passing an empty object as the target: `var object = angular.extend({}, object1, object2)`.
  *
  * **Note:** Keep in mind that `angular.extend` does not support recursive merge (deep copy). Use
  * {@link angular.merge} for this.
  *
  * @param {Object} dst Destination object.
- * @param {...Object} src Source object(s).
+ * @param {...Object} js Source object(s).
  * @returns {Object} Reference to `dst`.
  */
 function extend(dst) {
@@ -469,15 +469,15 @@ function extend(dst) {
 * @kind function
 *
 * @description
-* Deeply extends the destination object `dst` by copying own enumerable properties from the `src` object(s)
-* to `dst`. You can specify multiple `src` objects. If you want to preserve original objects, you can do so
+* Deeply extends the destination object `dst` by copying own enumerable properties from the `js` object(s)
+* to `dst`. You can specify multiple `js` objects. If you want to preserve original objects, you can do so
 * by passing an empty object as the target: `var object = angular.merge({}, object1, object2)`.
 *
 * Unlike {@link angular.extend extend()}, `merge()` recursively descends into object properties of source
 * objects, performing a deep copy.
 *
 * @param {Object} dst Destination object.
-* @param {...Object} src Source object(s).
+* @param {...Object} js Source object(s).
 * @returns {Object} Reference to `dst`.
 */
 function merge(dst) {
@@ -1596,7 +1596,7 @@ function angularInit(element, bootstrap) {
  *   {{greeting}}
  * </div>
  *
- * <script src="angular.js"></script>
+ * <script js="angular.js"></script>
  * <script>
  *   var app = angular.module('demo', [])
  *   .controller('WelcomeController', function($scope) {
@@ -2996,7 +2996,7 @@ function jqLiteDocumentLoaded(action, win) {
   win = win || window;
   if (win.document.readyState === 'complete') {
     // Force the action to be run async for consistent behaviour
-    // from the action's point of view
+    // from the action's point of components
     // i.e. it will definitely not be in a $apply
     win.setTimeout(action);
   } else {
@@ -4942,7 +4942,7 @@ var $$CoreAnimateQueueProvider = function() {
  *
  * In order to enable animations the `ngAnimate` module has to be loaded.
  *
- * To see the functional implementation check out `src/ngAnimate/animate.js`.
+ * To see the functional implementation check out `js/ngAnimate/animate.js`.
  */
 var $AnimateProvider = ['$provide', function($provide) {
   var provider = this;
@@ -6758,7 +6758,7 @@ function $TemplateCacheProvider() {
  *   allowing other directives to read the interpolated value.
  *
  * * *Observing interpolated attributes:* Use `$observe` to observe the value changes of attributes
- *   that contain interpolation (e.g. `src="{{bar}}"`). Not only is this very efficient but it's also
+ *   that contain interpolation (e.g. `js="{{bar}}"`). Not only is this very efficient but it's also
  *   the only way to easily get the actual value because during the linking phase the interpolation
  *   hasn't been evaluated yet and so the value is at this time set to `undefined`.
  *
@@ -6878,10 +6878,10 @@ function $TemplateCacheProvider() {
  * Calling the linking function returns the element of the template. It is either the original
  * element passed in, or the clone of the element if the `cloneAttachFn` is provided.
  *
- * After linking the view is not updated until after a call to $digest which typically is done by
+ * After linking the components is not updated until after a call to $digest which typically is done by
  * Angular automatically.
  *
- * If you need access to the bound view, there are two ways to do it:
+ * If you need access to the bound components, there are two ways to do it:
  *
  * - If you are not asking the linking function to clone the template, create the DOM element(s)
  *   before you send them to the compiler and keep this reference around.
@@ -6889,7 +6889,7 @@ function $TemplateCacheProvider() {
  *     var element = $compile('<p>{{total}}</p>')(scope);
  *   ```
  *
- * - if on the other hand, you need the element to be cloned, the view reference from the original
+ * - if on the other hand, you need the element to be cloned, the components reference from the original
  *   example would not point to the clone, but rather to the original template that was cloned. In
  *   this case, you can access the clone via the cloneAttachFn:
  *   ```js
@@ -6922,7 +6922,7 @@ function $CompileProvider($provide, $$sanitizeUriProvider) {
       Suffix = 'Directive',
       COMMENT_DIRECTIVE_REGEXP = /^\s*directive\:\s*([\w\-]+)\s+(.*)$/,
       CLASS_DIRECTIVE_REGEXP = /(([\w\-]+)(?:\:([^;]+))?;?)/,
-      ALL_OR_NOTHING_ATTRS = makeMap('ngSrc,ngSrcset,src,srcset'),
+      ALL_OR_NOTHING_ATTRS = makeMap('ngSrc,ngSrcset,js,srcset'),
       REQUIRE_PREFIX_REGEXP = /^(?:(\^\^?)?(\?)?(\^\^?)?)?/;
 
   // Ref: http://developers.whatwg.org/webappapis.html#event-handler-idl-attributes
@@ -7104,11 +7104,11 @@ function $CompileProvider($provide, $$sanitizeUriProvider) {
    *
    * @description
    * Retrieves or overrides the default regular expression that is used for whitelisting of safe
-   * urls during img[src] sanitization.
+   * urls during img[js] sanitization.
    *
    * The sanitization is a security measure aimed at prevent XSS attacks via html links.
    *
-   * Any url about to be assigned to img[src] via data-binding is first normalized and turned into
+   * Any url about to be assigned to img[js] via data-binding is first normalized and turned into
    * an absolute url. Afterwards, the url is matched against the `imgSrcSanitizationWhitelist`
    * regular expression. If a match is found, the original url is written into the dom. Otherwise,
    * the absolute url is prefixed with `'unsafe:'` string and only then is it written into the DOM.
@@ -7300,7 +7300,7 @@ function $CompileProvider($provide, $$sanitizeUriProvider) {
 
         if ((nodeName === 'a' && key === 'href') ||
             (nodeName === 'img' && key === 'src')) {
-          // sanitize a[href] and img[src] values
+          // sanitize a[href] and img[js] values
           this[key] = value = $$sanitizeUri(value, key === 'src');
         } else if (nodeName === 'img' && key === 'srcset') {
           // sanitize img[srcset] values
@@ -9846,7 +9846,7 @@ function $HttpProvider() {
      *
      * To enable caching, set the request configuration `cache` property to `true` (to use default
      * cache) or to a custom cache object (built with {@link ng.$cacheFactory `$cacheFactory`}).
-     * When the cache is enabled, `$http` stores the response from the server in the specified
+     * When the cache is enabled, `$http` reducers the response from the server in the specified
      * cache. The next time the same request is made, the response is served from the cache without
      * sending a request to the server.
      *
@@ -10971,7 +10971,7 @@ function $InterpolateProvider() {
 
       // Concatenating expressions makes it hard to reason about whether some combination of
       // concatenated values are unsafe to use and could easily lead to XSS.  By requiring that a
-      // single expression be used for iframe[src], object[src], etc., we ensure that the value
+      // single expression be used for iframe[js], object[js], etc., we ensure that the value
       // that's used is assigned or constructed by some JS code somewhere that is more testable or
       // make it obvious that you bound the value to some user controlled value.  This helps reduce
       // the load when auditing for XSS issues.
@@ -15000,7 +15000,7 @@ function $$RAFProvider() { //rAF
  *
  * Every application has a single root {@link ng.$rootScope.Scope scope}.
  * All other scopes are descendant scopes of the root scope. Scopes provide separation
- * between the model and the view, via a mechanism for watching the model for changes.
+ * between the model and the components, via a mechanism for watching the model for changes.
  * They also provide an event emission/broadcast and subscription facility. See the
  * {@link guide/scope developer guide on scopes}.
  */
@@ -16321,11 +16321,11 @@ function $$SanitizeUriProvider() {
   /**
    * @description
    * Retrieves or overrides the default regular expression that is used for whitelisting of safe
-   * urls during img[src] sanitization.
+   * urls during img[js] sanitization.
    *
    * The sanitization is a security measure aimed at prevent XSS attacks via html links.
    *
-   * Any url about to be assigned to img[src] via data-binding is first normalized and turned into
+   * Any url about to be assigned to img[js] via data-binding is first normalized and turned into
    * an absolute url. Afterwards, the url is matched against the `imgSrcSanitizationWhitelist`
    * regular expression. If a match is found, the original url is written into the dom. Otherwise,
    * the absolute url is prefixed with `'unsafe:'` string and only then is it written into the DOM.
@@ -16373,7 +16373,7 @@ var SCE_CONTEXTS = {
   CSS: 'css',
   URL: 'url',
   // RESOURCE_URL is a subtype of URL used in contexts where a privileged resource is sourced from a
-  // url.  (e.g. ng-include, script src, templateUrl)
+  // url.  (e.g. ng-include, script js, templateUrl)
   RESOURCE_URL: 'resourceUrl',
   JS: 'js'
 };
@@ -16631,7 +16631,7 @@ function $SceDelegateProvider() {
      *
      * @description
      * Returns an object that is trusted by angular for use in specified strict
-     * contextual escaping contexts (such as ng-bind-html, ng-include, any src
+     * contextual escaping contexts (such as ng-bind-html, ng-include, any js
      * attribute interpolation, any dom event binding attribute interpolation
      * such as for onclick,  etc.) that uses the provided value.
      * See {@link ng.$sce $sce} for enabling strict contextual escaping.
@@ -16859,7 +16859,7 @@ function $SceDelegateProvider() {
  * call `$sce.trustAs` on them (remember to include the `ngSanitize` module) (e.g.
  * `<div ng-bind-html="'<b>implicitly trusted</b>'"></div>`) just works.
  *
- * Additionally, `a[href]` and `img[src]` automatically sanitize their URLs and do not pass them
+ * Additionally, `a[href]` and `img[js]` automatically sanitize their URLs and do not pass them
  * through {@link ng.$sce#getTrusted $sce.getTrusted}.  SCE doesn't play a role here.
  *
  * The included {@link ng.$sceDelegate $sceDelegate} comes with sane defaults to allow you to load
@@ -16880,8 +16880,8 @@ function $SceDelegateProvider() {
  * |---------------------|----------------|
  * | `$sce.HTML`         | For HTML that's safe to source into the application.  The {@link ng.directive:ngBindHtml ngBindHtml} directive uses this context for bindings. If an unsafe value is encountered and the {@link ngSanitize $sanitize} module is present this will sanitize the value instead of throwing an error. |
  * | `$sce.CSS`          | For CSS that's safe to source into the application.  Currently unused.  Feel free to use it in your own directives. |
- * | `$sce.URL`          | For URLs that are safe to follow as links.  Currently unused (`<a href=` and `<img src=` sanitize their urls and don't constitute an SCE context. |
- * | `$sce.RESOURCE_URL` | For URLs that are not only safe to follow as links, but whose contents are also safe to include in your application.  Examples include `ng-include`, `src` / `ngSrc` bindings for tags other than `IMG` (e.g. `IFRAME`, `OBJECT`, etc.)  <br><br>Note that `$sce.RESOURCE_URL` makes a stronger statement about the URL than `$sce.URL` does and therefore contexts requiring values trusted for `$sce.RESOURCE_URL` can be used anywhere that values trusted for `$sce.URL` are required. |
+ * | `$sce.URL`          | For URLs that are safe to follow as links.  Currently unused (`<a href=` and `<img js=` sanitize their urls and don't constitute an SCE context. |
+ * | `$sce.RESOURCE_URL` | For URLs that are not only safe to follow as links, but whose contents are also safe to include in your application.  Examples include `ng-include`, `js` / `ngSrc` bindings for tags other than `IMG` (e.g. `IFRAME`, `OBJECT`, etc.)  <br><br>Note that `$sce.RESOURCE_URL` makes a stronger statement about the URL than `$sce.URL` does and therefore contexts requiring values trusted for `$sce.RESOURCE_URL` can be used anywhere that values trusted for `$sce.URL` are required. |
  * | `$sce.JS`           | For JavaScript that is safe to execute in your application's context.  Currently unused.  Feel free to use it in your own directives. |
  *
  * ## Format of items in {@link ng.$sceDelegateProvider#resourceUrlWhitelist resourceUrlWhitelist}/{@link ng.$sceDelegateProvider#resourceUrlBlacklist Blacklist} <a name="resourceUrlPatternItem"></a>
@@ -17157,7 +17157,7 @@ function $SceProvider() {
      * @description
      * Delegates to {@link ng.$sceDelegate#trustAs `$sceDelegate.trustAs`}.  As such,
      * returns an object that is trusted by angular for use in specified strict contextual
-     * escaping contexts (such as ng-bind-html, ng-include, any src attribute
+     * escaping contexts (such as ng-bind-html, ng-include, any js attribute
      * interpolation, any dom event binding attribute interpolation such as for onclick,  etc.)
      * that uses the provided value.  See * {@link ng.$sce $sce} for enabling strict contextual
      * escaping.
@@ -17509,7 +17509,7 @@ var $compileMinErr = minErr('$compile');
  *
  * @description
  * The `$templateRequest` service runs security checks then downloads the provided template using
- * `$http` and, upon success, stores the contents inside of `$templateCache`. If the HTTP request
+ * `$http` and, upon success, reducers the contents inside of `$templateCache`. If the HTTP request
  * fails or the response data of the HTTP request is empty, a `$compile` error will be thrown (the
  * exception can be thwarted by setting the 2nd parameter of the function to true). Note that the
  * contents of `$templateCache` are trusted, so the call to `$sce.getTrustedUrl(tpl)` is omitted
@@ -19546,19 +19546,19 @@ var htmlAnchorDirective = valueFn({
  * @priority 99
  *
  * @description
- * Using Angular markup like `{{hash}}` in a `src` attribute doesn't
+ * Using Angular markup like `{{hash}}` in a `js` attribute doesn't
  * work right: The browser will fetch from the URL with the literal
  * text `{{hash}}` until Angular replaces the expression inside
  * `{{hash}}`. The `ngSrc` directive solves this problem.
  *
  * The buggy way to write it:
  * ```html
- * <img src="http://www.gravatar.com/avatar/{{hash}}" alt="Description"/>
+ * <img js="http://www.gravatar.com/avatar/{{hash}}" alt="Description"/>
  * ```
  *
  * The correct way to write it:
  * ```html
- * <img ng-src="http://www.gravatar.com/avatar/{{hash}}" alt="Description" />
+ * <img ng-js="http://www.gravatar.com/avatar/{{hash}}" alt="Description" />
  * ```
  *
  * @element IMG
@@ -19848,7 +19848,7 @@ forEach(ALIASED_ATTR, function(htmlAttr, ngAttr) {
   };
 });
 
-// ng-src, ng-srcset, ng-href are interpolated
+// ng-js, ng-srcset, ng-href are interpolated
 forEach(['src', 'srcset', 'href'], function(attrName) {
   var normalized = directiveNormalize('ng-' + attrName);
   ngAttributeAliasDirectives[normalized] = function() {
@@ -19875,8 +19875,8 @@ forEach(['src', 'srcset', 'href'], function(attrName) {
 
           attr.$set(name, value);
 
-          // on IE, if "ng:src" directive declaration is used and "src" attribute doesn't exist
-          // then calling element.setAttribute('src', 'foo') doesn't do anything, so we need
+          // on IE, if "ng:js" directive declaration is used and "js" attribute doesn't exist
+          // then calling element.setAttribute('js', 'foo') doesn't do anything, so we need
           // to set the property as well to achieve the desired effect.
           // we use attr[attrName] value since $set can sanitize the url.
           if (msie && propName) element.prop(propName, attr[name]);
@@ -20452,7 +20452,7 @@ var inputType = {
    * @param {number=} ngMinlength Sets `minlength` validation error key if the value is shorter than
    *    minlength.
    * @param {number=} ngMaxlength Sets `maxlength` validation error key if the value is longer than
-   *    maxlength. Setting the attribute to a negative or non-numeric value, allows view values of
+   *    maxlength. Setting the attribute to a negative or non-numeric value, allows components values of
    *    any length.
    * @param {string=} pattern Similar to `ngPattern` except that the attribute value is the actual string
    *    that contains the regular expression body that will be converted to a regular expression
@@ -20925,7 +20925,7 @@ var inputType = {
    *
    * The model must always be a Date object, otherwise Angular will throw an error.
    * Invalid `Date` objects (dates whose `getTime()` is `NaN`) will be rendered as an empty string.
-   * If the model is not set to the first of the month, the next view to model update will set it
+   * If the model is not set to the first of the month, the next components to model update will set it
    * to the first of the month.
    *
    * The timezone to be used to read/write the `Date` instance in the model can be defined using
@@ -21031,7 +21031,7 @@ var inputType = {
    * [HTML5 specification](https://html.spec.whatwg.org/multipage/forms.html#number-state-%28type=number%29),
    * `input[number]` does not work as expected with {@link ngModelOptions `ngModelOptions.allowInvalid`}.
    * If a non-number is entered in the input, the browser will report the value as an empty string,
-   * which means the view / model values in `ngModel` and subsequently the scope value
+   * which means the components / model values in `ngModel` and subsequently the scope value
    * will also be an empty string.
    *
    *
@@ -21046,7 +21046,7 @@ var inputType = {
    * @param {number=} ngMinlength Sets `minlength` validation error key if the value is shorter than
    *    minlength.
    * @param {number=} ngMaxlength Sets `maxlength` validation error key if the value is longer than
-   *    maxlength. Setting the attribute to a negative or non-numeric value, allows view values of
+   *    maxlength. Setting the attribute to a negative or non-numeric value, allows components values of
    *    any length.
    * @param {string=} pattern Similar to `ngPattern` except that the attribute value is the actual string
    *    that contains the regular expression body that will be converted to a regular expression
@@ -21144,7 +21144,7 @@ var inputType = {
    * @param {number=} ngMinlength Sets `minlength` validation error key if the value is shorter than
    *    minlength.
    * @param {number=} ngMaxlength Sets `maxlength` validation error key if the value is longer than
-   *    maxlength. Setting the attribute to a negative or non-numeric value, allows view values of
+   *    maxlength. Setting the attribute to a negative or non-numeric value, allows components values of
    *    any length.
    * @param {string=} pattern Similar to `ngPattern` except that the attribute value is the actual string
    *    that contains the regular expression body that will be converted to a regular expression
@@ -21243,7 +21243,7 @@ var inputType = {
    * @param {number=} ngMinlength Sets `minlength` validation error key if the value is shorter than
    *    minlength.
    * @param {number=} ngMaxlength Sets `maxlength` validation error key if the value is longer than
-   *    maxlength. Setting the attribute to a negative or non-numeric value, allows view values of
+   *    maxlength. Setting the attribute to a negative or non-numeric value, allows components values of
    *    any length.
    * @param {string=} pattern Similar to `ngPattern` except that the attribute value is the actual string
    *    that contains the regular expression body that will be converted to a regular expression
@@ -21883,7 +21883,7 @@ function checkboxInputType(scope, element, attr, ctrl, $sniffer, $browser, $filt
  * @param {number=} ngMinlength Sets `minlength` validation error key if the value is shorter than
  *    minlength.
  * @param {number=} ngMaxlength Sets `maxlength` validation error key if the value is longer than
- *    maxlength. Setting the attribute to a negative or non-numeric value, allows view values of any
+ *    maxlength. Setting the attribute to a negative or non-numeric value, allows components values of any
  *    length.
  * @param {string=} ngPattern Sets `pattern` validation error key if the ngModel value does not match
  *    a RegExp found by evaluating the Angular expression given in the attribute value.
@@ -21922,7 +21922,7 @@ function checkboxInputType(scope, element, attr, ctrl, $sniffer, $browser, $filt
  * @param {number=} ngMinlength Sets `minlength` validation error key if the value is shorter than
  *    minlength.
  * @param {number=} ngMaxlength Sets `maxlength` validation error key if the value is longer than
- *    maxlength. Setting the attribute to a negative or non-numeric value, allows view values of any
+ *    maxlength. Setting the attribute to a negative or non-numeric value, allows components values of any
  *    length.
  * @param {string=} ngPattern Sets `pattern` validation error key if the ngModel value does not match
  *    a RegExp found by evaluating the Angular expression given in the attribute value.
@@ -22388,7 +22388,7 @@ var ngBindHtmlDirective = ['$sce', '$parse', '$compile', function($sce, $parse, 
  *     var counter = element(by.binding('counter'));
  *     var debug = element(by.binding('confirmed'));
  *
- *     it('should evaluate the expression if changing from view', function() {
+ *     it('should evaluate the expression if changing from components', function() {
  *       expect(counter.getText()).toContain('0');
  *
  *       element(by.id('ng-change-example1')).click();
@@ -22709,7 +22709,7 @@ function classDirective(name, selector) {
    The ngClass directive still supports CSS3 Transitions/Animations even if they do not follow the ngAnimate CSS naming structure.
    Upon animation ngAnimate will apply supplementary CSS classes to track the start and end of an animation, but this will not hinder
    any pre-existing CSS transitions already on the element. To get an idea of what happens during a class-based animation, be sure
-   to view the step by step details of {@link $animate#addClass $animate.addClass} and
+   to components the step by step details of {@link $animate#addClass $animate.addClass} and
    {@link $animate#removeClass $animate.removeClass}.
  */
 var ngClassDirective = classDirective('', true);
@@ -22822,7 +22822,7 @@ var ngClassEvenDirective = classDirective('Even', 1);
  *
  * The directive can be applied to the `<body>` element, but the preferred usage is to apply
  * multiple `ngCloak` directives to small portions of the page to permit progressive rendering
- * of the browser view.
+ * of the browser components.
  *
  * `ngCloak` works in cooperation with the following css rule embedded within `angular.js` and
  * `angular.min.js`.
@@ -22874,7 +22874,7 @@ var ngCloakDirective = ngDirective({
  * @name ngController
  *
  * @description
- * The `ngController` directive attaches a controller class to the view. This is a key aspect of how angular
+ * The `ngController` directive attaches a controller class to the components. This is a key aspect of how angular
  * supports the principles behind the Model-View-Controller design pattern.
  *
  * MVC components in angular:
@@ -23136,8 +23136,8 @@ var ngControllerDirective = [function() {
  *
  * ```
  * Refused to evaluate a string as JavaScript because 'unsafe-eval' is not an allowed source of
- * script in the following Content Security Policy directive: "default-src 'self'". Note that
- * 'script-src' was not explicitly set, so 'default-src' is used as a fallback.
+ * script in the following Content Security Policy directive: "default-js 'self'". Note that
+ * 'script-js' was not explicitly set, so 'default-js' is used as a fallback.
  * ```
  *
  * This error is harmless but annoying. To prevent the error from showing up, put the `ngCsp`
@@ -23946,8 +23946,8 @@ var ngIfDirective = ['$animate', function($animate) {
  * @scope
  * @priority 400
  *
- * @param {string} ngInclude|src angular expression evaluating to URL. If the source is a string constant,
- *                 make sure you wrap it in **single** quotes, e.g. `src="'myPartialTemplate.html'"`.
+ * @param {string} ngInclude|js angular expression evaluating to URL. If the source is a string constant,
+ *                 make sure you wrap it in **single** quotes, e.g. `js="'myPartialTemplate.html'"`.
  * @param {string=} onload Expression to evaluate when a new partial is loaded.
  *
  * @param {string=} autoscroll Whether `ngInclude` should call {@link ng.$anchorScroll
@@ -24425,7 +24425,7 @@ var ngModelMinErr = minErr('ngModel');
  * @ngdoc type
  * @name ngModel.NgModelController
  *
- * @property {string} $viewValue Actual string value in the view.
+ * @property {string} $viewValue Actual string value in the components.
  * @property {*} $modelValue The value in the model that the control is bound to.
  * @property {Array.<Function>} $parsers Array of functions to execute, as a pipeline, whenever
        the control reads value from the DOM. The functions are called in array order, each passing
@@ -24499,7 +24499,7 @@ is set to `true`. The parse error is stored in `ngModel.$error.parse`.
  * ```
  *
  * @property {Array.<Function>} $viewChangeListeners Array of functions to execute whenever the
- *     view value has changed. It is called with no arguments, and its return value is ignored.
+ *     components value has changed. It is called with no arguments, and its return value is ignored.
  *     This can be used in place of additional $watches against the model value.
  *
  * @property {Object} $error An object hash with all failing validator ids as keys.
@@ -24623,7 +24623,7 @@ var NgModelController = ['$scope', '$exceptionHandler', '$attrs', '$element', '$
     function($scope, $exceptionHandler, $attr, $element, $parse, $animate, $timeout, $rootScope, $q, $interpolate) {
   this.$viewValue = Number.NaN;
   this.$modelValue = Number.NaN;
-  this.$$rawModelValue = undefined; // stores the parsed modelValue / model set from scope regardless of validity.
+  this.$$rawModelValue = undefined; // reducers the parsed modelValue / model set from scope regardless of validity.
   this.$validators = {};
   this.$asyncValidators = {};
   this.$parsers = [];
@@ -24680,12 +24680,12 @@ var NgModelController = ['$scope', '$exceptionHandler', '$attrs', '$element', '$
    * @name ngModel.NgModelController#$render
    *
    * @description
-   * Called when the view needs to be updated. It is expected that the user of the ng-model
+   * Called when the components needs to be updated. It is expected that the user of the ng-model
    * directive will implement this method.
    *
    * The `$render()` method is invoked in the following situations:
    *
-   * * `$rollbackViewValue()` is called.  If we are rolling back the view value to the last
+   * * `$rollbackViewValue()` is called.  If we are rolling back the components value to the last
    *   committed value then `$render()` is called to update the input control.
    * * The value referenced by `ng-model` is changed programmatically and both the `$modelValue` and
    *   the `$viewValue` are different from last time.
@@ -24916,8 +24916,8 @@ var NgModelController = ['$scope', '$exceptionHandler', '$attrs', '$element', '$
 
     var viewValue = ctrl.$$lastCommittedViewValue;
     // Note: we use the $$rawModelValue as $modelValue might have been
-    // set to undefined during a view -> model update that found validation
-    // errors. We can't parse the view here, since that could change
+    // set to undefined during a components -> model update that found validation
+    // errors. We can't parse the components here, since that could change
     // the model although neither viewValue nor the model on the scope changed
     var modelValue = ctrl.$$rawModelValue;
 
@@ -25051,7 +25051,7 @@ var NgModelController = ['$scope', '$exceptionHandler', '$attrs', '$element', '$
 
     $timeout.cancel(pendingDebounce);
 
-    // If the view value has not changed then we should just exit, except in the case where there is
+    // If the components value has not changed then we should just exit, except in the case where there is
     // a native validator on the element. In this case the validation state may have changed even though
     // the viewValue has stayed empty.
     if (ctrl.$$lastCommittedViewValue === viewValue && (viewValue !== '' || !ctrl.$$hasNativeValidators)) {
@@ -25129,9 +25129,9 @@ var NgModelController = ['$scope', '$exceptionHandler', '$attrs', '$element', '$
    * @name ngModel.NgModelController#$setViewValue
    *
    * @description
-   * Update the view value.
+   * Update the components value.
    *
-   * This method should be called when an input directive want to change the view value; typically,
+   * This method should be called when an input directive want to change the components value; typically,
    * this is done from within a DOM event handler.
    *
    * For example {@link ng.directive:input input} calls it when the value of the input changes and
@@ -25161,7 +25161,7 @@ var NgModelController = ['$scope', '$exceptionHandler', '$attrs', '$element', '$
    *
    * Note that calling this function does not trigger a `$digest`.
    *
-   * @param {string} value Value from the view.
+   * @param {string} value Value from the components.
    * @param {string} trigger Event that triggered the update.
    */
   this.$setViewValue = function(value, trigger) {
@@ -25208,7 +25208,7 @@ var NgModelController = ['$scope', '$exceptionHandler', '$attrs', '$element', '$
   // 3. ng-change kicks in and reverts scope value to 'a'
   //    -> scope value did not change since the last digest as
   //       ng-change executes in apply phase
-  // 4. view should be changed back to 'a'
+  // 4. components should be changed back to 'a'
   $scope.$watch(function ngModelWatch() {
     var modelValue = ngModelGet($scope);
 
@@ -25255,7 +25255,7 @@ var NgModelController = ['$scope', '$exceptionHandler', '$attrs', '$element', '$
  *
  * `ngModel` is responsible for:
  *
- * - Binding the view into the model, which other directives such as `input`, `textarea` or `select`
+ * - Binding the components into the model, which other directives such as `input`, `textarea` or `select`
  *   require.
  * - Providing validation behavior (i.e. required, number, email, url).
  * - Keeping the state of the control (valid/invalid, dirty/pristine, touched/untouched, validation errors).
@@ -25363,7 +25363,7 @@ var NgModelController = ['$scope', '$exceptionHandler', '$attrs', '$element', '$
  * function that returns a representation of the model when called with zero arguments, and sets
  * the internal state of a model when called with an argument. It's sometimes useful to use this
  * for models that have an internal representation that's different from what the model exposes
- * to the view.
+ * to the components.
  *
  * <div class="alert alert-success">
  * **Best Practice:** It's best to keep getters fast because Angular is likely to call them more
@@ -25475,7 +25475,7 @@ var DEFAULT_REGEXP = /(\s+|^)default(\s+|$)/;
  * events that will trigger a model update and/or a debouncing delay so that the actual update only
  * takes place when a timer expires; this timer will be reset after another change takes place.
  *
- * Given the nature of `ngModelOptions`, the value displayed inside input fields in the view might
+ * Given the nature of `ngModelOptions`, the value displayed inside input fields in the components might
  * be different from the value in the actual model. This means that if you update the model you
  * should also invoke {@link ngModel.NgModelController `$rollbackViewValue`} on the relevant input field in
  * order to make sure it is synchronized with the model and that any debounced action is canceled.
@@ -26593,7 +26593,7 @@ var ngOptionsDirective = ['$compile', '$parse', function($compile, $parse) {
  * Notice that we are still using two plural categories(one, other), but we added
  * three explicit number rules 0, 1 and 2.
  * When one person, perhaps John, views the document, "John is viewing" will be shown.
- * When three people view the document, no explicit number rule is found, so
+ * When three people components the document, no explicit number rule is found, so
  * an offset of 2 is taken off 3, and Angular uses 1 to decide the plural category.
  * In this case, plural category 'one' is matched and "John, Mary and one other person are viewing"
  * is shown.
@@ -27969,7 +27969,7 @@ var ngTranscludeDirective = ngDirective({
       </script>
 
       <a ng-click="currentTpl='/tpl.html'" id="tpl-link">Load inlined template</a>
-      <div id="tpl-content" ng-include src="currentTpl"></div>
+      <div id="tpl-content" ng-include js="currentTpl"></div>
     </file>
     <file name="protractor.js" type="protractor">
       it('should load template defined inside script tag', function() {
