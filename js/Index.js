@@ -11,30 +11,61 @@ import { Provider } from 'react-redux';
 
 /* internal imports*/
 import App from './containers/AxsysApp';
-import { addDevice } from './actions/actionCreators';
+import { addDevice, removeDevice } from './actions/actionCreators';
 import AXApi from './ax-client';
 import axsysApp from './reducers/reducers';
 
-console.log(axsysApp);
-
-let api = new AXApi();
 let store = createStore(axsysApp);
+
+let api = new AXApi(
+    onDeviceAdded(store),
+    onDeviceRemoved(store),
+    onConnected(store),
+    onDisconnected(store)
+);
+
 console.log(store.getState());
 
-api.getDevices((allDevices) => {
-    console.log(allDevices);
-    allDevices.devices.forEach((aDevice) => {
-        store.dispatch(addDevice(aDevice));
-    });
+function onDeviceAdded(store) {
+    return (device) => {
+        store.dispatch(addDevice(device));
+    }
+}
 
-    React.render(
-        <Provider store={store}>
-            {() => <App />}
-        </Provider>,
-        document.getElementById('devicesList')
-    );
-});
+function onDeviceRemoved(store) {
+    return (device) => {
+        store.dispatch(removeDevice(device));
+    }
+}
 
+function onDisconnected(store) {
+    return () => {
+        let devices = store.getState().devices;
+        devices.map((device) => {
+            store.dispatch(removeDevice(device));
+        });
+    }
+}
+
+function onConnected(store) {
+    console.log('On connected');
+    return () => {
+        console.log('On connected 2');
+        api.getDevices((allDevices) => {
+            console.log(allDevices);
+            allDevices.devices.forEach((aDevice) => {
+                store.dispatch(addDevice(aDevice));
+            });
+        });
+    }
+}
+
+React.render(
+    <Provider store={store}>
+        {() => <App />}
+    </Provider>,
+    document.getElementById('devicesList')
+);
 
 
 

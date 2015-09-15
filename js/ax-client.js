@@ -3,8 +3,16 @@
  */
 
 export default class AXApi {
-    constructor() {
-        this.api = new AX.API();
+    constructor(onDeviceAdded,
+                onDeviceRemoved,
+                onConnected,
+                onDisconnected) {
+
+        this.api = new AX.API(
+            onDeviceAdded,
+            onDeviceRemoved,
+            onConnected,
+            onDisconnected);
     }
 
     getDevices(callback) {
@@ -14,6 +22,7 @@ export default class AXApi {
             })
         });
     }
+
 }
 
 

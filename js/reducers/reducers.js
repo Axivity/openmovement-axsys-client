@@ -3,31 +3,45 @@
  */
 
 import { combineReducers } from 'redux';
-import { ADD_DEVICE } from '../constants/actionTypes';
+import { ADD_DEVICE, REMOVE_DEVICE } from '../constants/actionTypes';
 import * as actions from '../actions/actionCreators';
 
-let initialState = {
-    devices: []
-};
+function devices(state = [], action = null) {
+    console.log(state);
 
-function devices(state, action) {
+    console.log(action.type);
+
     switch (action.type) {
         case ADD_DEVICE:
-            return [...state, {
-                device: action.device,
-                configured: false
-            }];
+            return [...state, action.device];
+            //return [...state, {
+            //    device: action.device
+            //}];
+            //{
+            //    devices: [
+            //        // copy original state
+            //        ...state,
+            //
+            //        // add new device
+            //        {
+            //            device: action.device,
+            //            configured: false
+            //        }
+            //    ]
+            //};
+
+        case REMOVE_DEVICE:
+            console.log(state);
+            console.log(action.device);
+            // remove device from state and return new state
+            return state.filter(device =>
+                device.serialNumber !== action.device.serialNumber
+            );
+
         default:
-            return initialState;
+            return state;
     }
 }
-
-//export default function axsysApp(state, action) {
-//    console.log(state);
-//    return {
-//        devices: devices(state.devices, action)
-//    }
-//}
 
 export default combineReducers({
    devices

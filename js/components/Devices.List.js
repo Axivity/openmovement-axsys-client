@@ -21,8 +21,8 @@ export default class DevicesList extends Component {
                 { devices.map((device) => {
                     return (
                         <DeviceListItem
-                            key={device.device._id}
-                            device={device.device}
+                            key={device._id}
+                            device={device}
                             actions={actions}
                         />
                     );
