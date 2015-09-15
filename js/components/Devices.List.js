@@ -24,6 +24,7 @@ export default class DevicesList extends Component {
                         />
                     );
                 }) }
+
             </div>
         );
 

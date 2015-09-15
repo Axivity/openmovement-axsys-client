@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="vendor/foundation/css/foundation.min.css" />
     <link rel="stylesheet" href="vendor/foundation-icons/foundation-icons.css" />
     <link rel="stylesheet" href="vendor/amcharts/plugins/export/export.css" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <!--<link rel="stylesheet" href="vendor/chartist/dist/chartist.min.css" />-->
     <link rel="stylesheet" href="css/app.css" />
 
@@ -50,20 +51,25 @@
     <div class="small-12 medium-4 large-4 columns ax-master-content" data-equalizer-watch>
 
         <div class="icon-bar five-up">
+            <a class="item" data-dropdown="drop1" aria-controls="drop1" aria-expanded="false">
+                <i class="material-icons">check_box_outline_blank</i>Select &raquo;
+            </a>
+            <ul id="drop1" class="f-dropdown" data-dropdown-content aria-hidden="true" tabindex="-1">
+                <li><a href="#">Select All</a></li>
+                <li><a href="#">Clear All</a></li>
+                <li><a href="#">Select Inverse</a></li>
+            </ul>
             <a class="item">
-                <i class="fi-home"></i>
+                <i class="material-icons">radio_button_checked</i>Record
             </a>
             <a class="item">
-                <i class="fi-bookmark"></i>
+                <i class="material-icons">stop</i>Stop
             </a>
             <a class="item">
-                <i class="fi-info"></i>
+                <i class="material-icons">my_location</i>Identify
             </a>
             <a class="item">
-                <i class="fi-mail"></i>
-            </a>
-            <a class="item">
-                <i class="fi-like"></i>
+                <i class="material-icons">file_download</i>Download
             </a>
         </div>
 
@@ -130,22 +136,25 @@
 <script src="vendor/amcharts/plugins/export/export.min.js"></script>
 <script>
     $(document).foundation();
-    $(document).ready(function() {
-        console.log(Foundation.utils.is_small_only());
 
-        if(Foundation.utils.is_small_only()) {
-            $('.ax-detail-content').hide();
-            console.log($('.fi-bluetooth'));
-            $('.fi-bluetooth').click(function() {
-                console.log(Foundation.utils.is_small_only());
-                $('.ax-master-content').hide();
-                $('.ax-detail-content').show('slide', function () {});
+    $('label').click(function() {
 
+        // find the first span which is our circle/bubble
+        var el = $(this).children('span:first-child');
 
-            });
+        // add the bubble class (we do this so it doesnt show on page load)
+        el.addClass('circle');
 
-        }
+        // clone it
+        var newone = el.clone(true);
+
+        // add the cloned version before our original
+        el.before(newone);
+
+        // remove the original so that it is ready to run on next click
+        $("." + el.attr("class") + ":last").remove();
     });
+
 </script>
 <script type="text/javascript">
     var chartData = [];

@@ -11,30 +11,37 @@ export default class DevicesListItem extends Component {
         console.log(device);
 
         return (
-            <div className="row">
-                <div className="large-3 small-3 medium-3 columns list-header-icon">
-                    <i className="fi-usb"></i>
+            <div className="row list-item">
+                <div className="row">
+                    <hr className="list-item-ruler" />
                 </div>
 
-                <div className="large-9 small-9 medium-9 columns">
+                <div className="large-2 small-2 medium-2 columns list-header-icon-wrapper">
+                    <i className="material-icons list-header-icon">check_box_outline_blank</i>
+                </div>
+
+                <div className="large-10 small-10 medium-10 columns">
                     <div className="row clearfix">
+                        <h4>
+                            {device.doc.serialNumber} <small>COM2345 90% batt</small>
+                            <span className="list-item-icons right">
+                                <small><i className="material-icons list-item-icons device-icons">usb</i></small>
+                                <small><i className="material-icons list-item-icons device-icons 90deg">battery_charging_full</i></small>
+                            </span>
+                        </h4>
 
-                        {device.doc.serialNumber}
-                        <span className="list-item-icons right">
-                            <a href=""><i className="fi-target-two list-item-icon"></i></a>
-                            <a href=""><i className="fi-info list-item-icon"></i></a>
-                            <a href=""><i className="fi-battery-half list-item-icon"></i></a>
-                        </span>
                     </div>
                     <div className="row">
-                        {device.doc.port}
-                    </div>
-                    <div className="row">
-                        <hr className="list-item-ruler" />
+                        Charging...
                     </div>
 
+                </div>
+
+                <div className="row">
+                    <hr className="list-item-ruler" />
                 </div>
             </div>
+
         );
 
     }
