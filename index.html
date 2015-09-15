@@ -52,7 +52,14 @@
 
         <div class="icon-bar five-up">
             <a class="item" data-dropdown="drop1" aria-controls="drop1" aria-expanded="false">
-                <i class="material-icons">check_box_outline_blank</i>Select &raquo;
+                <span data-tooltip
+                      aria-haspopup="true"
+                      class="has-tip"
+                      title="Select items">
+                    <i class="material-icons">check_box_outline_blank</i>
+
+                </span>
+
             </a>
             <ul id="drop1" class="f-dropdown" data-dropdown-content aria-hidden="true" tabindex="-1">
                 <li><a href="#">Select All</a></li>
@@ -60,16 +67,36 @@
                 <li><a href="#">Select Inverse</a></li>
             </ul>
             <a class="item">
-                <i class="material-icons">radio_button_checked</i>Record
+                 <span data-tooltip
+                       aria-haspopup="true"
+                       class="has-tip"
+                       title="Record">
+                    <i class="material-icons">radio_button_checked</i>
+                 </span>
             </a>
             <a class="item">
-                <i class="material-icons">stop</i>Stop
+                <span data-tooltip
+                      aria-haspopup="true"
+                      class="has-tip"
+                      title="Stop">
+                    <i class="material-icons">stop</i>
+                </span>
             </a>
             <a class="item">
-                <i class="material-icons">my_location</i>Identify
+                <span data-tooltip
+                      aria-haspopup="true"
+                      class="has-tip"
+                      title="Identify devices">
+                    <i class="material-icons">my_location</i>
+                </span>
             </a>
             <a class="item">
-                <i class="material-icons">file_download</i>Download
+                <span data-tooltip
+                      aria-haspopup="true"
+                      class="has-tip"
+                      title="Download file">
+                    <i class="material-icons">file_download</i>
+                </span>
             </a>
         </div>
 

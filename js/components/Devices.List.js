@@ -15,6 +15,9 @@ export default class DevicesList extends Component {
 
         return (
             <div>
+                <div className="row">
+                    <hr className="list-item-ruler" />
+                </div>
                 { devices.map((device) => {
                     return (
                         <DeviceListItem
