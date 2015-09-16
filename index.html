@@ -43,61 +43,64 @@
     </section>
 </nav>
 
-<div class="row">
-    <div class="large-12 columns"></div>
-</div>
+    <div class="row">
+        <div class="large-12 columns">
+            <!--<div class="test-content">-->
+                <!--<i class="material-icons">device_hub</i>-->
+            <!--</div>-->
+        </div>
+    </div>
 
 <div class="row ax-ui-content" data-equalizer>
-    <div class="small-12 medium-4 large-4 columns ax-master-content" data-equalizer-watch>
+    <div class="small-12 medium-4 large-4 columns ax-master-content slide" data-equalizer-watch>
 
-        <div class="icon-bar five-up">
-            <a class="item" data-dropdown="drop1" aria-controls="drop1" aria-expanded="false">
-                <span data-tooltip
-                      aria-haspopup="true"
-                      class="has-tip"
-                      title="Select items">
+        <div class="row">
+            <div class="large-4 small-4 medium-4 columns">
+                <button
+                        href="#"
+                        data-dropdown="drop1"
+                        aria-controls="drop1"
+                        aria-expanded="false"
+                        class="button dropdown tiny select-drop-down-menu">
                     <i class="material-icons">check_box_outline_blank</i>
+                </button>
+                <ul id="drop1" data-dropdown-content class="f-dropdown" aria-hidden="true">
+                    <li><a href="#">  All  </a></li>
+                    <li><a href="#">  Clear  </a></li>
+                    <li><a href="#">  Invert  </a></li>
+                </ul>
+                <!--<i class="material-icons list-header-icon"-->
+                   <!--data-dropdown="drop1"-->
+                   <!--data-options="align:bottom"-->
+                   <!--aria-controls="drop1"-->
+                   <!--aria-expanded="false">check_box_outline_blank</i>-->
 
-                </span>
+                <!--<ul id="drop1" class="f-dropdown text-center" data-dropdown-content>-->
+                    <!--<li>All</li>-->
+                    <!--<li>None</li>-->
+                    <!--<li>Invert</li>-->
+                <!--</ul>-->
+            </div>
 
-            </a>
-            <ul id="drop1" class="f-dropdown" data-dropdown-content aria-hidden="true" tabindex="-1">
-                <li><a href="#">Select All</a></li>
-                <li><a href="#">Clear All</a></li>
-                <li><a href="#">Select Inverse</a></li>
-            </ul>
-            <a class="item">
-                 <span data-tooltip
-                       aria-haspopup="true"
-                       class="has-tip"
-                       title="Record">
-                    <i class="material-icons">radio_button_checked</i>
-                 </span>
-            </a>
-            <a class="item">
-                <span data-tooltip
-                      aria-haspopup="true"
-                      class="has-tip"
-                      title="Stop">
-                    <i class="material-icons">stop</i>
-                </span>
-            </a>
-            <a class="item">
-                <span data-tooltip
-                      aria-haspopup="true"
-                      class="has-tip"
-                      title="Identify devices">
-                    <i class="material-icons">my_location</i>
-                </span>
-            </a>
-            <a class="item">
-                <span data-tooltip
-                      aria-haspopup="true"
-                      class="has-tip"
-                      title="Download file">
-                    <i class="material-icons">file_download</i>
-                </span>
-            </a>
+            <div class="large-8 small-8 medium-8 columns ">
+                <div class="row clearfix">
+                    <div class="large-3 small-3 medium-3 columns list-header-icon-wrapper">
+                        <i class="material-icons list-header-icon">radio_button_checked</i>
+                    </div>
+                    <div class="large-3 small-3 medium-3 columns list-header-icon-wrapper">
+                        <i class="material-icons list-header-icon">stop</i>
+                    </div>
+                    <div class="large-3 small-3 medium-3 columns list-header-icon-wrapper">
+                        <i class="material-icons list-header-icon">my_location</i>
+                    </div>
+                    <div class="large-3 small-3 medium-3 columns list-header-icon-wrapper">
+                        <i class="material-icons list-header-icon">file_download</i>
+                    </div>
+
+                </div>
+
+            </div>
+
         </div>
 
         <!-- list items start -->
@@ -109,45 +112,13 @@
     <div class="small-12 large-8 medium-8 columns ax-detail-content" data-equalizer-watch>
         <div class="row">
             <div class="large-12 medium-12 columns">
+                <div class="back-button-wrapper">
+                    <i class="material-icons">chevron_left</i>
+                </div>
+            </div>
+            <div class="large-12 medium-12 columns chart-wrapper">
                 <div id="chartdiv"></div>
             </div>
-
-            <!--<div class="row">-->
-                <!--<div class="large-12 medium-12 columns">-->
-                    <!--<table class="custom-table">-->
-                        <!--<thead>-->
-                        <!--<tr>-->
-                            <!--<th >Table Header</th>-->
-                            <!--<th>Table Header</th>-->
-                            <!--<th >Table Header</th>-->
-                            <!--<th >Table Header</th>-->
-                        <!--</tr>-->
-                        <!--</thead>-->
-                        <!--<tbody>-->
-                        <!--<tr>-->
-                            <!--<td>Content Goes Here</td>-->
-                            <!--<td>This is longer content Donec id elit non mi porta gravida at eget metus.</td>-->
-                            <!--<td>Content Goes Here</td>-->
-                            <!--<td>Content Goes Here</td>-->
-                        <!--</tr>-->
-                        <!--<tr>-->
-                            <!--<td>Content Goes Here</td>-->
-                            <!--<td>This is longer Content Goes Here Donec id elit non mi porta gravida at eget metus.</td>-->
-                            <!--<td>Content Goes Here</td>-->
-                            <!--<td>Content Goes Here</td>-->
-                        <!--</tr>-->
-                        <!--<tr>-->
-                            <!--<td>Content Goes Here</td>-->
-                            <!--<td>This is longer Content Goes Here Donec id elit non mi porta gravida at eget metus.</td>-->
-                            <!--<td>Content Goes Here</td>-->
-                            <!--<td>Content Goes Here</td>-->
-                        <!--</tr>-->
-                        <!--</tbody>-->
-                    <!--</table>-->
-                <!--</div>-->
-
-            <!--</div>-->
-
         </div>
 
     </div>
@@ -164,22 +135,26 @@
 <script>
     $(document).foundation();
 
-    $('label').click(function() {
+    $('.back-button-wrapper').click(function () {
+        console.log('clicked');
 
-        // find the first span which is our circle/bubble
-        var el = $(this).children('span:first-child');
+        var innerText = $('.back-button-wrapper > i').text();
+        console.log(innerText);
+        if(innerText === 'chevron_left') {
+            $('.back-button-wrapper > i').text('chevron_right');
 
-        // add the bubble class (we do this so it doesnt show on page load)
-        el.addClass('circle');
+            $(".slide").animate({width:'toggle'},100);
+            $('.ax-detail-content').removeClass('large-8');
+            $('.ax-detail-content').addClass('large-12');
 
-        // clone it
-        var newone = el.clone(true);
+        } else {
+            $('.back-button-wrapper > i').text('chevron_left');
+            $('.ax-detail-content').removeClass('large-12');
+            $('.ax-detail-content').addClass('large-8');
+            $(".slide").animate({width:'toggle'},100);
 
-        // add the cloned version before our original
-        el.before(newone);
+        }
 
-        // remove the original so that it is ready to run on next click
-        $("." + el.attr("class") + ":last").remove();
     });
 
 </script>
