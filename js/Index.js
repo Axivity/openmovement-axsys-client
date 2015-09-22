@@ -47,14 +47,21 @@ function onDisconnected(store) {
     }
 }
 
+function getHardwareAndSoftwareVersion(device) {
+    let options = {};
+    options.path = device._id;
+    console.log(api);
+    api.connect(options, (response) => {
+        console.log(response);
+    });
+}
+
 function onConnected(store) {
-    console.log('On connected');
     return () => {
-        console.log('On connected 2');
         api.getDevices((allDevices) => {
-            console.log(allDevices);
             allDevices.devices.forEach((aDevice) => {
                 store.dispatch(addDevice(aDevice));
+                getHardwareAndSoftwareVersion(aDevice);
             });
         });
     }

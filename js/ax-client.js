@@ -23,6 +23,12 @@ export default class AXApi {
         });
     }
 
+    connect(options, callback) {
+        this.api.connect(options, (payload) => {
+            callback(payload);
+        });
+    }
+
 }
 
 
