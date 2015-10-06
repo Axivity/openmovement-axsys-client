@@ -6,13 +6,15 @@ export default class AXApi {
     constructor(onDeviceAdded,
                 onDeviceRemoved,
                 onConnected,
-                onDisconnected) {
+                onDisconnected,
+                onDataReceived) {
 
         this.api = new AX.API(
             onDeviceAdded,
             onDeviceRemoved,
             onConnected,
-            onDisconnected);
+            onDisconnected,
+            onDataReceived);
     }
 
     getDevices(callback) {
@@ -25,6 +27,18 @@ export default class AXApi {
 
     connect(options, callback) {
         this.api.connect(options, (payload) => {
+            callback(payload);
+        });
+    }
+
+    write(options, callback) {
+        this.api.write(options, (payload) => {
+            callback(payload);
+        });
+    }
+
+    disconnect(options, callback) {
+        this.api.disconnect(options, (payload) => {
             callback(payload);
         });
     }

@@ -41,6 +41,7 @@
     "angular": "^1.4.5",
     "express.io": "^1.1.13",
     "foundation-sites": "^5.5.2",
+    "moment": "^2.10.6",
     "react": "^0.13.3",
     "redux": "^2.0.0",
     "redux-thunk": "^0.1.0",
