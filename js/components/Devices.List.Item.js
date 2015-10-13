@@ -19,7 +19,7 @@ export default class DevicesListItem extends Component {
                 <div className="large-10 small-10 medium-10 columns">
                     <div className="row clearfix">
                         <h4>
-                            {device.serialNumber} <small>COM2345</small>
+                            {device.serialNumber} <small>{device._id}</small>
                             <span className="list-item-icons right">
                                 <small><i className="material-icons list-item-icons device-icons">usb</i></small>
                                 <small><i className="material-icons list-item-icons device-icons 90deg">battery_charging_full</i></small>

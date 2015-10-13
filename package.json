@@ -9,12 +9,14 @@
     "test": "gulp test lint --verbose",
     "start": "gulp server --verbose",
     "dist": "gulp dist --verbose",
-    "test-dist": "gulp test-dist --verbose"
+    "test-dist": "gulp test-dist --verbose",
+    "watch": "gulp watch --verbose"
   },
   "devDependencies": {
     "babel": "^5.8.23",
     "babel-eslint": "^4.1.0",
     "babelify": "^6.3.0",
+    "browser-sync": "^2.9.10",
     "browserify": "^11.0.1",
     "chai": "^3.2.0",
     "eslint": "^1.2.1",

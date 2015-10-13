@@ -12,6 +12,7 @@ var nodemon     = require('gulp-nodemon');
 var uglify      = require('gulp-uglify');
 var browserify  = require('browserify');
 var babelify    = require('babelify');
+var watchify    = require('watchify');
 var source      = require('vinyl-source-stream');
 var buffer      = require('vinyl-buffer');
 
@@ -57,9 +58,9 @@ gulp.task('dist', function() {
         .on('error', function(err) {console.error(err); this.emit('end');} )
         .pipe(source('all.min.js'))
         .pipe(buffer())
-        //.pipe(sourcemaps.init({loadMaps: true}))
-        //.pipe(uglify())
-        //.pipe(sourcemaps.write('./'))
+        .pipe(sourcemaps.init({loadMaps: true}))
+        .pipe(uglify())
+        .pipe(sourcemaps.write('./'))
         .pipe(gulp.dest('dist'));
 });
 
@@ -79,4 +80,34 @@ gulp.task('test-dist', function() {
         .pipe(uglify())
         .pipe(sourcemaps.write('./'))
         .pipe(gulp.dest('dist'));
+});
+
+gulp.task('watch', function() {
+    var options = {
+        cache: {},
+        packageCache: {},
+        fullPaths: true,
+        debug: true
+    };
+
+    function rebundle(b) {
+        b.transform(babelify)
+            .bundle()
+            .on('error', function(err) {console.error(err); this.emit('end');} )
+            .pipe(source('all.min.js'))
+            .pipe(buffer())
+            .pipe(sourcemaps.init({loadMaps: true}))
+            .pipe(uglify())
+            .pipe(sourcemaps.write('./'))
+            .pipe(uglify())
+            .pipe(gulp.dest('dist'));
+    }
+
+    var wb = watchify(browserify(options));
+    wb.on('update', function() {
+        rebundle(wb);
+    });
+
+    wb.add('./js/Index.js');
+    rebundle(wb);
 });
