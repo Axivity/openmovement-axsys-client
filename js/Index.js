@@ -25,7 +25,17 @@ const TIMEOUT_IN_SECONDS = 10;
 const CHECK_FREQUENCY_IN_SECONDS = 1;
 
 let connections = {};
-let commandQeueue = [];
+let attributeCommands = [
+    {
+        'command': 'BATTERY\r\n',
+        'frequency_in_seconds': 60
+    },
+    {
+        'command': 'ID\r\n',
+        'frequency_in_seconds': 0
+    }
+
+];
 
 
 let api = new AXApi(
