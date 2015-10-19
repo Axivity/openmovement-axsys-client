@@ -52,45 +52,88 @@
     </div>
 
 <div class="row ax-ui-content" data-equalizer>
-    <div class="small-12 medium-4 large-4 columns ax-master-content slide" data-equalizer-watch>
+    <div class="small-12 medium-5 large-4 columns ax-master-content slide" data-equalizer-watch>
 
         <div class="row">
-            <div class="large-4 small-4 medium-4 columns">
-                <button
-                        href="#"
-                        data-dropdown="drop1"
-                        aria-controls="drop1"
-                        aria-expanded="false"
-                        class="button dropdown tiny select-drop-down-menu">
-                    <i class="material-icons">check_box_outline_blank</i>
-                </button>
-                <ul id="drop1" data-dropdown-content class="f-dropdown" aria-hidden="true">
-                    <li><a href="#">  All  </a></li>
-                    <li><a href="#">  Clear  </a></li>
-                    <li><a href="#">  Invert  </a></li>
+            <!--<div class="large-3 small-3 medium-3 columns">-->
+                <!--<button-->
+                        <!--class="tiny"-->
+                        <!--href="#"-->
+                        <!--data-dropdown="drop1"-->
+                        <!--aria-controls="drop1"-->
+                        <!--aria-expanded="false"-->
+                        <!--class="button dropdown tiny select-drop-down-menu">-->
+                    <!--<i class="material-icons icons-main-check-box">check_box</i>-->
+                <!--</button>-->
+                <!--<ul id="drop1" data-dropdown-content class="f-dropdown" aria-hidden="true">-->
+                    <!--<li><a href="#">  All  </a></li>-->
+                    <!--<li><a href="#">  Clear  </a></li>-->
+                    <!--<li><a href="#">  Invert  </a></li>-->
+                <!--</ul>-->
+            <!--</div>-->
+
+            <div class="large-12 small-12 medium-12 columns">
+                <ul class="button-group radius even-6">
+                    <li>
+                        <a href="#"
+                           class="button list-item-icons-wrapper has-tip"
+                           data-tooltip
+                           aria-haspopup="true"
+                           title="Select All">
+                            <i class="material-icons list-item-icon">check_box</i>
+
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#"
+                           class="button list-item-icons-wrapper has-tip"
+                           data-tooltip
+                           aria-haspopup="true"
+                           title="Configure recording">
+                            <i class="material-icons list-item-icon">radio_button_checked</i>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#"
+                           class="button list-item-icons-wrapper has-tip"
+                           data-tooltip
+                           aria-haspopup="true"
+                           title="Stop Recording">
+                            <i class="material-icons list-item-icon">stop</i>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#"
+                           class="button list-item-icons-wrapper has-tip"
+                           data-tooltip
+                           aria-haspopup="true"
+                           title="Identify">
+                            <i class="material-icons list-item-icon">my_location</i>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#"
+                           class="button list-item-icons-wrapper has-tip"
+                           data-tooltip
+                           aria-haspopup="true"
+                           title="Clear Data">
+                            <i class="material-icons list-item-icon">clear</i>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#"
+                           class="button list-item-icons-wrapper has-tip"
+                           data-tooltip
+                           aria-haspopup="true"
+                           title="Download datafile">
+                            <i class="material-icons list-item-icon">file_download</i>
+                        </a>
+                    </li>
                 </ul>
             </div>
 
-            <div class="large-8 small-8 medium-8 columns ">
-                <div class="row clearfix">
-                    <div class="large-3 small-3 medium-3 columns list-header-icon-wrapper">
-                        <i class="material-icons list-header-icon">radio_button_checked</i>
-                    </div>
-                    <div class="large-3 small-3 medium-3 columns list-header-icon-wrapper">
-                        <i class="material-icons list-header-icon">stop</i>
-                    </div>
-                    <div class="large-3 small-3 medium-3 columns list-header-icon-wrapper">
-                        <i class="material-icons list-header-icon">my_location</i>
-                    </div>
-                    <div class="large-3 small-3 medium-3 columns list-header-icon-wrapper">
-                        <i class="material-icons list-header-icon">file_download</i>
-                    </div>
-
-                </div>
-
-            </div>
-
         </div>
+
 
         <!-- list items start -->
         <div id="devicesList"></div>
@@ -98,7 +141,7 @@
 
     </div>
 
-    <div class="small-12 large-8 medium-8 columns ax-detail-content" data-equalizer-watch>
+    <div class="small-12 large-8 medium-7 columns ax-detail-content" data-equalizer-watch>
         <div class="row">
             <div class="large-12 medium-12 columns">
                 <div class="back-button-wrapper">

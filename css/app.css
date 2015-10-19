@@ -21,46 +21,41 @@
     background-color: #2a6496;
 }
 
+.list-item-bottom-spacer {
+    padding-bottom: 0.5rem;
+}
+
+.icons-main-check-box {
+
+}
+
+.list-item {
+    padding-right: 0.9375rem;
+}
+
+.list-item-header-icon {
+    margin: 1rem auto;
+}
+
 .chart-wrapper {
     margin: 10px auto;
 }
 
 .select-drop-down-menu {
     margin-top: 1rem;
-
 }
 
-.icon-bar {
-    background-color: white;
-}
-
-.icon-bar > * i {
-    color: black;
-    font-size: 1.2rem;
-}
-
-.list-header-icon-wrapper {
-    text-align: left;
-    display: inline-block;
-}
-
-.list-header-icon {
-    font-size: 2.0rem;
-    margin: 1.2rem auto;
+.list-item-icons-wrapper {
+    font-size:0.5rem;
+    padding: 1rem 0 1.025rem;
 }
 
 .list-item-icon {
-    font-size:1.2rem;
-    margin: 0 0.2rem 0 0;
-}
-
-.list-item-icons {
-    font-size:1.5rem;
-    margin:0 0.75rem 0 0;
+    color: white;
 }
 
 .list-item-ruler {
-    margin: 0.5rem 1.5rem 0.5rem 0.5rem;
+    /*margin: 0.7rem 1.5rem 0.5rem 1.5rem;*/
 }
 
 .unstyled {
@@ -70,27 +65,6 @@
 .custom-table {
     margin: 1rem 0.2rem 0 2rem;
 
-}
-
-.icon-bar > * i {
-    font-size: 1.75rem
-}
-
-.icon-bar > * {
-    padding: 0.35rem;
-}
-
-.icon-bar > * a {
-    color: black;
-}
-
-
-.icon-bar > a:hover {
-    color: white;
-}
-
-.icon-bar > a:active {
-    color: white;
 }
 
 
@@ -128,4 +102,5 @@
     color: white;
     font-size: 2.2em;
     padding-top: 0.4rem;
+    cursor: pointer;
 }

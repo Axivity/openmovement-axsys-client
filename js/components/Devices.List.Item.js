@@ -13,7 +13,10 @@ export default class DevicesListItem extends Component {
         return (
             <div className="row list-item">
                 <div className="large-2 small-2 medium-2 columns list-header-icon-wrapper">
+                    {/*
                     <i className="material-icons list-header-icon">check_box_outline_blank</i>
+                    */}
+                    <i className="material-icons list-item-header-icon">check_box</i>
                 </div>
 
                 <div className="large-10 small-10 medium-10 columns">
@@ -27,7 +30,8 @@ export default class DevicesListItem extends Component {
                         </h4>
 
                     </div>
-                    <div className="row">
+
+                    <div className="row list-item-bottom-spacer">
                         Charging...
                     </div>
 
