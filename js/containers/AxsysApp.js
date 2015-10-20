@@ -8,7 +8,8 @@ import React, { PropTypes, Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import * as actionCreators from '../actions/actionCreators';
-import DevicesList from './../components/Devices.List.js';
+//import DevicesList from './../components/Devices.List';
+import DevicesMaster from '../components/Devices.Master'
 
 
 class App extends Component {
@@ -18,7 +19,7 @@ class App extends Component {
         const actions = bindActionCreators(actionCreators, dispatch);
 
         return (
-            <DevicesList
+            <DevicesMaster
                 devices={devices}
                 actions={actions}
             />

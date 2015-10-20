@@ -164,5 +164,5 @@ React.render(
     <Provider store={store}>
         {() => <App />}
     </Provider>,
-    document.getElementById('devicesList')
+    document.getElementById('ax-master')
 );
