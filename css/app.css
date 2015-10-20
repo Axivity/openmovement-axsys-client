@@ -12,22 +12,42 @@
     margin: 10px 0 0 0;
 }
 
+/*
+.fix-sides {
+    margin: 0 0 0 0;
+}
+*/
 .ax-master-content {
     border-right:1px solid;
     border-color: #e1e1e1;
+    padding: 0;
 }
 
 .main-icon-check-box-wrapper {
     background-color: #2a6496;
 }
 
+/* Icon bar */
+
+.icon-bar>* {
+    padding: 0.8rem;
+    text-align: center;
+    font-size: 0.5rem;
+}
+
+.icon-bar>* i {
+    font-size: 1.3rem;
+}
+
+/* List items for master content */
 .list-item-bottom-spacer {
     padding-bottom: 0.5rem;
 }
 
-.icons-main-check-box {
-
+.list-item-top-spacer {
+    padding-top: 0.5rem;
 }
+
 
 .list-item {
     padding-right: 0.9375rem;
@@ -52,14 +72,6 @@ div.list-item-wrapper:hover {
     cursor: pointer;
 }
 
-.chart-wrapper {
-    margin: 10px auto;
-}
-
-.select-drop-down-menu {
-    margin-top: 1rem;
-}
-
 .list-item-icons-wrapper {
     font-size:0.5rem;
     padding: 1rem 0 1.025rem;
@@ -71,6 +83,26 @@ div.list-item-wrapper:hover {
 
 .list-item-ruler {
     /*margin: 0.7rem 1.5rem 0.5rem 1.5rem;*/
+}
+
+/* List items for master content end */
+
+
+/*  TODO: Find a work around to remove this margin.
+ *  This wrapper is a hack, when rendered by reactjs
+ *  there are extra divs which messes up foundation
+ *  button group. */
+.ax-icon-bar-wrapper {
+    margin: 0 -1.55rem 0 -0.330rem;
+}
+/* Hack ends - phew! */
+
+.chart-wrapper {
+    margin: 1rem auto;
+}
+
+.select-drop-down-menu {
+    margin-top: 1rem;
 }
 
 .unstyled {

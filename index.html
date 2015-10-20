@@ -14,274 +14,328 @@
 
     <script src="vendor/modernizr/modernizr.js"></script>
 </head>
-<body>
-<!-- nav - make it sticky? -->
-<nav class="top-bar" data-topbar role="navigation">
-    <ul class="title-area">
-        <li class="name">
-            <h1>
-                <a href="#">
-                    <img src="img/swoosh.png" alt="">
-                    Axsys
-                </a></h1>
-        </li>
-        <!-- Remove the class "menu-icon" to get rid of menu icon. Take out "Menu" to just have icon alone -->
-        <li class="toggle-topbar menu-icon"><a href="#"><span></span></a></li>
-    </ul>
+    <body>
+        <!-- nav - make it sticky? -->
+        <nav class="top-bar" data-topbar role="navigation">
+            <ul class="title-area">
+                <li class="name">
+                    <h1>
+                        <a href="#">
+                            <img src="img/swoosh.png" alt="">
+                            Axsys
+                        </a></h1>
+                </li>
+                <!-- Remove the class "menu-icon" to get rid of menu icon. Take out "Menu" to just have icon alone -->
+                <li class="toggle-topbar menu-icon"><a href="#"><span></span></a></li>
+            </ul>
 
-    <section class="top-bar-section">
-        <!-- Right Nav Section -->
-        <ul class="right">
-            <li><a href="#">Settings</a></li>
-        </ul>
+            <section class="top-bar-section">
+                <!-- Right Nav Section -->
+                <ul class="right">
+                    <li><a href="#">Settings</a></li>
+                </ul>
 
-        <!-- Left Nav Section -->
-        <ul class="left">
-            <li class="active"><a href="#">Devices</a></li>
-            <li><a href="#">Files</a></li>
-        </ul>
-    </section>
-</nav>
+                <!-- Left Nav Section -->
+                <ul class="left">
+                    <li class="active"><a href="#">Devices</a></li>
+                    <li><a href="#">Files</a></li>
+                </ul>
+            </section>
+        </nav>
 
-    <div class="row">
-        <div class="large-12 columns">
-            <!--<div class="test-content">-->
-                <!--<i class="material-icons">device_hub</i>-->
-            <!--</div>-->
-        </div>
-    </div>
+        <div class="row ax-ui-content" data-equalizer>
 
-<div class="row ax-ui-content" data-equalizer>
-    <!-- master content -->
-    <div id="ax-master"></div>
+                <!--<div class="large-12 small-12 medium-12 columns">-->
+                    <!--<ul class="button-group radius even-6">-->
+                        <!--<li>-->
+                            <!--<a href="#"-->
+                               <!--class="button list-item-icons-wrapper has-tip"-->
+                               <!--data-tooltip-->
+                               <!--aria-haspopup="true"-->
+                               <!--title="Select All">-->
+                                <!--<i class="material-icons list-item-icon">check_box_outline_blank</i>-->
 
-    <!-- detail content -->
-    <div class="small-12 large-8 medium-7 columns ax-detail-content" data-equalizer-watch>
-        <div class="row">
-            <div class="large-12 medium-12 columns">
-                <div class="back-button-wrapper">
-                    <i class="material-icons">chevron_left</i>
+                            <!--</a>-->
+                        <!--</li>-->
+                        <!--<li>-->
+                            <!--<a href="#"-->
+                               <!--class="button disabled list-item-icons-wrapper has-tip"-->
+                               <!--data-tooltip-->
+                               <!--aria-haspopup="true"-->
+                               <!--title="Configure recording">-->
+                                <!--<i class="material-icons list-item-icon">radio_button_checked</i>-->
+                            <!--</a>-->
+                        <!--</li>-->
+                        <!--<li>-->
+                            <!--<a href="#"-->
+                               <!--class="button disabled list-item-icons-wrapper has-tip"-->
+                               <!--data-tooltip-->
+                               <!--aria-haspopup="true"-->
+                               <!--title="Stop Recording">-->
+                                <!--<i class="material-icons list-item-icon">stop</i>-->
+                            <!--</a>-->
+                        <!--</li>-->
+                        <!--<li>-->
+                            <!--<a href="#"-->
+                               <!--class="button disabled list-item-icons-wrapper has-tip"-->
+                               <!--data-tooltip-->
+                               <!--aria-haspopup="true"-->
+                               <!--title="Identify">-->
+                                <!--<i class="material-icons list-item-icon">my_location</i>-->
+                            <!--</a>-->
+                        <!--</li>-->
+                        <!--<li>-->
+                            <!--<a href="#"-->
+                               <!--class="button disabled list-item-icons-wrapper has-tip"-->
+                               <!--data-tooltip-->
+                               <!--aria-haspopup="true"-->
+                               <!--title="Clear Data">-->
+                                <!--<i class="material-icons list-item-icon">clear</i>-->
+                            <!--</a>-->
+                        <!--</li>-->
+                        <!--<li>-->
+                            <!--<a href="#"-->
+                               <!--class="button disabled list-item-icons-wrapper has-tip"-->
+                               <!--data-tooltip-->
+                               <!--aria-haspopup="true"-->
+                               <!--title="Download datafile">-->
+                                <!--<i class="material-icons list-item-icon">file_download</i>-->
+                            <!--</a>-->
+                        <!--</li>-->
+                    <!--</ul>-->
+                <!--</div>-->
+
+
+            <!-- master content -->
+            <div id="ax-master"></div>
+
+            <!-- detail content -->
+            <div class="small-12 large-8 medium-7 columns ax-detail-content" data-equalizer-watch>
+                <div class="row">
+                    <div class="large-12 medium-12 columns">
+                        <div class="back-button-wrapper">
+                            <i class="material-icons">chevron_left</i>
+                        </div>
+                    </div>
+                    <div class="large-12 medium-12 columns chart-wrapper">
+                        <div id="chartdiv"></div>
+                    </div>
                 </div>
             </div>
-            <div class="large-12 medium-12 columns chart-wrapper">
-                <div id="chartdiv"></div>
-            </div>
+
         </div>
-    </div>
 
-</div>
+        <!-- includes -->
+        <script src="vendor/jquery/dist/jquery.min.js"></script>
+        <script src="vendor/foundation/js/foundation.min.js"></script>
+        <script src="vendor/amcharts/amcharts.js"></script>
+        <script src="vendor/amcharts/serial.js"></script>
+        <script src="vendor/amcharts/themes/dark.js"></script>
+        <script src="vendor/amcharts/amstock.js"></script>
+        <script src="vendor/amcharts/plugins/export/export.min.js"></script>
+        <script>
+            $(document).foundation();
 
-<!-- includes -->
-<script src="vendor/jquery/dist/jquery.min.js"></script>
-<script src="vendor/foundation/js/foundation.min.js"></script>
-<script src="vendor/amcharts/amcharts.js"></script>
-<script src="vendor/amcharts/serial.js"></script>
-<script src="vendor/amcharts/themes/dark.js"></script>
-<script src="vendor/amcharts/amstock.js"></script>
-<script src="vendor/amcharts/plugins/export/export.min.js"></script>
-<script>
-    $(document).foundation();
+            $('.back-button-wrapper').click(function () {
+                console.log('clicked');
 
-    $('.back-button-wrapper').click(function () {
-        console.log('clicked');
+                var innerText = $('.back-button-wrapper > i').text();
+                console.log(innerText);
+                if(innerText === 'chevron_left') {
+                    $('.back-button-wrapper > i').text('chevron_right');
 
-        var innerText = $('.back-button-wrapper > i').text();
-        console.log(innerText);
-        if(innerText === 'chevron_left') {
-            $('.back-button-wrapper > i').text('chevron_right');
+                    $(".slide").animate({width:'toggle'},100);
+                    $('.ax-detail-content').removeClass('large-8');
+                    $('.ax-detail-content').addClass('large-12');
 
-            $(".slide").animate({width:'toggle'},100);
-            $('.ax-detail-content').removeClass('large-8');
-            $('.ax-detail-content').addClass('large-12');
+                } else {
+                    $('.back-button-wrapper > i').text('chevron_left');
+                    $('.ax-detail-content').removeClass('large-12');
+                    $('.ax-detail-content').addClass('large-8');
+                    $(".slide").animate({width:'toggle'},100);
 
-        } else {
-            $('.back-button-wrapper > i').text('chevron_left');
-            $('.ax-detail-content').removeClass('large-12');
-            $('.ax-detail-content').addClass('large-8');
-            $(".slide").animate({width:'toggle'},100);
+                }
 
-        }
+            });
 
-    });
+        </script>
+        <script type="text/javascript">
+            var chartData = [];
+            generateChartData();
 
-</script>
-<script type="text/javascript">
-    var chartData = [];
-    generateChartData();
+            function generateChartData() {
+                var firstDate = new Date( 2012, 0, 1 );
+                firstDate.setDate( firstDate.getDate() - 500 );
+                firstDate.setHours( 0, 0, 0, 0 );
 
-    function generateChartData() {
-        var firstDate = new Date( 2012, 0, 1 );
-        firstDate.setDate( firstDate.getDate() - 500 );
-        firstDate.setHours( 0, 0, 0, 0 );
+                for ( var i = 0; i < 500; i++ ) {
+                    var newDate = new Date( firstDate );
+                    newDate.setDate( newDate.getDate() + i );
 
-        for ( var i = 0; i < 500; i++ ) {
-            var newDate = new Date( firstDate );
-            newDate.setDate( newDate.getDate() + i );
+                    var a = Math.round( Math.random() * ( 40 + i ) ) + 100 + i;
+                    var b = Math.round( Math.random() * 100000000 );
 
-            var a = Math.round( Math.random() * ( 40 + i ) ) + 100 + i;
-            var b = Math.round( Math.random() * 100000000 );
-
-            chartData.push( {
-                date: newDate,
-                value: a,
-                volume: b
-            } );
-        }
-    }
-
-    var chart = AmCharts.makeChart( "chartdiv", {
-        type: "stock",
-        "theme": "dark",
-        dataSets: [ {
-            color: "#b0de09",
-            fieldMappings: [ {
-                fromField: "value",
-                toField: "value"
-            }, {
-                fromField: "volume",
-                toField: "volume"
-            } ],
-            dataProvider: chartData,
-            categoryField: "date",
-            // EVENTS
-            stockEvents: [ {
-                date: new Date( 2010, 8, 19 ),
-                type: "sign",
-                backgroundColor: "#85CDE6",
-                graph: "g1",
-                text: "S",
-                description: "This is description of an event"
-            }, {
-                date: new Date( 2010, 10, 19 ),
-                type: "flag",
-                backgroundColor: "#FFFFFF",
-                backgroundAlpha: 0.5,
-                graph: "g1",
-                text: "F",
-                description: "Some longerntext can alson be added"
-            }, {
-                date: new Date( 2010, 11, 10 ),
-                showOnAxis: true,
-                backgroundColor: "#85CDE6",
-                type: "pin",
-                text: "X",
-                graph: "g1",
-                description: "This is description of an event"
-            }, {
-                date: new Date( 2010, 11, 26 ),
-                showOnAxis: true,
-                backgroundColor: "#85CDE6",
-                type: "pin",
-                text: "Z",
-                graph: "g1",
-                description: "This is description of an event"
-            }, {
-                date: new Date( 2011, 0, 3 ),
-                type: "sign",
-                backgroundColor: "#85CDE6",
-                graph: "g1",
-                text: "U",
-                description: "This is description of an event"
-            }, {
-                date: new Date( 2011, 1, 6 ),
-                type: "sign",
-                graph: "g1",
-                text: "D",
-                description: "This is description of an event"
-            }, {
-                date: new Date( 2011, 3, 5 ),
-                type: "sign",
-                graph: "g1",
-                text: "L",
-                description: "This is description of an event"
-            }, {
-                date: new Date( 2011, 3, 5 ),
-                type: "sign",
-                graph: "g1",
-                text: "R",
-                description: "This is description of an event"
-            }, {
-                date: new Date( 2011, 5, 15 ),
-                type: "arrowUp",
-                backgroundColor: "#00CC00",
-                graph: "g1",
-                description: "This is description of an event"
-            }, {
-                date: new Date( 2011, 6, 25 ),
-                type: "arrowDown",
-                backgroundColor: "#CC0000",
-                graph: "g1",
-                description: "This is description of an event"
-            }, {
-                date: new Date( 2011, 8, 1 ),
-                type: "text",
-                graph: "g1",
-                text: "Longer text can\nalso be displayed",
-                description: "This is description of an event"
-            } ]
-        } ],
-
-
-        panels: [ {
-            title: "Value",
-            percentHeight: 70,
-
-            stockGraphs: [ {
-                id: "g1",
-                valueField: "value"
-            } ],
-
-            stockLegend: {
-                valueTextRegular: " ",
-                markerType: "none"
+                    chartData.push( {
+                        date: newDate,
+                        value: a,
+                        volume: b
+                    } );
+                }
             }
-        } ],
 
-        chartScrollbarSettings: {
-            graph: "g1"
-        },
+            var chart = AmCharts.makeChart( "chartdiv", {
+                type: "stock",
+                "theme": "dark",
+                dataSets: [ {
+                    color: "#b0de09",
+                    fieldMappings: [ {
+                        fromField: "value",
+                        toField: "value"
+                    }, {
+                        fromField: "volume",
+                        toField: "volume"
+                    } ],
+                    dataProvider: chartData,
+                    categoryField: "date",
+                    // EVENTS
+                    stockEvents: [ {
+                        date: new Date( 2010, 8, 19 ),
+                        type: "sign",
+                        backgroundColor: "#85CDE6",
+                        graph: "g1",
+                        text: "S",
+                        description: "This is description of an event"
+                    }, {
+                        date: new Date( 2010, 10, 19 ),
+                        type: "flag",
+                        backgroundColor: "#FFFFFF",
+                        backgroundAlpha: 0.5,
+                        graph: "g1",
+                        text: "F",
+                        description: "Some longerntext can alson be added"
+                    }, {
+                        date: new Date( 2010, 11, 10 ),
+                        showOnAxis: true,
+                        backgroundColor: "#85CDE6",
+                        type: "pin",
+                        text: "X",
+                        graph: "g1",
+                        description: "This is description of an event"
+                    }, {
+                        date: new Date( 2010, 11, 26 ),
+                        showOnAxis: true,
+                        backgroundColor: "#85CDE6",
+                        type: "pin",
+                        text: "Z",
+                        graph: "g1",
+                        description: "This is description of an event"
+                    }, {
+                        date: new Date( 2011, 0, 3 ),
+                        type: "sign",
+                        backgroundColor: "#85CDE6",
+                        graph: "g1",
+                        text: "U",
+                        description: "This is description of an event"
+                    }, {
+                        date: new Date( 2011, 1, 6 ),
+                        type: "sign",
+                        graph: "g1",
+                        text: "D",
+                        description: "This is description of an event"
+                    }, {
+                        date: new Date( 2011, 3, 5 ),
+                        type: "sign",
+                        graph: "g1",
+                        text: "L",
+                        description: "This is description of an event"
+                    }, {
+                        date: new Date( 2011, 3, 5 ),
+                        type: "sign",
+                        graph: "g1",
+                        text: "R",
+                        description: "This is description of an event"
+                    }, {
+                        date: new Date( 2011, 5, 15 ),
+                        type: "arrowUp",
+                        backgroundColor: "#00CC00",
+                        graph: "g1",
+                        description: "This is description of an event"
+                    }, {
+                        date: new Date( 2011, 6, 25 ),
+                        type: "arrowDown",
+                        backgroundColor: "#CC0000",
+                        graph: "g1",
+                        description: "This is description of an event"
+                    }, {
+                        date: new Date( 2011, 8, 1 ),
+                        type: "text",
+                        graph: "g1",
+                        text: "Longer text can\nalso be displayed",
+                        description: "This is description of an event"
+                    } ]
+                } ],
 
-        chartCursorSettings: {
-            valueBalloonsEnabled: true,
-            graphBulletSize: 1,
-            valueLineBalloonEnabled: true,
-            valueLineEnabled: true,
-            valueLineAlpha: 0.5
-        },
 
-        periodSelector: {
-            periods: [ {
-                period: "DD",
-                count: 10,
-                label: "10 days"
-            }, {
-                period: "MM",
-                count: 1,
-                label: "1 month"
-            }, {
-                period: "YYYY",
-                count: 1,
-                label: "1 year"
-            }, {
-                period: "YTD",
-                label: "YTD"
-            }, {
-                period: "MAX",
-                label: "MAX"
-            } ]
-        },
+                panels: [ {
+                    title: "Value",
+                    percentHeight: 70,
 
-        panelsSettings: {
-            usePrefixes: true
-        },
-        "export": {
-            "enabled": true
-        }
-    } );
+                    stockGraphs: [ {
+                        id: "g1",
+                        valueField: "value"
+                    } ],
 
-</script>
-<script src="http://localhost:9693/client.min.js"></script>
-<!--<script src="js/ax-client.js"></script>-->
-<script src="/dist/all.min.js"></script>
-</body>
+                    stockLegend: {
+                        valueTextRegular: " ",
+                        markerType: "none"
+                    }
+                } ],
+
+                chartScrollbarSettings: {
+                    graph: "g1"
+                },
+
+                chartCursorSettings: {
+                    valueBalloonsEnabled: true,
+                    graphBulletSize: 1,
+                    valueLineBalloonEnabled: true,
+                    valueLineEnabled: true,
+                    valueLineAlpha: 0.5
+                },
+
+                periodSelector: {
+                    periods: [ {
+                        period: "DD",
+                        count: 10,
+                        label: "10 days"
+                    }, {
+                        period: "MM",
+                        count: 1,
+                        label: "1 month"
+                    }, {
+                        period: "YYYY",
+                        count: 1,
+                        label: "1 year"
+                    }, {
+                        period: "YTD",
+                        label: "YTD"
+                    }, {
+                        period: "MAX",
+                        label: "MAX"
+                    } ]
+                },
+
+                panelsSettings: {
+                    usePrefixes: true
+                },
+                "export": {
+                    "enabled": true
+                }
+            } );
+
+        </script>
+        <script src="http://localhost:9693/client.min.js"></script>
+        <!--<script src="js/ax-client.js"></script>-->
+        <script src="/dist/all.min.js"></script>
+    </body>
 </html>

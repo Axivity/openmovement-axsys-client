@@ -16,19 +16,13 @@ export default class DevicesMaster extends Component {
 
         return (
             <div className="small-12 medium-5 large-4 columns ax-master-content slide" data-equalizer-watch>
-
                 <DevicesIconBar
-                    devices={devices}
                     actions={actions}
                 />
-
-                <!-- list items start -->
                 <DevicesList
                     devices={devices}
                     actions={actions}
                 />
-                <!-- list of items end -->
-
             </div>
         );
     }

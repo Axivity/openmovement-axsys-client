@@ -13,20 +13,23 @@ export default class DevicesList extends Component {
         let { actions, devices } = this.props;
         console.log(devices);
 
+        let fixSidesStyle = {
+            margin: 0
+        };
+
         return (
-            <div>
-                <div className="row">
-                {/*<hr className="list-item-ruler" /> */}
+            <div className="row" style={fixSidesStyle}>
+                <div className="large-12 small-12 medium-12 columns">
+                    { devices.map((device) => {
+                        return (
+                            <DeviceListItem
+                                key={device._id}
+                                device={device}
+                                actions={actions}
+                            />
+                        );
+                    }) }
                 </div>
-                { devices.map((device) => {
-                    return (
-                        <DeviceListItem
-                            key={device._id}
-                            device={device}
-                            actions={actions}
-                        />
-                    );
-                }) }
             </div>
         );
     }
