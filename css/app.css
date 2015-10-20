@@ -33,8 +33,23 @@
     padding-right: 0.9375rem;
 }
 
+
+.list-item-wrapper {
+    border-bottom: 1px solid #e1e1e1;
+    /*padding-bottom: 0.5rem;
+    padding-top: 0.5rem;*/
+}
+
+
+div.list-item-wrapper:hover {
+    background-color: #e1e1e1;
+}
+
+
 .list-item-header-icon {
-    margin: 1rem auto;
+    /*margin: 1rem auto;*/
+    margin: 1rem auto 1rem 0.7rem;
+    cursor: pointer;
 }
 
 .chart-wrapper {
@@ -64,7 +79,6 @@
 
 .custom-table {
     margin: 1rem 0.2rem 0 2rem;
-
 }
 
 
