@@ -18,7 +18,7 @@ var buffer      = require('vinyl-buffer');
 
 gulp.task('test', function () {
     var babel_c = require('babel/register');
-    return gulp.src(['test/*-test.js'], {read: false})
+    return gulp.src(['test/**/*-test.js'], {read: false})
         // gulp-mocha needs filepaths so you can't have any plugins before it
         .pipe(mocha({
             reporter: 'list',

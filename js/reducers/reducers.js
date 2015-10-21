@@ -3,8 +3,35 @@
  */
 
 import { combineReducers } from 'redux';
-import { ADD_DEVICE, REMOVE_DEVICE } from '../constants/actionTypes';
+import * as actionTypes from '../constants/actionTypes';
 import * as actions from '../actions/actionCreators';
+
+
+function deviceAttributes(state={}, action=null) {
+    console.log('device attributes');
+    console.log(state);
+
+    switch(action.type) {
+        case actionTypes.ADD_DEVICE_ATTRIBUTES:
+            let newState = {};
+            if (state[action.deviceAttribute.path]) {
+                newState = state[action.deviceAttribute.path];
+                newState[action.deviceAttribute.attribute] = action.deviceAttribute.value;
+
+            } else {
+                newState = {
+                    [action.deviceAttribute.path]: {
+                        [action.deviceAttribute.attribute]: action.deviceAttribute.value
+                    }
+                };
+            }
+
+            return Object.assign({}, state, newState);
+
+        default:
+            return state;
+    }
+}
 
 function devices(state = [], action = null) {
     console.log(state);
@@ -12,7 +39,7 @@ function devices(state = [], action = null) {
     console.log(action.type);
 
     switch (action.type) {
-        case ADD_DEVICE:
+        case actionTypes.ADD_DEVICE:
             return [...state, action.device];
             //return [...state, {
             //    device: action.device
@@ -30,7 +57,7 @@ function devices(state = [], action = null) {
             //    ]
             //};
 
-        case REMOVE_DEVICE:
+        case actionTypes.REMOVE_DEVICE:
             console.log(state);
             console.log(action.device);
             // remove device from state and return new state
@@ -44,5 +71,6 @@ function devices(state = [], action = null) {
 }
 
 export default combineReducers({
-   devices
+    devices,
+    deviceAttributes
 });

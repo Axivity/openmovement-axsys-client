@@ -5,3 +5,5 @@
 export const ADD_DEVICE = "ADD_DEVICE";
 
 export const REMOVE_DEVICE = "REMOVE_DEVICE";
+
+export const ADD_DEVICE_ATTRIBUTES = "ADD_DEVICE_ATTRIBUTES";

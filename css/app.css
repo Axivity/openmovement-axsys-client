@@ -4,6 +4,23 @@
     }
 }
 
+
+.green {
+    color: #00AA00;
+}
+
+.orange {
+    color: #FFAB00;
+}
+
+.red {
+    color: #ff0000;
+}
+
+.grey {
+    color: #808080;
+}
+
 .row {
     max-width:100%;
 }
@@ -30,7 +47,7 @@
 /* Icon bar */
 
 .icon-bar>* {
-    padding: 0.8rem;
+    /*padding: 0.8rem;*/
     text-align: center;
     font-size: 0.5rem;
 }
@@ -66,6 +83,10 @@ div.list-item-wrapper:hover {
 }
 
 
+.list-header-icon-wrapper {
+    text-align: center;
+}
+
 .list-item-header-icon {
     /*margin: 1rem auto;*/
     margin: 1rem auto 1rem 0.3rem;
@@ -75,6 +96,10 @@ div.list-item-wrapper:hover {
 .list-item-icons-wrapper {
     font-size:0.5rem;
     padding: 1rem 0 1.025rem;
+}
+
+.list-item-icons {
+    padding-right: 0.9375rem;
 }
 
 .list-item-icon {
@@ -130,6 +155,11 @@ div.list-item-wrapper:hover {
 }
 
 .material-icons.device-icons {
+    /*color: black;*/
+    font-size: 1.5rem;
+}
+
+.material-icons.device-icons.standard {
     color: black;
     font-size: 1.5rem;
 }

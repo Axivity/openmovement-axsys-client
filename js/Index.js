@@ -12,27 +12,28 @@ import moment from 'moment';
 
 /* internal imports*/
 import App from './containers/AxsysApp';
-import { addDevice, removeDevice } from './actions/actionCreators';
+import { addDevice, removeDevice, addDataAttributeForDevicePath } from './actions/actionCreators';
 import AXApi from './ax-client';
+import { DeviceQueue, CommandOptions } from './utils/device-queue';
 import axsysApp from './reducers/reducers';
+import * as binUtils from './utils/binutils';
 
 let store = createStore(axsysApp);
 
-const WRITTEN = Symbol();
-const WRITTEN_AND_READ = Symbol();
-
-const TIMEOUT_IN_SECONDS = 10;
-const CHECK_FREQUENCY_IN_SECONDS = 1;
-
 let connections = {};
+let commandQs = {};
+
+// NB: The name is supposed to be unique for all these commands.
 let attributeCommands = [
     {
-        'command': 'BATTERY\r\n',
-        'frequency_in_seconds': 60
+        'command': 'SAMPLE 1\r\n',
+        'frequency_in_seconds': 60,
+        'name': 'BATTERY'
     },
     {
         'command': 'ID\r\n',
-        'frequency_in_seconds': 0
+        'frequency_in_seconds': 0,
+        'name': 'VERSION'
     }
 
 ];
@@ -52,6 +53,7 @@ console.log(store.getState());
 
 function onDeviceAdded(store) {
     return (device) => {
+        connectToDevice(device);
         store.dispatch(addDevice(device));
     }
 }
@@ -74,47 +76,128 @@ function onDisconnected(store) {
 }
 
 
-function onDataReceived(data) {
-    console.log('Data is in the app');
-    console.log(data);
-    connections[data.path] = WRITTEN_AND_READ;
+function onDataReceived(store) {
+    return (data) => {
+        console.log('Data is in the app');
+        console.log(data);
+
+        let options = data.commandOptions;
+        // Only attribute commands are updating state at the minute!!
+        if(options) {
+            for(let i=0; i<attributeCommands.length; i++) {
+                let attributeCommand = attributeCommands[i];
+                if (attributeCommand.name === options.name) {
+                    let deviceAttribute = {
+                        'path': data.path,
+                        'attribute': options.name,
+                        'value': binUtils.bufferToString(data.buffer)
+                    };
+                    store.dispatch(addDataAttributeForDevicePath(deviceAttribute));
+                }
+            }
+        }
+    }
 }
 
 
-function getHardwareAndSoftwareVersion(device) {
+
+//function getHardwareAndSoftwareVersion(device) {
+//    let options = {};
+//    let path = device._id;
+//    options.path = path;
+//    console.log('Getting h/w and s/w version for device: ' + path);
+//
+//    api.connect(options, (response) => {
+//        if (response) { // void method
+//            let writeOptions = {};
+//            writeOptions.path = path;
+//            writeOptions.command = 'ID\r\n';
+//            api.write(writeOptions, (writeResponse) => {
+//                console.log(writeResponse);
+//                connections[path] = WRITTEN;
+//            });
+//            checkIfDataReceivedAndCloseConnection(path);
+//        }
+//    });
+//}
+//
+//
+//function checkIfDataReceivedAndCloseConnection(path) {
+//    let endTime = moment().add(TIMEOUT_IN_SECONDS, 'second');
+//    var checker = setInterval(() => {
+//        if (connections[path] === WRITTEN_AND_READ || moment() >= endTime) {
+//            let options = {};
+//            options.path = path;
+//            api.disconnect(options, (response) => {
+//                console.log('Closed connection');
+//                console.log(response);
+//            });
+//            clearInterval(checker);
+//        }
+//    }, CHECK_FREQUENCY_IN_SECONDS);
+//}
+
+
+function prepareCommandOptions(path) {
+    let allCommandOptions = [];
+    for(let i=0; i<attributeCommands.length; i++) {
+        let options = {
+            'command': attributeCommands[i].command,
+            'path': path,
+            'frequency_in_seconds': attributeCommands[i].frequency_in_seconds,
+            'name': attributeCommands[i].name
+        };
+        let commandOptions = new CommandOptions(options, (writeResponse) => {
+            if(writeResponse) {
+                console.log('Written command to device ' + path);
+            }
+        });
+        allCommandOptions.push(commandOptions);
+    }
+    return allCommandOptions;
+}
+
+
+function runCommandContinuously(deviceCommandQ, commandOptions, frequency_in_seconds) {
+    var continuousCommandRunner = setInterval(() => {
+            deviceCommandQ.addCommand(commandOptions);
+        },
+        frequency_in_seconds * 1000
+    );
+}
+
+
+function connectToDevice(device) {
     let options = {};
     let path = device._id;
     options.path = path;
-    console.log('Getting h/w and s/w version for device: ' + path);
+    console.log('Connecting to device: ' + path);
 
     api.connect(options, (response) => {
-        if (response) { // void method
-            let writeOptions = {};
-            writeOptions.path = path;
-            writeOptions.command = 'ID\r\n';
-            api.write(writeOptions, (writeResponse) => {
-                console.log(writeResponse);
-                connections[path] = WRITTEN;
-            });
-            checkIfDataReceivedAndCloseConnection(path);
+        if(response) {
+            let deviceCommandQ = new DeviceQueue(path, api, onDataReceived(store));
+            deviceCommandQ.start();
+            commandQs[path] = deviceCommandQ;
+            console.log('Started command Q for ' + path);
+
+            let commands = prepareCommandOptions(path);
+            for(let i=0; i< commands.length; i++) {
+                let frequency = commands[i].options.frequency_in_seconds;
+                if (frequency > 0) {
+                    // run continuously
+                    runCommandContinuously(deviceCommandQ, commands[i], frequency);
+                } else {
+                    // run once
+                    deviceCommandQ.addCommand(commands[i]);
+                }
+
+            }
+
+        } else {
+            console.warn('Cannot connect to device ' + path);
         }
     });
-}
 
-
-function checkIfDataReceivedAndCloseConnection(path) {
-    let endTime = moment().add(TIMEOUT_IN_SECONDS, 'second');
-    var checker = setInterval(() => {
-        if (connections[path] === WRITTEN_AND_READ || moment() >= endTime) {
-            let options = {};
-            options.path = path;
-            api.disconnect(options, (response) => {
-                console.log('Closed connection');
-                console.log(response);
-            });
-            clearInterval(checker);
-        }
-    }, CHECK_FREQUENCY_IN_SECONDS);
 }
 
 
@@ -133,20 +216,24 @@ function onConnected(store) {
             } else {
                 var devices = allDevices.devices;
 
-                (function loop(i) {
+                //(function loop(i) {
+                //
+                //    setTimeout(() => {
+                //        console.log(i);
+                //        console.log(devices);
+                //        let dev = devices[i];
+                //        console.log(dev);
+                //        getHardwareAndSoftwareVersion(dev);
+                //        --i;
+                //
+                //        if (i >= 0) loop(i);
+                //    }, 3000);
+                //
+                //})(allDevices.devices.length - 1);
 
-                    setTimeout(() => {
-                        console.log(i);
-                        console.log(devices);
-                        let dev = devices[i];
-                        console.log(dev);
-                        getHardwareAndSoftwareVersion(dev);
-                        --i;
-
-                        if (i >= 0) loop(i);
-                    }, 3000);
-
-                })(allDevices.devices.length - 1);
+                for(let i=0; i<devices.length; i++) {
+                    connectToDevice(devices[i]);
+                }
 
                 allDevices.devices.forEach((aDevice) => {
                     store.dispatch(addDevice(aDevice));

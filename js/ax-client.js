@@ -43,6 +43,10 @@ export default class AXApi {
         });
     }
 
+    replaceDataListener(fn) {
+        this.api.replaceDataListener(fn);
+    }
+
 }
 
 
