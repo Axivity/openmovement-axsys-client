@@ -38,6 +38,7 @@
     border-right:1px solid;
     border-color: #e1e1e1;
     padding: 0;
+    /*min-height: 582px;*/
 }
 
 .main-icon-check-box-wrapper {
@@ -70,6 +71,17 @@
     padding-right: 0.9375rem;
 }
 
+.list-item-main-header {
+    font-size: large;
+}
+
+.list-item-main-sub-header {
+    font-size: small;
+}
+
+.list-item-main-content {
+    font-size: x-small;
+}
 
 .list-item-wrapper {
     border-bottom: 1px solid #e1e1e1;
@@ -102,6 +114,17 @@ div.list-item-wrapper:hover {
     /*margin: 1rem auto;*/
     margin: 1rem auto 1rem 0.3rem;
     cursor: pointer;
+    color: #008CBA;
+}
+
+.material-icons.device-icons {
+    /*color: black;*/
+    font-size: 1.5rem;
+}
+
+.material-icons.device-icons.standard {
+    font-size: 1.5rem;
+    color: #000000;
 }
 
 .list-item-icons-wrapper {
@@ -110,7 +133,9 @@ div.list-item-wrapper:hover {
 }
 
 .list-item-icons {
-    padding-right: 0.9375rem;
+    /*padding-right: 0.9375rem;*/
+    padding: 0;
+    text-align: center;
 }
 
 .list-item-icon {
@@ -163,16 +188,6 @@ div.list-item-wrapper:hover {
     -o-transform: rotate(90deg);
     -ms-transform: rotate(90deg);
     transform: rotate(90deg);
-}
-
-.material-icons.device-icons {
-    /*color: black;*/
-    font-size: 1.5rem;
-}
-
-.material-icons.device-icons.standard {
-    color: black;
-    font-size: 1.5rem;
 }
 
 .back-button-wrapper {

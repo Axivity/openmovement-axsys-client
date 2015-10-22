@@ -15,10 +15,11 @@ export default class DevicesMaster extends Component {
         let {devices, dispatch, deviceAttributes, selectedDevices} = this.props;
 
         return (
-            <div className="small-12 medium-5 large-4 columns ax-master-content slide" data-equalizer-watch>
+            <div className="small-12 medium-5 large-4 columns ax-master-content slide">
                 <DevicesIconBar
-                    actions={dispatch}
+                    dispatch={dispatch}
                     selectedDevices={selectedDevices}
+                    devices={devices}
                 />
                 <DevicesList
                     devices={devices}

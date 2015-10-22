@@ -27,9 +27,17 @@ export function addDataAttributeForDevicePath(deviceAttribute) {
     }
 }
 
-export function selectDevices(devices) {
+export function selectDevice(device) {
     return {
-        type: actionTypes.SELECTED_DEVICES,
-        devices
+        type: actionTypes.SELECT_DEVICE,
+        device
+    }
+}
+
+
+export function deSelectDevice(device) {
+    return {
+        type: actionTypes.DESELECT_DEVICE,
+        device
     }
 }

@@ -12,10 +12,11 @@ import moment from 'moment';
 
 /* internal imports*/
 import App from './containers/AxsysApp';
-import { addDevice, removeDevice, addDataAttributeForDevicePath } from './actions/actionCreators';
+import { addDevice, removeDevice, addDataAttributeForDevicePath, deSelectDevice } from './actions/actionCreators';
 import AXApi from './ax-client';
 import { DeviceQueue, CommandOptions } from './utils/device-queue';
 import axsysApp from './reducers/reducers';
+import {RESPONSES_START_WITH_STRING} from './constants/commandResponseTypes';
 import * as binUtils from './utils/binutils';
 
 let store = createStore(axsysApp);
@@ -61,6 +62,10 @@ function onDeviceAdded(store) {
 
 function onDeviceRemoved(store) {
     return (device) => {
+        store.dispatch(deSelectDevice({
+            _id: device._id,
+            mountPoint: device.volumePath
+        }));
         store.dispatch(removeDevice(device));
     }
 }
@@ -81,21 +86,41 @@ function onDataReceived(store) {
         console.log('Data is in the app');
         console.log(data);
 
-        let options = data.commandOptions;
-        // Only attribute commands are updating state at the minute!!
-        if(options) {
-            for(let i=0; i<attributeCommands.length; i++) {
-                let attributeCommand = attributeCommands[i];
-                if (attributeCommand.name === options.name) {
-                    let deviceAttribute = {
-                        'path': data.path,
-                        'attribute': options.name,
-                        'value': binUtils.bufferToString(data.buffer)
-                    };
-                    store.dispatch(addDataAttributeForDevicePath(deviceAttribute));
+        let returnedString = binUtils.bufferToString(data.buffer);
+        let attributeName = null;
+        for(let prop in RESPONSES_START_WITH_STRING) {
+            if(RESPONSES_START_WITH_STRING.hasOwnProperty(prop)) {
+                if(returnedString.startsWith(prop)) {
+                    attributeName = RESPONSES_START_WITH_STRING[prop];
                 }
             }
         }
+
+        // we only care about the attributes we know of.
+        if(attributeName !== null) {
+            let deviceAttribute = {
+                'path': data.path,
+                'attribute': attributeName,
+                'value': returnedString
+            };
+            store.dispatch(addDataAttributeForDevicePath(deviceAttribute));
+        }
+
+        //let options = data.commandOptions;
+        //// Only attribute commands are updating state at the minute!!
+        //if(options) {
+        //    for(let i=0; i<attributeCommands.length; i++) {
+        //        let attributeCommand = attributeCommands[i];
+        //        if (attributeCommand.name === options.name) {
+        //            let deviceAttribute = {
+        //                'path': data.path,
+        //                'attribute': options.name,
+        //                'value': binUtils.bufferToString(data.buffer)
+        //            };
+        //            store.dispatch(addDataAttributeForDevicePath(deviceAttribute));
+        //        }
+        //    }
+        //}
     }
 }
 

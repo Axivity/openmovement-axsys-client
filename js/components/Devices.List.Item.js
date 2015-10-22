@@ -20,11 +20,20 @@ export default class DevicesListItem extends Component {
 
     handleSelect(event) {
         let dispatch = this.props.dispatch;
-        // dispatch device selected!
-        dispatch(actionCreators.selectDevices({
-            'devicePath': this.props.device._id,
-            'mountPoint': this.props.device.volumeName
-        }));
+        if(!this.state.selected) {
+            // dispatch device selected!
+            dispatch(actionCreators.selectDevice({
+                _id: this.props.device._id,
+                mountPoint: this.props.device.volumePath
+            }));
+
+        } else {
+            dispatch(actionCreators.deSelectDevice({
+                _id: this.props.device._id,
+                mountPoint: this.props.device.volumePath
+            }));
+        }
+
         this.setState({
            selected: !this.state.selected
         });
@@ -115,9 +124,20 @@ export default class DevicesListItem extends Component {
     }
 
 
+    presentInSelectedDevices(selectedDevices, deviceId) {
+        for(let i=0; i < selectedDevices.length; i++) {
+            let dev = selectedDevices[i];
+            if(dev._id === deviceId) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
     render() {
 
-        let { dispatch, device, deviceAttributes } = this.props;
+        let { dispatch, device, deviceAttributes, selectedDevices } = this.props;
 
         console.log(deviceAttributes);
 
@@ -131,22 +151,24 @@ export default class DevicesListItem extends Component {
 
         batteryClasses += " " + batteryIconNameWithColor.className;
 
-        var iconName = this.state.selected ? 'check_box' : 'check_box_outline_blank';
+        //var iconName = this.state.selected ? 'check_box' : 'check_box_outline_blank';
+        let selectIconName = this.presentInSelectedDevices(selectedDevices, device._id) ? 'check_box' : 'check_box_outline_blank';
 
         return (
-            <div className="row list-item-wrapper list-item-top-spacer">
+            <div className="row list-item-wrapper list-item-top-spacer list-item-bottom-spacer">
 
                 <div className="large-2 small-2 medium-2 columns list-header-icon-wrapper">
                     <i className="material-icons list-item-header-icon"
                        onClick={this.handleSelect.bind(this)}>
-                        {iconName}
+                        {selectIconName}
                     </i>
                 </div>
 
                 <div className="large-10 small-10 medium-10 columns">
+                    {/*
                     <div className="row clearfix">
                         <h4>
-                            {device.serialNumber} <small>Charging</small>
+                            {device.serialNumber} <small>Stopped</small>
                             <span className="list-item-icons right">
                                 <small>
                                     <i className="material-icons device-icons standard">usb</i>
@@ -164,8 +186,50 @@ export default class DevicesListItem extends Component {
                     <div className="row list-item-bottom-spacer list-item-extra-info standard">
                         <span>Session: Unknown</span><br/>
                         <span>Hardware:{versions.hardwareVersion} Software:{versions.softwareVersion}</span>
-                        {/*<small>{device._id}</small>*/}
                     </div>
+                    */}
+                    <div className="row">
+                        <div className="small-9 large-9 medium-9 columns">
+                            <div className="row">
+                                <div className="small-12 large-12 medium-12 columns">
+                                    <span className="list-item-main-header">{device.serialNumber}</span>
+                                    <span className="list-item-main-sub-header">  downloading..</span>
+                                </div>
+                            </div>
+
+                            <div className="row">
+                                <div className="small-12 large-12 medium-12 columns">
+                                    <span className="list-item-main-sub-header"> session: unknown</span>
+                                </div>
+                            </div>
+
+                            <div className="row">
+                                <div className="small-12 large-12 medium-12 columns">
+                                    <span className="list-item-main-content"> hardware:{versions.hardwareVersion} software:{versions.softwareVersion}</span>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div className="small-3 large-3 medium-3 columns list-item-icons">
+                            <span>
+                                <small>
+                                    <i className="material-icons device-icons standard">usb</i>
+                                </small>
+                                <small>
+                                    <i className={batteryClasses}>
+                                        {batteryIconNameWithColor.name}
+                                    </i>
+                                </small>
+                            </span>
+                        </div>
+                    </div>
+
+                    {/*
+                    <div className="row">
+                        <div className="small-12 large-12 medium-12 columns list-item-bottom-spacer">
+                        </div>
+                    </div>
+                     */}
 
                 </div>
 

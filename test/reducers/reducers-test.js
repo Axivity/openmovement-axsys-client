@@ -161,5 +161,59 @@ describe('reducers', () => {
         });
 
     });
+
+    describe('when selectedDevices is passed', () => {
+        it('should return new state with new object', () => {
+            let expectedState = {
+                'devices': [],
+                'deviceAttributes': {},
+                'selectedDevices': [
+                    { '_id': 'serial://123456', 'mountPoint': 'D:/' }
+                ]
+            };
+
+            let selectedDevice = {
+                '_id': 'serial://123456',
+                'mountPoint': 'D:/'
+            };
+
+            let initialState = [];
+            let nextState = reducer(initialState, actions.selectDevice(selectedDevice));
+            console.log(nextState);
+            expect(nextState).to.shallowDeepEqual(expectedState);
+
+        });
+
+        it('should return new state without altering state if object present already', () => {
+            let expectedState = {
+                'devices': [],
+                'deviceAttributes': {},
+                'selectedDevices': [
+                    { '_id': 'serial://123456', 'mountPoint': 'D:/' }
+                ]
+            };
+
+            let selectedDevice1 = {
+                '_id': 'serial://123456',
+                'mountPoint': 'D:/'
+            };
+
+            let initialState = [];
+            let nextState1 = reducer(initialState, actions.selectDevice(selectedDevice1));
+            expect(nextState1).to.shallowDeepEqual(expectedState);
+
+            let selectedDevice2 = {
+                '_id': 'serial://123456',
+                'mountPoint': 'D:/'
+            };
+
+            let nextState2 = reducer(nextState1, actions.selectDevice(selectedDevice2));
+            console.log(nextState2);
+            expect(nextState2).to.shallowDeepEqual(expectedState);
+
+        });
+
+
+    });
 });
 

@@ -7,13 +7,44 @@ import * as actionTypes from '../constants/actionTypes';
 import * as actions from '../actions/actionCreators';
 
 
+function _itemPresentAlready(listOfObjects, item, itemKey) {
+    for(let i=0; i<listOfObjects.length; i++) {
+        let obj = listOfObjects[i];
+        if(obj[itemKey]) {
+            if(obj[itemKey] === item[itemKey]) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+
 function selectedDevices(state=[], action=null) {
     switch (action.type) {
-        case actionTypes.SELECTED_DEVICES:
-            return [
-                ...state,
-                ...action.devices
-            ];
+        case actionTypes.SELECT_DEVICE:
+            let presentAlready = _itemPresentAlready(state, action.device, '_id');
+            console.log('Present already: ' + presentAlready);
+            // add device to list of devices in selected state
+            if(presentAlready) {
+                // TODO: do we replace item or just ignore??
+                // For now I'll ignore if it's present already as it
+                // is only applicable for selections- but may need
+                // revisiting.
+                return state;
+
+            } else {
+                return [
+                    ...state,
+                    action.device
+                ];
+            }
+
+        case actionTypes.DESELECT_DEVICE:
+            // remove device from selected list of devices in state
+            return state.filter(device =>
+                device._id !== action.device._id
+            );
 
         default:
             return state;
