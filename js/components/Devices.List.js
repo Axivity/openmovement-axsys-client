@@ -10,7 +10,7 @@ export default class DevicesList extends Component {
 
     render() {
 
-        let { actions, devices, deviceAttributes } = this.props;
+        let { dispatch, devices, deviceAttributes, selectedDevices } = this.props;
         console.log(devices);
 
         let fixSidesStyle = {
@@ -25,8 +25,9 @@ export default class DevicesList extends Component {
                             <DeviceListItem
                                 key={device._id}
                                 device={device}
-                                actions={actions}
+                                dispatch={dispatch}
                                 deviceAttributes={deviceAttributes}
+                                selectedDevices={selectedDevices}
                             />
                         );
                     }) }

@@ -4,6 +4,7 @@
 import React, { PropTypes, Component } from 'react';
 
 import * as attributeNames from '../constants/attributeNames';
+import * as actionCreators from '../actions/actionCreators';
 
 export default class DevicesListItem extends Component {
 
@@ -18,6 +19,12 @@ export default class DevicesListItem extends Component {
 
 
     handleSelect(event) {
+        let dispatch = this.props.dispatch;
+        // dispatch device selected!
+        dispatch(actionCreators.selectDevices({
+            'devicePath': this.props.device._id,
+            'mountPoint': this.props.device.volumeName
+        }));
         this.setState({
            selected: !this.state.selected
         });
@@ -110,7 +117,7 @@ export default class DevicesListItem extends Component {
 
     render() {
 
-        let { action, device, deviceAttributes } = this.props;
+        let { dispatch, device, deviceAttributes } = this.props;
 
         console.log(deviceAttributes);
 
@@ -154,8 +161,9 @@ export default class DevicesListItem extends Component {
                         </h4>
                     </div>
 
-                    <div className="row list-item-bottom-spacer">
-                        <small>Hardware:{versions.hardwareVersion} Software:{versions.softwareVersion}</small><br/>
+                    <div className="row list-item-bottom-spacer list-item-extra-info standard">
+                        <span>Session: Unknown</span><br/>
+                        <span>Hardware:{versions.hardwareVersion} Software:{versions.softwareVersion}</span>
                         {/*<small>{device._id}</small>*/}
                     </div>
 

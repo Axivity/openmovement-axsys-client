@@ -11,7 +11,7 @@ export default class DevicesIconBar extends Component {
     }
 
     render() {
-        let { actions } = this.props;
+        let { actions, selectedDevices } = this.props;
         
         return (
             <div className="row">

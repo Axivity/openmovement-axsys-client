@@ -15,15 +15,16 @@ import DevicesMaster from '../components/Devices.Master'
 class App extends Component {
     render() {
         console.log(this.props);
-        const { devices, dispatch, deviceAttributes } = this.props;
-        const actions = bindActionCreators(actionCreators, dispatch);
+        const { devices, dispatch, deviceAttributes, selectedDevices } = this.props;
+        //const actions = bindActionCreators(actionCreators, dispatch);
         console.log(deviceAttributes);
 
         return (
             <DevicesMaster
                 devices={devices}
-                actions={actions}
+                dispatch={dispatch}
                 deviceAttributes={deviceAttributes}
+                selectedDevices={selectedDevices}
             />
         );
     }
@@ -35,7 +36,8 @@ function mapStateToProps(state) {
     console.log(state);
     return {
         devices: state.devices,
-        deviceAttributes: state.deviceAttributes
+        deviceAttributes: state.deviceAttributes,
+        selectedDevices: state.selectedDevices
     };
 }
 

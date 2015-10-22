@@ -82,6 +82,17 @@ div.list-item-wrapper:hover {
     background-color: #e1e1e1;
 }
 
+.list-item-extra-info {
+    font-size: small;
+}
+
+.list-item-extra-info.significant {
+    font-size: small;
+}
+
+.list-item-extra-info.standard {
+    font-size: x-small;
+}
 
 .list-header-icon-wrapper {
     text-align: center;

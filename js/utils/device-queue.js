@@ -6,7 +6,7 @@ import moment from 'moment';
 
 import * as binUtils from './binutils';
 
-const TIMEOUT_IN_SECONDS = 10;
+const TIMEOUT_IN_SECONDS = 30;
 
 const WRITTEN = Symbol();
 
@@ -38,6 +38,7 @@ export class DeviceQueue {
         this.commandRunning = false;
         this.currentCommand = null;
         this.dataListener = dataListener;
+        this.checker = null;
         // replacing ondatareceived data listener
         this.api.replaceDataListener(this.wrappedDataListener.bind(this));
     }
@@ -75,6 +76,9 @@ export class DeviceQueue {
             console.log(data);
             if(this.commandRunning) {
                 if(data.endsWith(END_OF_LINE)) {
+                    if(this.checker) {
+                        clearInterval(this.checker);
+                    }
                     this.commandRunning = false;
                     //this.currentCommand = null;
                 }
@@ -86,7 +90,7 @@ export class DeviceQueue {
 
     checkIfCommandHasNotReturnedWithinTimeOutAndMarkAsDone() {
         let endTime = moment().add(TIMEOUT_IN_SECONDS, 'second');
-        var checker = setInterval(() => {
+        this.checker = setInterval(() => {
             if(this.commandRunning) {
                 if (moment() >= endTime) {
                     console.warn('Command did not finish execution within timeout on ' +  this.devicePath);
@@ -97,12 +101,12 @@ export class DeviceQueue {
                     this.commandRunning = false;
                     //this.currentCommand = null;
                     //
-                    clearInterval(checker);
+                    clearInterval(this.checker);
                 }
 
             } else {
                 // No command running so clear this checker
-                clearInterval(checker);
+                clearInterval(this.checker);
             }
 
         }, this.checkFrequencyInMilliSeconds);

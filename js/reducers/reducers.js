@@ -7,6 +7,20 @@ import * as actionTypes from '../constants/actionTypes';
 import * as actions from '../actions/actionCreators';
 
 
+function selectedDevices(state=[], action=null) {
+    switch (action.type) {
+        case actionTypes.SELECTED_DEVICES:
+            return [
+                ...state,
+                ...action.devices
+            ];
+
+        default:
+            return state;
+    }
+}
+
+
 function deviceAttributes(state={}, action=null) {
     console.log('device attributes');
     console.log(state);
@@ -72,5 +86,6 @@ function devices(state = [], action = null) {
 
 export default combineReducers({
     devices,
-    deviceAttributes
+    deviceAttributes,
+    selectedDevices
 });

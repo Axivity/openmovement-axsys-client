@@ -12,17 +12,19 @@ export default class DevicesMaster extends Component {
     }
 
     render() {
-        let {devices, actions, deviceAttributes} = this.props;
+        let {devices, dispatch, deviceAttributes, selectedDevices} = this.props;
 
         return (
             <div className="small-12 medium-5 large-4 columns ax-master-content slide" data-equalizer-watch>
                 <DevicesIconBar
-                    actions={actions}
+                    actions={dispatch}
+                    selectedDevices={selectedDevices}
                 />
                 <DevicesList
                     devices={devices}
-                    actions={actions}
+                    dispatch={dispatch}
                     deviceAttributes={deviceAttributes}
+                    selectedDevices={selectedDevices}
                 />
             </div>
         );

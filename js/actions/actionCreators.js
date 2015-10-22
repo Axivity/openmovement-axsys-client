@@ -2,12 +2,12 @@
  * Created by Praveen on 11/09/2015.
  */
 
-import { ADD_DEVICE, REMOVE_DEVICE, ADD_DEVICE_ATTRIBUTES } from '../constants/actionTypes';
+import * as actionTypes from '../constants/actionTypes';
 
 
 export function addDevice(device) {
     return {
-        type: ADD_DEVICE,
+        type: actionTypes.ADD_DEVICE,
         device
     };
 
@@ -15,14 +15,21 @@ export function addDevice(device) {
 
 export function removeDevice(device) {
     return {
-        type: REMOVE_DEVICE,
+        type: actionTypes.REMOVE_DEVICE,
         device
     }
 }
 
 export function addDataAttributeForDevicePath(deviceAttribute) {
     return {
-        type: ADD_DEVICE_ATTRIBUTES,
+        type: actionTypes.ADD_DEVICE_ATTRIBUTES,
         deviceAttribute
+    }
+}
+
+export function selectDevices(devices) {
+    return {
+        type: actionTypes.SELECTED_DEVICES,
+        devices
     }
 }
