@@ -5,5 +5,5 @@
 
 export function bufferToString(buff) {
     // buff.data is websocket dependent!!
-    return String.fromCharCode.apply(null, new Uint8Array(buff.data));
+    return String.fromCharCode.apply(null, new Uint8Array(buff));
 }

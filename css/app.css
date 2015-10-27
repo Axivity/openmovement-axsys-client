@@ -26,7 +26,12 @@
 }
 
 .ax-ui-content {
-    margin: 10px 0 0 0;
+    margin: 1rem 0 0 0;
+}
+
+
+.ax-detail-content {
+    margin: 1rem auto;
 }
 
 /*
@@ -146,7 +151,21 @@ div.list-item-wrapper:hover {
     /*margin: 0.7rem 1.5rem 0.5rem 1.5rem;*/
 }
 
+.list-item-section {
+    cursor: pointer;
+}
+
 /* List items for master content end */
+
+/* Details section */
+.device-details-section-main {
+    text-align:center;
+}
+
+.device-details-main-msg {
+    color: #808080;
+}
+/* Details section ends */
 
 
 /*  TODO: Find a work around to remove this margin.

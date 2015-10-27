@@ -41,3 +41,19 @@ export function deSelectDevice(device) {
         device
     }
 }
+
+
+export function setDetailViewForDevice(device) {
+    return {
+        type: actionTypes.SET_DETAIL_VIEW_FOR_DEVICE,
+        device
+    }
+}
+
+export function removeDetailViewForDevice(device) {
+    return {
+        type: actionTypes.REMOVE_DETAIL_VIEW_FOR_DEVICE,
+        device
+    }
+}
+

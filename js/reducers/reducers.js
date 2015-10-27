@@ -115,8 +115,22 @@ function devices(state = [], action = null) {
     }
 }
 
+function detailViewDevice(state={}, action=null) {
+    switch(action.type) {
+        case actionTypes.SET_DETAIL_VIEW_FOR_DEVICE:
+            return action.device;
+
+        case actionTypes.REMOVE_DETAIL_VIEW_FOR_DEVICE:
+            return {};
+
+        default:
+            return state;
+    }
+}
+
 export default combineReducers({
     devices,
     deviceAttributes,
-    selectedDevices
+    selectedDevices,
+    detailViewDevice
 });

@@ -12,7 +12,8 @@ import moment from 'moment';
 
 /* internal imports*/
 import App from './containers/AxsysApp';
-import { addDevice, removeDevice, addDataAttributeForDevicePath, deSelectDevice } from './actions/actionCreators';
+import { addDevice, removeDevice, addDataAttributeForDevicePath,
+    deSelectDevice, removeDetailViewForDevice } from './actions/actionCreators';
 import AXApi from './ax-client';
 import { DeviceQueue, CommandOptions } from './utils/device-queue';
 import axsysApp from './reducers/reducers';
@@ -43,7 +44,7 @@ let attributeCommands = [
 let api = new AXApi(
     onDeviceAdded(store),
     onDeviceRemoved(store),
-    onConnected(store),
+    onConnectedToServer(store),
     onDisconnected(store),
     onDataReceived
 );
@@ -106,61 +107,8 @@ function onDataReceived(store) {
             store.dispatch(addDataAttributeForDevicePath(deviceAttribute));
         }
 
-        //let options = data.commandOptions;
-        //// Only attribute commands are updating state at the minute!!
-        //if(options) {
-        //    for(let i=0; i<attributeCommands.length; i++) {
-        //        let attributeCommand = attributeCommands[i];
-        //        if (attributeCommand.name === options.name) {
-        //            let deviceAttribute = {
-        //                'path': data.path,
-        //                'attribute': options.name,
-        //                'value': binUtils.bufferToString(data.buffer)
-        //            };
-        //            store.dispatch(addDataAttributeForDevicePath(deviceAttribute));
-        //        }
-        //    }
-        //}
     }
 }
-
-
-
-//function getHardwareAndSoftwareVersion(device) {
-//    let options = {};
-//    let path = device._id;
-//    options.path = path;
-//    console.log('Getting h/w and s/w version for device: ' + path);
-//
-//    api.connect(options, (response) => {
-//        if (response) { // void method
-//            let writeOptions = {};
-//            writeOptions.path = path;
-//            writeOptions.command = 'ID\r\n';
-//            api.write(writeOptions, (writeResponse) => {
-//                console.log(writeResponse);
-//                connections[path] = WRITTEN;
-//            });
-//            checkIfDataReceivedAndCloseConnection(path);
-//        }
-//    });
-//}
-//
-//
-//function checkIfDataReceivedAndCloseConnection(path) {
-//    let endTime = moment().add(TIMEOUT_IN_SECONDS, 'second');
-//    var checker = setInterval(() => {
-//        if (connections[path] === WRITTEN_AND_READ || moment() >= endTime) {
-//            let options = {};
-//            options.path = path;
-//            api.disconnect(options, (response) => {
-//                console.log('Closed connection');
-//                console.log(response);
-//            });
-//            clearInterval(checker);
-//        }
-//    }, CHECK_FREQUENCY_IN_SECONDS);
-//}
 
 
 function prepareCommandOptions(path) {
@@ -215,18 +163,17 @@ function connectToDevice(device) {
                     // run once
                     deviceCommandQ.addCommand(commands[i]);
                 }
-
             }
 
         } else {
-            console.warn('Cannot connect to device ' + path);
+            console.warn('Unexpected internal error in connecting to device ' + path);
         }
     });
 
 }
 
 
-function onConnected(store) {
+function onConnectedToServer(store) {
     return () => {
         api.getDevices((allDevices) => {
             console.log(err);
@@ -276,5 +223,5 @@ React.render(
     <Provider store={store}>
         {() => <App />}
     </Provider>,
-    document.getElementById('ax-master')
+    document.getElementById('ax-ui-content')
 );

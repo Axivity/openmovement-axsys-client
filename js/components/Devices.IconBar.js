@@ -48,7 +48,7 @@ export default class DevicesIconBar extends Component {
     }
 
     areAllDevicesSelected(selectedDevices, devices) {
-        return (devices.length === selectedDevices.length);
+        return (devices.length > 0 && devices.length === selectedDevices.length);
     }
 
 

@@ -134,6 +134,11 @@ export default class DevicesListItem extends Component {
         return false;
     }
 
+    handleListItemClicked(ev) {
+        let dispatch = this.props.dispatch;
+        dispatch(actionCreators.setDetailViewForDevice(this.props.device));
+    }
+
 
     render() {
 
@@ -164,7 +169,7 @@ export default class DevicesListItem extends Component {
                     </i>
                 </div>
 
-                <div className="large-10 small-10 medium-10 columns">
+                <div className="large-10 small-10 medium-10 columns list-item-section" onClick={this.handleListItemClicked.bind(this)}>
                     {/*
                     <div className="row clearfix">
                         <h4>
