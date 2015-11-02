@@ -48,6 +48,7 @@
     "express.io": "^1.1.13",
     "foundation-sites": "^5.5.2",
     "moment": "^2.10.6",
+    "normalize.css": "^3.0.3",
     "object-assign": "^2.1.1",
     "pubsub-js": "^1.5.3",
     "react": "^0.13.3",

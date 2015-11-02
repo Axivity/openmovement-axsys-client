@@ -155,6 +155,10 @@ div.list-item-wrapper:hover {
     cursor: pointer;
 }
 
+.ax-icon-bar-adjust-height {
+    height: 61px;
+}
+
 /* List items for master content end */
 
 /* Details section */

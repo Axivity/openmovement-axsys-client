@@ -12,11 +12,24 @@ export default class DevicesDetail extends Component {
 
     hasDeviceKey(obj) {
         const keyName = '_id';
-        return obj[keyName];
+        return obj.hasOwnProperty(keyName);
     }
 
-    componentDidMount() {
-        $(document).foundation('accordion', 'reflow');
+    //componentDidMount() {
+    //    $(document).foundation('accordion', 'reflow');
+    //}
+
+    shouldComponentUpdate(nextProps, nextState) {
+        const {detailViewDevice} = this.props;
+        if(this.hasDeviceKey(detailViewDevice)) {
+            let newDetailViewSelectedForDevice = nextProps.detailViewDevice;
+            return (detailViewDevice._id !== newDetailViewSelectedForDevice._id);
+
+        } else {
+            // No device selected we need to show some informative message
+            return true;
+        }
+
     }
 
     componentDidUpdate() {
@@ -88,83 +101,7 @@ export default class DevicesDetail extends Component {
                     toField: "volume"
                 } ],
                 dataProvider: chartData,
-                categoryField: "date",
-                // EVENTS
-                stockEvents: [ {
-                    date: new Date( 2010, 8, 19 ),
-                    type: "sign",
-                    backgroundColor: "#85CDE6",
-                    graph: "g1",
-                    text: "S",
-                    description: "This is description of an event"
-                }, {
-                    date: new Date( 2010, 10, 19 ),
-                    type: "flag",
-                    backgroundColor: "#FFFFFF",
-                    backgroundAlpha: 0.5,
-                    graph: "g1",
-                    text: "F",
-                    description: "Some longerntext can alson be added"
-                }, {
-                    date: new Date( 2010, 11, 10 ),
-                    showOnAxis: true,
-                    backgroundColor: "#85CDE6",
-                    type: "pin",
-                    text: "X",
-                    graph: "g1",
-                    description: "This is description of an event"
-                }, {
-                    date: new Date( 2010, 11, 26 ),
-                    showOnAxis: true,
-                    backgroundColor: "#85CDE6",
-                    type: "pin",
-                    text: "Z",
-                    graph: "g1",
-                    description: "This is description of an event"
-                }, {
-                    date: new Date( 2011, 0, 3 ),
-                    type: "sign",
-                    backgroundColor: "#85CDE6",
-                    graph: "g1",
-                    text: "U",
-                    description: "This is description of an event"
-                }, {
-                    date: new Date( 2011, 1, 6 ),
-                    type: "sign",
-                    graph: "g1",
-                    text: "D",
-                    description: "This is description of an event"
-                }, {
-                    date: new Date( 2011, 3, 5 ),
-                    type: "sign",
-                    graph: "g1",
-                    text: "L",
-                    description: "This is description of an event"
-                }, {
-                    date: new Date( 2011, 3, 5 ),
-                    type: "sign",
-                    graph: "g1",
-                    text: "R",
-                    description: "This is description of an event"
-                }, {
-                    date: new Date( 2011, 5, 15 ),
-                    type: "arrowUp",
-                    backgroundColor: "#00CC00",
-                    graph: "g1",
-                    description: "This is description of an event"
-                }, {
-                    date: new Date( 2011, 6, 25 ),
-                    type: "arrowDown",
-                    backgroundColor: "#CC0000",
-                    graph: "g1",
-                    description: "This is description of an event"
-                }, {
-                    date: new Date( 2011, 8, 1 ),
-                    type: "text",
-                    graph: "g1",
-                    text: "Longer text can\nalso be displayed",
-                    description: "This is description of an event"
-                } ]
+                categoryField: "date"
             } ],
 
 
@@ -227,6 +164,9 @@ export default class DevicesDetail extends Component {
     }
 
     render() {
+
+        // TODO: Needs updating remove all the accordion classes below.
+
         let {dispatch, detailViewDevice} =  this.props;
 
         if (this.hasDeviceKey(detailViewDevice)) {

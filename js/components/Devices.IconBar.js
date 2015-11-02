@@ -65,7 +65,7 @@ export default class DevicesIconBar extends Component {
         
         return (
             <div className="row">
-                <div className="large-12 small-12 medium-12 columns">
+                <div className="large-12 small-12 medium-12 columns ax-icon-bar-adjust-height">
                     <div className="icon-bar six-up">
                         <a className="item has-tip"
                            role="button"
@@ -78,7 +78,6 @@ export default class DevicesIconBar extends Component {
                         <a className={iconKlassNames}
                            data-tooltip
                            aria-haspopup="true"
-                           data-reveal-id="myModal"
                            title="Record">
                             <i className="material-icons">radio_button_checked</i>
                         </a>
