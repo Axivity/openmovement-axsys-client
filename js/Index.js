@@ -1,5 +1,7 @@
 /**
  * Created by Praveen on 11/09/2015.
+ *
+ * @flow
  */
 /* system imports */
 require("babel/polyfill");
@@ -22,7 +24,7 @@ import * as binUtils from './utils/binutils';
 
 let store = createStore(axsysApp);
 
-let connections = {};
+let connections: Map<string, string>;
 let commandQs = {};
 
 // NB: The name is supposed to be unique for all these commands.

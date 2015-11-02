@@ -4,6 +4,7 @@
 
 import React, { PropTypes, Component } from 'react';
 
+
 export default class DevicesDetail extends Component {
     constructor(props) {
         super(props)
@@ -15,49 +16,39 @@ export default class DevicesDetail extends Component {
     }
 
     componentDidMount() {
-        const {detailViewDevice} = this.props;
-
-        if(this.hasDeviceKey(detailViewDevice)) {
-            
-        }
+        $(document).foundation('accordion', 'reflow');
     }
-
 
     componentDidUpdate() {
         const {detailViewDevice} = this.props;
 
         if(this.hasDeviceKey(detailViewDevice)) {
             this.drawChart();
-            this.setUpSlide();
         }
     }
 
-    setUpSlide() {
-        $('.back-button-wrapper').click(function () {
-            console.log('clicked');
+    handleMinimizeButtonClick(ev) {
+        console.log('clicked');
+        var innerText = $('.back-button-wrapper > i').text();
+        console.log(innerText);
+        if(innerText === 'chevron_left') {
+            $('.back-button-wrapper > i').text('chevron_right');
 
-            var innerText = $('.back-button-wrapper > i').text();
-            console.log(innerText);
-            if(innerText === 'chevron_left') {
-                $('.back-button-wrapper > i').text('chevron_right');
+            $(".slide").animate({width:'toggle'},100, 'linear', () => {
+                $('.ax-detail-content').removeClass('large-8');
+                $('.ax-detail-content').addClass('large-12');
+            });
 
-                $(".slide").animate({width:'toggle'},300, 'linear', () => {
-                    $('.ax-detail-content').removeClass('large-8');
-                    $('.ax-detail-content').addClass('large-12');    
-                });
-                
 
-            } else {
-                $('.back-button-wrapper > i').text('chevron_left');
-                
-                $(".slide").animate({width:'toggle'},300, 'linear', () => {
-                    $('.ax-detail-content').removeClass('large-12');
-                    $('.ax-detail-content').addClass('large-8');    
-                });
+        } else {
+            $('.back-button-wrapper > i').text('chevron_left');
 
-            }
+            $(".slide").animate({width:'toggle'},100, 'linear', () => {
+                $('.ax-detail-content').removeClass('large-12');
+                $('.ax-detail-content').addClass('large-8');
+            });
 
-        });
+        }
     }
 
     drawChart() {
@@ -243,63 +234,59 @@ export default class DevicesDetail extends Component {
                 <div className="small-12 large-8 medium-7 columns ax-detail-content">
                     <div className="row">
                         <div className="large-12 medium-12 columns">
-                            <div className="back-button-wrapper">
+                            <div className="back-button-wrapper" onClick={this.handleMinimizeButtonClick.bind(this)}>
                                 <i className="material-icons">chevron_left</i>
                             </div>
                         </div>
 
                         <div className="large-12 medium-12 columns">
-
-                            <dl className="accordion" data-accordion>
-                                <dd className="accordion-navigation">
-                                    <a href="#panel1a">Device Info</a>
-                                    <div id="panel1a" className="content active">
-                                        <h6>Metadata</h6>
-                                        <span><small>Gender: <b>M</b></small><br/></span>
-                                        <span><small>Age: <b>45</b></small><br/> </span>
-                                        <br/>
-                                        <h6>Attributes</h6>
-                                        <span><small>Port: <b>{detailViewDevice.port}</b></small><br/></span>
-                                        <span><small>Volume: <b>{detailViewDevice.volumePath}</b></small><br/></span>
-                                    </div>
-                                </dd>
-                                <dd className="accordion-navigation">
-                                    <a href="#panel1b">Visualization</a>
-                                    <div id="panel1b" className="content active">
-                                        <div id="chartdiv"></div>
-                                    </div>
-                                </dd>
-                            </dl>
-
-                            {/*
-                            <ul className="accordion" data-accordion>
+                            <ul className="accordion ax-detail-panels" data-accordion>
                                 <li className="accordion-navigation">
-                                    <a href="#panel1a">Device Info</a>
+                                    <a href="#panel1a"><strong>Device Info</strong></a>
                                     <div id="panel1a" className="content active">
                                         <h6>Metadata</h6>
-                                        <span><small>Gender: <b>M</b></small><br/></span>
-                                        <span><small>Age: <b>45</b></small><br/> </span>
-                                        <br/>
+                                        <div className="row">
+                                            <div className="large-6 medium-6 small-6 columns">
+                                                Gender:
+                                            </div>
+                                            <div className="large-6 medium-6 small-6 columns">
+                                                Male
+                                            </div>
+                                            <div className="large-6 medium-6 small-6 columns">
+                                                Age:
+                                            </div>
+                                            <div className="large-6 medium-6 small-6 columns">
+                                                45
+                                            </div>
+                                        </div>
+
                                         <h6>Attributes</h6>
-                                        <span><small>Port: <b>{detailViewDevice.port}</b></small><br/></span>
-                                        <span><small>Volume: <b>{detailViewDevice.volumePath}</b></small><br/></span>
+                                        <div className="row">
+                                            <div className="large-6 medium-6 small-6 columns">
+                                                Port:
+                                            </div>
+                                            <div className="large-6 medium-6 small-6 columns">
+                                                {detailViewDevice.port}
+                                            </div>
+                                            <div className="large-6 medium-6 small-6 columns">
+                                                Volume:
+                                            </div>
+                                            <div className="large-6 medium-6 small-6 columns">
+                                                {detailViewDevice.volumePath}
+                                            </div>
+                                        </div>
                                     </div>
                                 </li>
                                 <li className="accordion-navigation">
-                                    <a href="#panel1a">Visualization</a>
+                                    <a href="#panel1a"><strong>Preview</strong></a>
                                     <div id="panel1a" className="content active">
                                         <div id="chartdiv"></div>
                                     </div>
                                 </li>
                             </ul>
-                             */}
                         </div>
-                        <div className="large-12 medium-12 columns chart-wrapper">
 
-                        </div>
-                        <div className="large-12 medium-12 columns ">
 
-                        </div>
                     </div>
                 </div>
             );

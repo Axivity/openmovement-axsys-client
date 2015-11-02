@@ -48,7 +48,11 @@
     "express.io": "^1.1.13",
     "foundation-sites": "^5.5.2",
     "moment": "^2.10.6",
+    "object-assign": "^2.1.1",
+    "pubsub-js": "^1.5.3",
     "react": "^0.13.3",
+    "react-foundation-apps": "^0.6.1",
+    "react-responsive-mixin": "^0.3.5",
     "redux": "^2.0.0",
     "redux-thunk": "^0.1.0",
     "uglify": "^0.1.5"
