@@ -3,16 +3,39 @@
  */
 
 import React, { PropTypes, Component } from 'react';
+import ReactTooltip from 'react-tooltip';
+import Modal from 'react-modal';
 
+import DevicesConfigurationForm from './Devices.Configuration';
 import * as actionCreators from '../actions/actionCreators';
+
+const customStyles = {
+    content : {
+        top                   : '50%',
+        left                  : '50%',
+        right                 : 'auto',
+        bottom                : 'auto',
+        marginRight           : '-50%',
+        transform             : 'translate(-50%, -50%)'
+    }
+};
 
 export default class DevicesIconBar extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            selectedAll: false
+            selectedAll: false,
+            modalIsOpen: false
         };
+    }
+
+    openModal() {
+        this.setState({modalIsOpen: true});
+    }
+
+    closeModal() {
+        this.setState({modalIsOpen: false});
     }
 
     isSelected() {
@@ -67,19 +90,28 @@ export default class DevicesIconBar extends Component {
             <div className="row">
                 <div className="large-12 small-12 medium-12 columns ax-icon-bar-adjust-height">
                     <div className="icon-bar six-up">
-                        <a className="item has-tip"
-                           role="button"
-                           data-tooltip
-                           aria-haspopup="true"
-                           title="Select All"
+                        <a className="item"
+                            role="button"
+                            data-tip="Select All"
                             onClick={this.handleSelectAll.bind(this)}>
                             <i className="material-icons">{checkBoxIconName}</i>
                         </a>
+
                         <a className={iconKlassNames}
                            data-tooltip
                            aria-haspopup="true"
+                           onClick={this.openModal.bind(this)}
                            title="Record">
                             <i className="material-icons">radio_button_checked</i>
+                            <Modal
+                                isOpen={this.state.modalIsOpen}
+                                onRequestClose={this.closeModal.bind(this)}
+                                style={customStyles} >
+
+                                <DevicesConfigurationForm
+                                    closeModalFn={this.closeModal.bind(this)}
+                                />
+                            </Modal>
                         </a>
                         <a className={iconKlassNames}
                            data-tooltip
@@ -108,6 +140,7 @@ export default class DevicesIconBar extends Component {
                     </div>
                 </div>
             </div>
+
        );
     }
 

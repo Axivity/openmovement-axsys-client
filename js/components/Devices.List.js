@@ -11,7 +11,7 @@ export default class DevicesList extends Component {
     render() {
 
         let { dispatch, devices, deviceAttributes, selectedDevices } = this.props;
-        console.log(devices);
+        //console.log(devices);
 
         let fixSidesStyle = {
             margin: 0

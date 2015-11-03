@@ -144,7 +144,7 @@ export default class DevicesListItem extends Component {
 
         let { dispatch, device, deviceAttributes, selectedDevices } = this.props;
 
-        console.log(deviceAttributes);
+        //console.log(deviceAttributes);
 
         let attributes = this.getDeviceAttributesForGivenDevicePath(deviceAttributes, device._id);
 

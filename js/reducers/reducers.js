@@ -24,7 +24,7 @@ function selectedDevices(state=[], action=null) {
     switch (action.type) {
         case actionTypes.SELECT_DEVICE:
             let presentAlready = _itemPresentAlready(state, action.device, '_id');
-            console.log('Present already: ' + presentAlready);
+            //console.log('Present already: ' + presentAlready);
             // add device to list of devices in selected state
             if(presentAlready) {
                 // TODO: do we replace item or just ignore??
@@ -53,8 +53,8 @@ function selectedDevices(state=[], action=null) {
 
 
 function deviceAttributes(state={}, action=null) {
-    console.log('device attributes');
-    console.log(state);
+    //console.log('device attributes');
+    //console.log(state);
 
     switch(action.type) {
         case actionTypes.ADD_DEVICE_ATTRIBUTES:
@@ -79,9 +79,9 @@ function deviceAttributes(state={}, action=null) {
 }
 
 function devices(state = [], action = null) {
-    console.log(state);
+    //console.log(state);
 
-    console.log(action.type);
+    //console.log(action.type);
 
     switch (action.type) {
         case actionTypes.ADD_DEVICE:

@@ -78,7 +78,7 @@ export class DeviceQueue {
             this._addDataToBuffer(chunk);
 
             let data = binUtils.bufferToString(this.dataBuffer);
-            console.log(data);
+            //console.log(data);
 
             // TODO: Check with Dan if this approach will work.
             // Wait till all data is received

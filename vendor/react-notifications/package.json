@@ -1,0 +1,93 @@
+{
+  "name": "react-notifications",
+  "version": "0.1.0",
+  "description": "Notification component for ReactJS",
+  "main": "lib/index.js",
+  "scripts": {
+    "start": "NODE_ENV=development node example/webpack.dev.server.js",
+    "build": "NODE_ENV=production gulp build"
+  },
+  "peerDependencies": {
+    "react": "0.13 - 0.14"
+  },
+  "dependencies": {
+    "classnames": "^2.1.1"
+  },
+  "devDependencies": {
+    "autoprefixer": "^6.0.3",
+    "babel-core": "^5.8.25",
+    "babel-eslint": "^4.1.3",
+    "babel-loader": "^5.3.2",
+    "css-loader": "^0.19.0",
+    "del": "^2.0.2",
+    "eslint": "^1.6.0",
+    "eslint-loader": "^1.0.0",
+    "eslint-plugin-react": "^3.5.1",
+    "express": "^4.13.3",
+    "file-loader": "^0.8.4",
+    "gulp": "^3.9.0",
+    "gulp-autoprefixer": "^3.0.2",
+    "gulp-babel": "^5.2.1",
+    "gulp-eslint": "^1.0.0",
+    "gulp-filter": "^3.0.1",
+    "gulp-frep": "^0.1.3",
+    "gulp-minify-html": "^1.0.4",
+    "gulp-sass": "^2.0.4",
+    "http-proxy": "^1.11.2",
+    "json-loader": "^0.5.3",
+    "less": "^2.5.3",
+    "less-loader": "^2.2.1",
+    "lodash.merge": "^3.3.2",
+    "node-sass": "^3.3.3",
+    "opn": "^3.0.2",
+    "postcss-loader": "^0.6.0",
+    "react-dom": "^0.14.0",
+    "react-hot-loader": "^1.3.0",
+    "run-sequence": "^1.1.4",
+    "sass-loader": "^3.0.0",
+    "style-loader": "^0.12.4",
+    "webpack": "^1.12.2",
+    "webpack-dev-server": "^1.12.0",
+    "webpack-stream": "^2.1.1"
+  },
+  "keywords": [
+    "react-component",
+    "react",
+    "component",
+    "notification"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vn38minhtran/react-notifications.git"
+  },
+  "author": {
+    "name": "Minh Tran"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/vn38minhtran/react-notifications/issues"
+  },
+  "homepage": "https://github.com/vn38minhtran/react-notifications",
+  "gitHead": "4459f6b39e4af27afc3db1303eb920230aea6c6a",
+  "_id": "react-notifications@0.1.0",
+  "_shasum": "9cfdc64d7aad86d7eb303c1f40d6d4ed29b40bb7",
+  "_from": "react-notifications@*",
+  "_npmVersion": "2.14.4",
+  "_nodeVersion": "4.1.2",
+  "_npmUser": {
+    "name": "vn38minhtran",
+    "email": "vn38minhtran@gmail.com"
+  },
+  "maintainers": [
+    {
+      "name": "vn38minhtran",
+      "email": "vn38minhtran@gmail.com"
+    }
+  ],
+  "dist": {
+    "shasum": "9cfdc64d7aad86d7eb303c1f40d6d4ed29b40bb7",
+    "tarball": "http://registry.npmjs.org/react-notifications/-/react-notifications-0.1.0.tgz"
+  },
+  "directories": {},
+  "_resolved": "https://registry.npmjs.org/react-notifications/-/react-notifications-0.1.0.tgz"
+}

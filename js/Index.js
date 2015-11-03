@@ -8,6 +8,7 @@ require("babel/polyfill");
 
 /* third party lib imports */
 import React, { Component } from 'react';
+import ReactDOM from 'react-dom';
 import { createStore } from 'redux';
 import { Provider } from 'react-redux';
 import moment from 'moment';
@@ -52,7 +53,7 @@ let api = new AXApi(
 );
 
 
-console.log(store.getState());
+//console.log(store.getState());
 
 
 function onDeviceAdded(store) {
@@ -86,8 +87,8 @@ function onDisconnected(store) {
 
 function onDataReceived(store) {
     return (data) => {
-        console.log('Data is in the app');
-        console.log(data);
+        //console.log('Data is in the app');
+        //console.log(data);
 
         let returnedString = binUtils.bufferToString(data.buffer);
         let attributeName = null;
@@ -178,8 +179,8 @@ function connectToDevice(device) {
 function onConnectedToServer(store) {
     return () => {
         api.getDevices((allDevices) => {
-            console.log(err);
-            console.log(allDevices);
+            //console.log(err);
+            //console.log(allDevices);
 
             let err = null;
 
@@ -221,9 +222,9 @@ function onConnectedToServer(store) {
 
 
 // Entry point to the views
-React.render(
+ReactDOM.render(
     <Provider store={store}>
-        {() => <App />}
+        <App />
     </Provider>,
     document.getElementById('ax-ui-content')
 );
