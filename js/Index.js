@@ -25,7 +25,7 @@ import * as binUtils from './utils/binutils';
 
 let store = createStore(axsysApp);
 
-let connections: Map<string, string>;
+//let connections: Map<string, string>;
 let commandQs = {};
 
 // NB: The name is supposed to be unique for all these commands.
