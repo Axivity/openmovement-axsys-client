@@ -3,7 +3,7 @@
  */
 
 import React, { PropTypes, Component } from 'react';
-import ReactTooltip from 'react-tooltip';
+import Tooltip from 'rc-tooltip';
 import Modal from 'react-modal';
 
 import DevicesConfigurationForm from './Devices.Configuration.Form.js';
@@ -113,56 +113,90 @@ export default class DevicesIconBar extends Component {
             <div className="row">
                 <div className="large-12 small-12 medium-12 columns ax-icon-bar-adjust-height">
                     <div className="icon-bar six-up">
-                        <a className="item"
-                            role="button"
-                            data-tip="Select All"
-                            onClick={this.handleSelectAll.bind(this)}>
-                            <i className="material-icons">{checkBoxIconName}</i>
-                        </a>
+                        <Tooltip
+                            placement="bottom"
+                            mouseEnterDelay={0}
+                            mouseLeaveDelay={0.1}
+                            overlay={<div style={{height:20,width:100}}><strong>Select All</strong></div>}
+                            transitionName={'rc-tooltip-zoom'}>
+                            <a className="item"
+                                role="button"
+                                onClick={this.handleSelectAll.bind(this)}>
+                                <i className="material-icons">{checkBoxIconName}</i>
+                            </a>
+                        </Tooltip>
 
-                        <a className={iconKlassNames}
-                           data-tooltip
-                           aria-haspopup="true"
-                           onClick={this.openModal.bind(this)}
-                           title="Record">
-                            <i className="material-icons">radio_button_checked</i>
-                            <Modal
-                                isOpen={this.state.modalIsOpen}
-                                onRequestClose={this.closeModal.bind(this)}
-                                style={customStyles} >
+                        <Tooltip
+                            placement="bottom"
+                            mouseEnterDelay={0}
+                            mouseLeaveDelay={0.1}
+                            overlay={<div style={{height:20,width:100}}><strong>Record</strong></div>}
+                            transitionName={'rc-tooltip-zoom'}>
 
-                                 <DevicesConfigurationForm
-                                    closeModalFn={this.closeModal.bind(this)}
-                                 />
+                            <a className={iconKlassNames}
+                               onClick={this.openModal.bind(this)}>
+                                <i className="material-icons">radio_button_checked</i>
+                                <Modal
+                                    isOpen={this.state.modalIsOpen}
+                                    onRequestClose={this.closeModal.bind(this)}
+                                    style={customStyles} >
 
-                            </Modal>
-                        </a>
+                                     <DevicesConfigurationForm
+                                        closeModalFn={this.closeModal.bind(this)}
+                                     />
 
+                                </Modal>
+                            </a>
+                        </Tooltip>
 
-                        <a className={iconKlassNames}
-                           data-tooltip
-                           aria-haspopup="true"
-                           title="Stop Recording">
-                            <i className="material-icons">stop</i>
-                        </a>
-                        <a className={iconKlassNames}
-                           data-tooltip
-                           aria-haspopup="true"
-                           title="Identify">
-                            <i className="material-icons">my_location</i>
-                        </a>
-                        <a className={iconKlassNames}
-                           data-tooltip
-                           aria-haspopup="true"
-                           title="Clear data">
-                            <i className="material-icons">clear</i>
-                        </a>
-                        <a className={iconKlassNames}
-                           data-tooltip
-                           aria-haspopup="true"
-                           title="Download data">
-                            <i className="material-icons">file_download</i>
-                        </a>
+                        <Tooltip
+                            placement="bottom"
+                            mouseEnterDelay={0}
+                            mouseLeaveDelay={0.1}
+                            overlay={<div style={{height:20,width:100}}><strong>Stop Recording</strong></div>}
+                            transitionName={'rc-tooltip-zoom'}>
+
+                            <a className={iconKlassNames}>
+                                <i className="material-icons">stop</i>
+                            </a>
+
+                        </Tooltip>
+
+                        <Tooltip
+                            placement="bottom"
+                            mouseEnterDelay={0}
+                            mouseLeaveDelay={0.1}
+                            overlay={<div style={{height:20,width:100}}><strong>Identify</strong></div>}
+                            transitionName={'rc-tooltip-zoom'}>
+
+                            <a className={iconKlassNames}>
+                                <i className="material-icons">my_location</i>
+                            </a>
+                        </Tooltip>
+
+                        <Tooltip
+                            placement="bottom"
+                            mouseEnterDelay={0}
+                            mouseLeaveDelay={0.1}
+                            overlay={<div style={{height:20,width:100}}><strong>Clear data</strong></div>}
+                            transitionName={'rc-tooltip-zoom'}>
+
+                            <a className={iconKlassNames}>
+                                <i className="material-icons">clear</i>
+                            </a>
+                        </Tooltip>
+
+                        <Tooltip
+                            placement="bottom"
+                            mouseEnterDelay={0}
+                            mouseLeaveDelay={0.1}
+                            overlay={<div style={{height:20,width:100}}><strong>Download data</strong></div>}
+                            transitionName={'rc-tooltip-zoom'}>
+
+                            <a className={iconKlassNames}>
+                                <i className="material-icons">file_download</i>
+                            </a>
+                        </Tooltip>
                     </div>
                 </div>
             </div>

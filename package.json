@@ -51,12 +51,12 @@
     "normalize.css": "^3.0.3",
     "object-assign": "^2.1.1",
     "pubsub-js": "^1.5.3",
+    "rc-tooltip": "^3.2.0",
     "react": "^0.14.2",
     "react-dom": "^0.14.2",
     "react-modal": "^0.6.1",
     "react-notifications": "^0.1.0",
     "react-responsive-mixin": "^0.3.5",
-    "react-tooltip": "^0.8.4",
     "redux": "^2.0.0",
     "redux-thunk": "^0.1.0",
     "uglify": "^0.1.5"
