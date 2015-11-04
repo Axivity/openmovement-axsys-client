@@ -3,6 +3,7 @@
  */
 
 import React, { PropTypes, Component } from 'react';
+import Collapse from 'rc-collapse';
 
 
 export default class DevicesDetail extends Component {
@@ -165,13 +166,15 @@ export default class DevicesDetail extends Component {
 
     render() {
 
+        let Panel = Collapse.Panel;
+
         // TODO: Needs updating remove all the accordion classes below.
 
         let {dispatch, detailViewDevice} =  this.props;
 
         if (this.hasDeviceKey(detailViewDevice)) {
             return (
-                <div className="small-12 large-8 medium-7 columns ax-detail-content">
+                <div className="small-12 large-9 medium-8 columns ax-detail-content">
                     <div className="row">
                         <div className="large-12 medium-12 columns">
                             <div className="back-button-wrapper" onClick={this.handleMinimizeButtonClick.bind(this)}>
@@ -179,11 +182,10 @@ export default class DevicesDetail extends Component {
                             </div>
                         </div>
 
-                        <div className="large-12 medium-12 columns">
-                            <ul className="accordion ax-detail-panels" data-accordion>
-                                <li className="accordion-navigation">
-                                    <a href="#panel1a"><strong>Device Info</strong></a>
-                                    <div id="panel1a" className="content active">
+                        <div className="large-12 medium-12 columns top-spacer">
+                            <Collapse accordion={true} activeKey={['2']} defaultActiveKey={['2']}>
+                                <Panel header="Device Info" key="2">
+                                    <div>
                                         <h6>Metadata</h6>
                                         <div className="row">
                                             <div className="large-6 medium-6 small-6 columns">
@@ -216,16 +218,17 @@ export default class DevicesDetail extends Component {
                                             </div>
                                         </div>
                                     </div>
-                                </li>
-                                <li className="accordion-navigation">
-                                    <a href="#panel1a"><strong>Preview</strong></a>
-                                    <div id="panel1a" className="content active">
-                                        <div id="chartdiv"></div>
-                                    </div>
-                                </li>
-                            </ul>
+                                </Panel>
+                            </Collapse>
                         </div>
 
+                        <div className="large-12 medium-12 columns top-spacer">
+                            <Collapse accordion={true} activeKey={['1']} defaultActiveKey={['1']}>
+                                <Panel header="Preview" key="1">
+                                    <div id="chartdiv"></div>
+                                </Panel>
+                            </Collapse>
+                        </div>
 
                     </div>
                 </div>

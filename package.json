@@ -51,6 +51,7 @@
     "normalize.css": "^3.0.3",
     "object-assign": "^2.1.1",
     "pubsub-js": "^1.5.3",
+    "rc-collapse": "^1.4.0",
     "rc-tooltip": "^3.2.0",
     "react": "^0.14.2",
     "react-dom": "^0.14.2",
