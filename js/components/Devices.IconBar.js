@@ -43,6 +43,11 @@ const customStyles = {
 
 };
 
+const tooltipStyles = {
+    height: 20,
+    width: 100
+};
+
 export default class DevicesIconBar extends Component {
 
     constructor(props) {
@@ -103,7 +108,7 @@ export default class DevicesIconBar extends Component {
 
         let shouldEnableIcons = this.isSelected();
 
-        let iconKlassNames = 'item has-tip';
+        let iconKlassNames = 'item ';
 
         iconKlassNames += shouldEnableIcons ? '' : ' disabled';
 
@@ -117,7 +122,7 @@ export default class DevicesIconBar extends Component {
                             placement="bottom"
                             mouseEnterDelay={0}
                             mouseLeaveDelay={0.1}
-                            overlay={<div style={{height:20,width:100}}><strong>Select All</strong></div>}
+                            overlay={<div style={tooltipStyles}><strong>Select All</strong></div>}
                             transitionName={'rc-tooltip-zoom'}>
                             <a className="item"
                                 role="button"
@@ -130,7 +135,7 @@ export default class DevicesIconBar extends Component {
                             placement="bottom"
                             mouseEnterDelay={0}
                             mouseLeaveDelay={0.1}
-                            overlay={<div style={{height:20,width:100}}><strong>Record</strong></div>}
+                            overlay={<div style={tooltipStyles}><strong>Record</strong></div>}
                             transitionName={'rc-tooltip-zoom'}>
 
                             <a className={iconKlassNames}
@@ -153,7 +158,7 @@ export default class DevicesIconBar extends Component {
                             placement="bottom"
                             mouseEnterDelay={0}
                             mouseLeaveDelay={0.1}
-                            overlay={<div style={{height:20,width:100}}><strong>Stop Recording</strong></div>}
+                            overlay={<div style={tooltipStyles}><strong>Stop Recording</strong></div>}
                             transitionName={'rc-tooltip-zoom'}>
 
                             <a className={iconKlassNames}>
@@ -166,7 +171,7 @@ export default class DevicesIconBar extends Component {
                             placement="bottom"
                             mouseEnterDelay={0}
                             mouseLeaveDelay={0.1}
-                            overlay={<div style={{height:20,width:100}}><strong>Identify</strong></div>}
+                            overlay={<div style={tooltipStyles}><strong>Identify</strong></div>}
                             transitionName={'rc-tooltip-zoom'}>
 
                             <a className={iconKlassNames}>
@@ -178,7 +183,7 @@ export default class DevicesIconBar extends Component {
                             placement="bottom"
                             mouseEnterDelay={0}
                             mouseLeaveDelay={0.1}
-                            overlay={<div style={{height:20,width:100}}><strong>Clear data</strong></div>}
+                            overlay={<div style={tooltipStyles}><strong>Clear data</strong></div>}
                             transitionName={'rc-tooltip-zoom'}>
 
                             <a className={iconKlassNames}>
@@ -190,7 +195,7 @@ export default class DevicesIconBar extends Component {
                             placement="bottom"
                             mouseEnterDelay={0}
                             mouseLeaveDelay={0.1}
-                            overlay={<div style={{height:20,width:100}}><strong>Download data</strong></div>}
+                            overlay={<div style={tooltipStyles}><strong>Download data</strong></div>}
                             transitionName={'rc-tooltip-zoom'}>
 
                             <a className={iconKlassNames}>
