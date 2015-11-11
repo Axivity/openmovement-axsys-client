@@ -49,7 +49,8 @@ let api = new AXApi(
     onDeviceRemoved(store),
     onConnectedToServer(store),
     onDisconnected(store),
-    onDataReceived
+    onDataReceived,
+    onAttributesDataPublished(store)
 );
 
 
@@ -113,6 +114,12 @@ function onDataReceived(store) {
     }
 }
 
+function onAttributesDataPublished(store) {
+    return (data) => {
+        console.log("Published data");
+        console.log(data);
+    }
+}
 
 function prepareCommandOptions(path) {
     let allCommandOptions = [];
@@ -211,16 +218,14 @@ function onConnectedToServer(store) {
                 //
                 //})(allDevices.devices.length - 1);
 
-                for(let i=0; i<devices.length; i++) {
-                    connectToDevice(devices[i]);
+                for(let devicePath in devices) {
+                    if(devices.hasOwnProperty(devicePath)) {
+                        let device = devices[devicePath];
+                        connectToDevice(device);
+                        store.dispatch(addDevice(device));
+                    }
                 }
-
-                allDevices.devices.forEach((aDevice) => {
-                    store.dispatch(addDevice(aDevice));
-                });
-
             }
-
         });
     }
 }
