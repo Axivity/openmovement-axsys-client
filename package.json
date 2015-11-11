@@ -1,6 +1,7 @@
 {
   "name": "om-axsys-client",
   "version": "0.1.0",
+  "repository": "https://github.com/Axivity/openmovement-axsys-client",
   "author": {
     "name": "Praveen Kumar",
     "email": "3.pravin@gmail.com"

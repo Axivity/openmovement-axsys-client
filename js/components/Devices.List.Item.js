@@ -3,8 +3,16 @@
  */
 import React, { PropTypes, Component } from 'react';
 
+import Tooltip from 'rc-tooltip';
+
 import * as attributeNames from '../constants/attributeNames';
 import * as actionCreators from '../actions/actionCreators';
+
+const tooltipStyles = {
+    height: 20,
+    width: 50,
+    textAlign: 'center'
+};
 
 export default class DevicesListItem extends Component {
 
@@ -148,6 +156,10 @@ export default class DevicesListItem extends Component {
 
         let attributes = this.getDeviceAttributesForGivenDevicePath(deviceAttributes, device._id);
 
+        let batteryLevel = this.parseBatteryLevel(attributes);
+
+        let batteryLevelForUI = (batteryLevel === null) ? 'N/A' : batteryLevel + '%';
+
         let batteryClasses = "material-icons list-item-icons device-icons";
 
         let batteryIconNameWithColor = this.getBatteryIconName(attributes);
@@ -170,29 +182,6 @@ export default class DevicesListItem extends Component {
                 </div>
 
                 <div className="large-10 small-10 medium-10 columns list-item-section" onClick={this.handleListItemClicked.bind(this)}>
-                    {/*
-                    <div className="row clearfix">
-                        <h4>
-                            {device.serialNumber} <small>Stopped</small>
-                            <span className="list-item-icons right">
-                                <small>
-                                    <i className="material-icons device-icons standard">usb</i>
-                                </small>
-                                <small>
-                                    <i className={batteryClasses}>
-                                        {batteryIconNameWithColor.name}
-                                    </i>
-                                </small>
-                            </span>
-
-                        </h4>
-                    </div>
-
-                    <div className="row list-item-bottom-spacer list-item-extra-info standard">
-                        <span>Session: Unknown</span><br/>
-                        <span>Hardware:{versions.hardwareVersion} Software:{versions.softwareVersion}</span>
-                    </div>
-                    */}
                     <div className="row">
                         <div className="small-9 large-9 medium-9 columns">
                             <div className="row">
@@ -221,9 +210,16 @@ export default class DevicesListItem extends Component {
                                     <i className="material-icons device-icons standard">usb</i>
                                 </small>
                                 <small>
-                                    <i className={batteryClasses}>
-                                        {batteryIconNameWithColor.name}
-                                    </i>
+                                    <Tooltip
+                                        placement="right"
+                                        mouseEnterDelay={0}
+                                        mouseLeaveDelay={0.1}
+                                        overlay={<div style={tooltipStyles}><strong>{batteryLevelForUI}</strong></div>}
+                                        transitionName={'rc-tooltip-zoom'}>
+                                        <i className={batteryClasses}>
+                                            {batteryIconNameWithColor.name}
+                                        </i>
+                                    </Tooltip>
                                 </small>
                             </span>
                         </div>

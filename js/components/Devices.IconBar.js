@@ -46,7 +46,7 @@ const customStyles = {
 const tooltipStyles = {
     height: 20,
     width: 100,
-    'text-align': 'center'
+    textAlign: 'center'
 };
 
 export default class DevicesIconBar extends Component {

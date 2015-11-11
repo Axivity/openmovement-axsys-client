@@ -12,7 +12,7 @@ const WRITTEN = Symbol();
 
 const WRITTEN_AND_READ = Symbol();
 
-// TODO: This constant should probably live in a separate module constant!
+// TODO: This constant should probably live in a separate constants module!
 export const END_OF_LINE = '\r\n';
 
 export class CommandOptions {
@@ -82,6 +82,7 @@ export class DeviceQueue {
 
             // TODO: Check with Dan if this approach will work.
             // Wait till all data is received
+            // TODO: check for EOL in the data buffer in any place not just at the end
             if(data.endsWith(END_OF_LINE)) {
                 // set the buffer to dataBuffer
                 response.buffer = this.dataBuffer;

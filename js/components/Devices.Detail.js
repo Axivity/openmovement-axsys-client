@@ -168,8 +168,6 @@ export default class DevicesDetail extends Component {
 
         let Panel = Collapse.Panel;
 
-        // TODO: Needs updating remove all the accordion classes below.
-
         let {dispatch, detailViewDevice} =  this.props;
 
         if (this.hasDeviceKey(detailViewDevice)) {

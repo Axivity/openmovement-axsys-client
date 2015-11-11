@@ -149,6 +149,11 @@ function connectToDevice(device) {
     options.path = path;
     console.log('Connecting to device: ' + path);
 
+    // check for attributes in this device
+
+
+    // if attribute is not set or not updated within frequency range then get that data
+
     api.connect(options, (response) => {
         if(response) {
             let deviceCommandQ = new DeviceQueue(path, api, onDataReceived(store));

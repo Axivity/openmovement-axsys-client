@@ -7,14 +7,16 @@ export default class AXApi {
                 onDeviceRemoved,
                 onConnected,
                 onDisconnected,
-                onDataReceived) {
+                onDataReceived,
+                onAttributesDataPublished) {
 
         this.api = new AX.API(
             onDeviceAdded,
             onDeviceRemoved,
             onConnected,
             onDisconnected,
-            onDataReceived);
+            onDataReceived,
+            onAttributesDataPublished);
     }
 
     getDevices(callback) {
