@@ -22,6 +22,8 @@ import { DeviceQueue, CommandOptions } from './utils/device-queue';
 import axsysApp from './reducers/reducers';
 import {RESPONSES_START_WITH_STRING} from './constants/commandResponseTypes';
 import * as binUtils from './utils/binutils';
+import * as attributeNames from './constants/attributeNames';
+import {getDevicesWithAttributesNotSet} from './utils/device-attributes';
 
 let store = createStore(axsysApp);
 
@@ -33,14 +35,13 @@ let attributeCommands = [
     {
         'command': 'SAMPLE 1\r\n',
         'frequency_in_seconds': 60,
-        'name': 'BATTERY'
+        'name': attributeNames.BATTERY
     },
     {
         'command': 'ID\r\n',
         'frequency_in_seconds': 0,
-        'name': 'VERSION'
+        'name': attributeNames.VERSION
     }
-
 ];
 
 
@@ -156,9 +157,6 @@ function connectToDevice(device) {
     options.path = path;
     console.log('Connecting to device: ' + path);
 
-    // check for attributes in this device
-
-
     // if attribute is not set or not updated within frequency range then get that data
 
     api.connect(options, (response) => {
@@ -187,44 +185,37 @@ function connectToDevice(device) {
 
 }
 
+function applyFunctionToEachDevice(devices, fn) {
+    for(let devicePath in devices) {
+        if(devices.hasOwnProperty(devicePath)) {
+            let device = devices[devicePath];
+            fn(device);
+        }
+    }
+}
 
 function onConnectedToServer(store) {
     return () => {
-        api.getDevices((allDevices) => {
-            //console.log(err);
-            //console.log(allDevices);
-
+        api.getDevices((devices) => {
             let err = null;
-
             if(err) {
-                // Need to handle error
+                // Need to handle error?
                 console.error(err);
 
             } else {
-                var devices = allDevices.devices;
+                console.log(api.getServerTime());
 
-                //(function loop(i) {
-                //
-                //    setTimeout(() => {
-                //        console.log(i);
-                //        console.log(devices);
-                //        let dev = devices[i];
-                //        console.log(dev);
-                //        getHardwareAndSoftwareVersion(dev);
-                //        --i;
-                //
-                //        if (i >= 0) loop(i);
-                //    }, 3000);
-                //
-                //})(allDevices.devices.length - 1);
+                // add device to store
+                applyFunctionToEachDevice(devices, (device) => {
+                    store.dispatch(addDevice(device));
+                });
 
-                for(let devicePath in devices) {
-                    if(devices.hasOwnProperty(devicePath)) {
-                        let device = devices[devicePath];
-                        connectToDevice(device);
-                        store.dispatch(addDevice(device));
-                    }
-                }
+                // check for attributes for those devices
+                let devicesWithNoAttributes = getDevicesWithAttributesNotSet(devices);
+                applyFunctionToEachDevice(devicesWithNoAttributes, (device) => {
+                    connectToDevice(device);
+                });
+
             }
         });
     }

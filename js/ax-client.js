@@ -20,10 +20,8 @@ export default class AXApi {
     }
 
     getDevices(callback) {
-        this.api.getDevices((devices) => {
-            callback({
-                devices
-            })
+        this.api.getDevices((payload) => {
+            callback(payload)
         });
     }
 
@@ -47,6 +45,10 @@ export default class AXApi {
 
     replaceDataListener(fn) {
         this.api.replaceDataListener(fn);
+    }
+
+    getServerTime() {
+        return this.api.getCurrentTime();
     }
 
 }
