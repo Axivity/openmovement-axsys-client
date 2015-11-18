@@ -47,6 +47,12 @@ export default class AXApi {
         this.api.replaceDataListener(fn);
     }
 
+    publish(options, callback) {
+        this.api.publish(options, (data) => {
+            callback(data);
+        });
+    }
+
     getServerTime() {
         return this.api.getCurrentTime();
     }

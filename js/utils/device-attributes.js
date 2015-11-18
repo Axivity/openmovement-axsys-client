@@ -5,22 +5,49 @@
 const ATTRIBUTE_FREQ_THRESHOLD_IN_SECS = 60;
 
 export function getDevicesWithAttributesNotSet(
-                        devices:Array<Object>,
+                        devices:Array<object>,
+                        deviceAttributes:Object,
                         attributes:Array<Object>,
                         serverTimeFn: () => number) {
-    return checkAttributesForEachDevice(devices, attributesChecker, attributes, serverTimeFn);
+
+    return checkAttributesForEachDevice(
+                        devices,
+                        deviceAttributes,
+                        attributesChecker,
+                        attributes,
+                        serverTimeFn);
 }
 
-function checkAttributesForEachDevice(devices, checker, attributes, serverTimeFn) {
-    let devicesWithAttributesNotFound = {};
-
-    for(let devicePath in devices) {
-
-        if (devices.hasOwnProperty(devicePath)) {
-            let device = devices[devicePath];
-            devicesWithAttributesNotFound[devicePath] = checker(device, attributes, serverTimeFn);
+export function findDeviceByPath(devices:Array<Object>, devicePath: string) : ?Object {
+    for(let i=0; i<devices.length; i++) {
+        let device = devices[i];
+        if(device._id === devicePath) {
+            return device;
         }
     }
+    return null;
+}
+
+function checkAttributesForEachDevice(devices, deviceAttributes, checker, attributes, serverTimeFn) {
+
+    let devicesWithAttributesNotFound = {};
+
+    for(let i=0; i<devices.length; i++) {
+        let device = devices[i];
+        let devicePath = device._id;
+        if(deviceAttributes.hasOwnProperty(devicePath)) {
+            // When device attributes is set for device then find out
+            // which attributes are missing and fetch from server.
+            let deviceAttribute = deviceAttributes[devicePath];
+            devicesWithAttributesNotFound[devicePath] = checker(deviceAttribute, attributes, serverTimeFn);
+
+        } else {
+            // When device attributes are not set yet in state tree,
+            // all given "attributes" would have to be fetched/updated
+            devicesWithAttributesNotFound[devicePath] = attributes;
+        }
+    }
+
     return devicesWithAttributesNotFound;
 }
 

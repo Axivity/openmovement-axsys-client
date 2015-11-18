@@ -79,35 +79,16 @@ function deviceAttributes(state={}, action=null) {
 }
 
 function devices(state = [], action = null) {
-    //console.log(state);
-
-    //console.log(action.type);
-
     switch (action.type) {
         case actionTypes.ADD_DEVICE:
             return [...state, action.device];
-            //return [...state, {
-            //    device: action.device
-            //}];
-            //{
-            //    devices: [
-            //        // copy original state
-            //        ...state,
-            //
-            //        // add new device
-            //        {
-            //            device: action.device,
-            //            configured: false
-            //        }
-            //    ]
-            //};
 
         case actionTypes.REMOVE_DEVICE:
             console.log(state);
             console.log(action.device);
             // remove device from state and return new state
             return state.filter(device =>
-                device.serialNumber !== action.device.serialNumber
+                device._id !== action.device._id
             );
 
         default:

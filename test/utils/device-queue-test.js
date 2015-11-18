@@ -4,13 +4,13 @@
 
 import {expect} from 'chai';
 
-import {DeviceQueue, END_OF_LINE} from '../../js/utils/device-queue';
+import {DeviceCommandQueue, END_OF_LINE} from '../../js/utils/device-command-queue';
 
 describe('With Device Queue', () => {
 
     describe('when data is received in callback', () => {
 
-        let q = new DeviceQueue('serial://sample-path', {
+        let q = new DeviceCommandQueue('serial://sample-path', {
             // this is a mock to get around replacing data listener
             'replaceDataListener': () => {console.log('Called replace')}
 

@@ -51,7 +51,7 @@ export class CommandOptions {
 //}
 
 
-export class DeviceQueue {
+export class DeviceCommandQueue {
     constructor(devicePath:string,
                 api:object,
                 dataListener: (obj: {buffer: ArrayBuffer; updatedEpoch: number}) => void) {
@@ -103,13 +103,13 @@ export class DeviceQueue {
             let indexPositionCRLFEnd = indexPositionCRLFStart + 1;
 
             if(indexPositionCRLFStart > -1) {
-                // line feed is in chunk
+                // CRLF is in chunk
                 let dataBuffTillCRLF = binUtils.getDataTillIndexPosition(chunk, indexPositionCRLFStart);
                 let dataBuffFromCRLF = binUtils.getDataFromIndexPosition(chunk, indexPositionCRLFEnd);
 
                 this._addDataToBuffer(dataBuffTillCRLF);
 
-                // TODO: Need to handle carriage return characters sent in different chunks
+                // TODO: Need to handle carriage return and line feed characters sent in different chunks
 
                 // set the buffer to dataBuffer
                 response.buffer = this.dataBuffer;
