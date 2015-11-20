@@ -55,8 +55,9 @@ export default class DevicesListItem extends Component {
 
     parseBatteryLevel(attributes) {
         if(attributes) {
-            let batteryValue = attributes[attributeNames.BATTERY];
-            if(batteryValue) {
+            let batteryData = attributes[attributeNames.BATTERY];
+            if(batteryData) {
+                let batteryValue = batteryData.value;
                 return parseInt(batteryValue.split(',')[3]);
 
             } else {
@@ -111,8 +112,9 @@ export default class DevicesListItem extends Component {
 
     getHardwareAndSoftwareVersions(attributes) {
         if(attributes) {
-            let versionsString = attributes[attributeNames.VERSION];
-            if(versionsString) {
+            let versionsData = attributes[attributeNames.VERSION];
+            if(versionsData) {
+                let versionsString = versionsData.value;
                 return {
                     hardwareVersion: versionsString.split(',')[1],
                     softwareVersion: versionsString.split(',')[2]

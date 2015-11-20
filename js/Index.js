@@ -20,7 +20,7 @@ import { addDevice, removeDevice, addDataAttributeForDevicePath,
 import AXApi from './ax-client';
 import { DeviceCommandQueue, CommandOptions } from './utils/device-command-queue';
 import axsysApp from './reducers/reducers';
-import {RESPONSES_START_WITH_STRING} from './constants/commandResponseTypes';
+import {MAP_RESPONSES_TO_ATTRIBUTE_NAMES} from './constants/commandResponseTypes';
 import * as binUtils from './utils/binutils';
 import * as attributeNames from './constants/attributeNames';
 import {getDevicesWithAttributesNotSet, findDeviceByPath} from './utils/device-attributes';
@@ -61,8 +61,8 @@ let api = new AXApi(
 
 function onDeviceAdded(store) {
     return (device) => {
-        connectToDevice(device);
         store.dispatch(addDevice(device));
+        setupDevice();
     }
 }
 
@@ -110,25 +110,11 @@ function onDataReceived(store) {
         //console.log(data);
 
         let returnedString = binUtils.bufferToString(data.buffer);
-        let attributeName = null;
+        let attributeName = getAttributeName(returnedString);
         let devicePath = data.path;
-
-        for(let prop in RESPONSES_START_WITH_STRING) {
-            if(RESPONSES_START_WITH_STRING.hasOwnProperty(prop)) {
-                if(returnedString.startsWith(prop)) {
-                    attributeName = RESPONSES_START_WITH_STRING[prop];
-                }
-            }
-        }
 
         // we only care about the attributes we know of.
         if(attributeName !== null) {
-            let deviceAttribute = {
-                'path': devicePath,
-                'attribute': attributeName,
-                'value': returnedString
-            };
-            store.dispatch(addDataAttributeForDevicePath(deviceAttribute));
             // We need to remove the command from list, which holds all commands awaiting response
             removeAttributeFromList(attributeName, commandResponses, devicePath);
             // Publish data attribute to server
@@ -136,6 +122,18 @@ function onDataReceived(store) {
         }
 
     }
+}
+
+function getAttributeName(returnedString) {
+    let attributeName = null;
+    for(let prop in MAP_RESPONSES_TO_ATTRIBUTE_NAMES) {
+        if(MAP_RESPONSES_TO_ATTRIBUTE_NAMES.hasOwnProperty(prop)) {
+            if(returnedString && returnedString.startsWith(prop)) {
+                attributeName = MAP_RESPONSES_TO_ATTRIBUTE_NAMES[prop];
+            }
+        }
+    }
+    return attributeName;
 }
 
 function sendAttributeDataToServer(devicePath, attributeKey, attributeVal) {
@@ -151,9 +149,33 @@ function sendAttributeDataToServer(devicePath, attributeKey, attributeVal) {
 }
 
 function onAttributesDataPublished(store) {
-    return (data) => {
+    return (listOfChanges) => {
         console.log("Published data");
-        console.log(data);
+        console.log(listOfChanges);
+
+        for(let i=0; i<listOfChanges.length; i++) {
+            let data = listOfChanges[i];
+
+            // TODO: This check is required to avoid timesync'd data from getting published!
+            //       We should be able to remove this check once we figure out why time sync
+            //       is getting published
+            //if(data.path.split('/').length <= 2) {
+                let attributeValue = data.value.value;
+                let attributeName = getAttributeName(attributeValue);
+
+                if(attributeName != null) {
+                    let deviceAttribute = {
+                        'path': data.path.split('/')[1].replace(/~1/g, '/'),
+                        'attribute': attributeName,
+                        'value': data.value
+                    };
+                    store.dispatch(addDataAttributeForDevicePath(deviceAttribute));
+                }
+
+            //}
+
+        }
+
     }
 }
 
@@ -230,30 +252,35 @@ function applyFunctionToEachDevice(devices, fn) {
     }
 }
 
+
+function setupDevice() {
+    let devices = store.getState().devices;
+    let deviceAttributes = store.getState().deviceAttributes;
+    console.log(devices);
+    console.log(deviceAttributes);
+
+    // check for attributes for those devices
+    let devicesWithAttributesNotSet = getDevicesWithAttributesNotSet(
+        devices,
+        deviceAttributes,
+        attributeCommands,
+        api.getServerTime);
+
+    console.log(devicesWithAttributesNotSet);
+
+    for(let devicePath in devicesWithAttributesNotSet) {
+        if(devicesWithAttributesNotSet.hasOwnProperty(devicePath)) {
+            let attributes = devicesWithAttributesNotSet[devicePath];
+            let device = findDeviceByPath(devices, devicePath);
+            connectToDevice(device, attributes);
+        }
+    }
+}
+
+
 function checkAttributesPeriodically() {
     setInterval(() => {
-        let devices = store.getState().devices;
-        let deviceAttributes = store.getState().deviceAttributes;
-        console.log(devices);
-        console.log(deviceAttributes);
-
-        // check for attributes for those devices
-        let devicesWithAttributesNotSet = getDevicesWithAttributesNotSet(
-                                            devices,
-                                            deviceAttributes,
-                                            attributeCommands,
-                                            api.getServerTime);
-
-        console.log(devicesWithAttributesNotSet);
-
-        for(let devicePath in devicesWithAttributesNotSet) {
-            if(devicesWithAttributesNotSet.hasOwnProperty(devicePath)) {
-                let attributes = devicesWithAttributesNotSet[devicePath];
-                let device = findDeviceByPath(devices, devicePath);
-                connectToDevice(device, attributes);
-            }
-        }
-
+        setupDevice();
     }, 30000);
 }
 

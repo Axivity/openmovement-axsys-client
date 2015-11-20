@@ -4,11 +4,35 @@
 
 import * as attributeNames from './attributeNames';
 
-export const RESPONSES_START_WITH_STRING = {
+// Battery command returns with $BATT=
+export const BATTERY_RESPONSE_STARTS_WITH = '$BATT=';
 
-    // ID Command returns with ID=...
-    'ID=': attributeNames.VERSION,
+// ID Command returns with ID=...
+export const ID_RESPONSE_STARTS_WITH = 'ID=';
 
-    // Battery command returns with $BATT=
-    '$BATT=': attributeNames.BATTERY
+// Error in response starts with ERROR=...
+export const ERROR_RESPONSE_STARTS_WITH = 'ERROR=';
+
+
+export const MAP_RESPONSES_TO_ATTRIBUTE_NAMES = {
+
+    [ID_RESPONSE_STARTS_WITH]: attributeNames.VERSION,
+
+
+    [BATTERY_RESPONSE_STARTS_WITH]: attributeNames.BATTERY
 };
+
+//export const ATTRIBUTES_PARSER_USING_NAME = {
+//
+//    [ID_RESPONSE_STARTS_WITH]: (versionType) => {
+//        return (data) => {
+//            if(versionType === 'hardware') {
+//                return data.split(',')[1];
+//            } else {
+//                return data.split(',')[2];
+//            }
+//
+//        }
+//    }
+//
+//};

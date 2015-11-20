@@ -170,11 +170,14 @@ div.list-item-wrapper:hover {
     text-align:center;
 }
 
-.device-details-main-msg {
+.no-devices-main, .device-details-main-msg {
     color: #808080;
 }
 /* Details section ends */
 
+.no-devices-main {
+    text-align: center;
+}
 
 /*  TODO: Find a work around to remove this margin.
  *  This wrapper is a hack, when rendered by reactjs

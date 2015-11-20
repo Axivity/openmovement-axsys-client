@@ -28,6 +28,10 @@ export function findDeviceByPath(devices:Array<Object>, devicePath: string) : ?O
     return null;
 }
 
+export function updateAttribute() {
+
+}
+
 function checkAttributesForEachDevice(devices, deviceAttributes, checker, attributes, serverTimeFn) {
 
     let devicesWithAttributesNotFound = {};
@@ -51,19 +55,24 @@ function checkAttributesForEachDevice(devices, deviceAttributes, checker, attrib
     return devicesWithAttributesNotFound;
 }
 
-function attributesChecker(device, attributes, serverTimeFn) {
+function attributesChecker(deviceAttribute, attributes, serverTimeFn) {
+    // Attributes are set of commands that are pre-configured
+    // deviceAttribute is an attribute key and value store in state tree.
+    // This will not have configuration related keys like 'frequency' for
+    // example, which says how often an attribute is updated.
     let attributesNotSet = [];
 
     for(let i=0; i<attributes.length; i++) {
         let attribute = attributes[i];
         let attributeName = attribute.name;
 
-        if(!device.hasOwnProperty(attributeName)) {
+        if(!deviceAttribute.hasOwnProperty(attributeName)) {
             attributesNotSet.push(attribute);
         } else {
-            let devAttribute = device[attributeName];
+            let devAttribute = deviceAttribute[attributeName];
+            let frequency = attribute.frequency;
             if (isContinuouslyUpdatingAttribute(devAttribute)) {
-                if(hasNotUpdatedForTheFrequencyPeriod(devAttribute, serverTimeFn)) {
+                if(hasNotUpdatedForTheFrequencyPeriod(devAttribute, frequency, serverTimeFn)) {
                     attributesNotSet.push(devAttribute);
                 }
             }
@@ -76,6 +85,8 @@ function isContinuouslyUpdatingAttribute(attr) {
     return attr.frequency > 0;
 }
 
-function hasNotUpdatedForTheFrequencyPeriod(attr, serverTimeFn) {
-    return serverTimeFn() > (attr.updatedEpoch + attr.frequency + ATTRIBUTE_FREQ_THRESHOLD_IN_SECS)
+function hasNotUpdatedForTheFrequencyPeriod(attr, frequency, serverTimeFn) {
+    let serverTimeInMillis = serverTimeFn();
+    console.log(serverTimeInMillis);
+    return serverTimeInMillis > (attr.timeUpdatedInMillis + frequency + ATTRIBUTE_FREQ_THRESHOLD_IN_SECS)
 }

@@ -30,14 +30,26 @@ describe('Device attributes', () => {
 
             let deviceAttributes = {
                 'path1': {
-                    a: 'a',
-                    b: 'b'
+                    a: {
+                        val: 'a',
+                        timeUpdatedInMillis: 1234567890000
+                    },
+                    b: {
+                        val: 'b',
+                        timeUpdatedInMillis: 1234567890000
+                    }
                 },
                 'path2': {
-                    a: 'a',
-                    b: 'b',
+                    a: {
+                        val: 'a',
+                        timeUpdatedInMillis: 1234567890000
+                    },
+                    b: {
+                        val: 'b',
+                        timeUpdatedInMillis: 1234567890000
+                    },
                     c: {
-                        updatedEpoch: 123456789
+                        timeUpdateInMillis: 1234567890000
                     }
                 }
 
@@ -59,9 +71,8 @@ describe('Device attributes', () => {
                                             devices,
                                             deviceAttributes,
                                             attributes,
-                                            () => { return 123456780}
+                                            () => { return 1234567810000 }
             );
-
 
             let expectedPath1 = [ { name: 'c', frequency: 0 }, { name: 'd', frequency: 60 } ];
             let expectedPath2 = [ { name: 'd', frequency: 60 } ];
@@ -109,7 +120,7 @@ describe('Device attributes', () => {
                 devices,
                 deviceAttributes,
                 attributes,
-                () => { return 123456780}
+                () => { return 1234567810000 }
             );
 
 
