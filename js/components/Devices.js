@@ -34,7 +34,6 @@ export default class Devices extends Component {
                         detailViewDevice={detailViewDevice}
                     />
                 </div>
-
             );
 
         } else {

@@ -23,7 +23,7 @@ import axsysApp from './reducers/reducers';
 import {MAP_RESPONSES_TO_ATTRIBUTE_NAMES} from './constants/commandResponseTypes';
 import * as binUtils from './utils/binutils';
 import * as attributeNames from './constants/attributeNames';
-import {getDevicesWithAttributesNotSet, findDeviceByPath} from './utils/device-attributes';
+import {DEVICE_METADATA_ATTRIBUTES, getDevicesWithAttributesNotSet, findDeviceByPath} from './utils/device-attributes';
 
 let store = createStore(axsysApp);
 
@@ -31,20 +31,7 @@ let commandResponses = {};
 
 let commandQs = {};
 
-// NB: The name is supposed to be unique for all these commands.
-let attributeCommands = [
-    {
-        'command': 'SAMPLE 1\r\n',
-        'frequency_in_seconds': 60,
-        'name': attributeNames.BATTERY
-    },
-    {
-        'command': 'ID\r\n',
-        'frequency_in_seconds': 0,
-        'name': attributeNames.VERSION
-    }
-];
-
+let attributeCommands = DEVICE_METADATA_ATTRIBUTES;
 
 let api = new AXApi(
     onDeviceAdded(store),
@@ -62,7 +49,7 @@ let api = new AXApi(
 function onDeviceAdded(store) {
     return (device) => {
         store.dispatch(addDevice(device));
-        setupDevice();
+        setupDevices();
     }
 }
 
@@ -104,7 +91,7 @@ function removeAttributeFromList(attributeName, attributeCommandOptions, deviceP
 }
 
 
-function onDataReceived(store) {
+function onDataReceived() {
     return (data) => {
         //console.log('Data is in the app');
         //console.log(data);
@@ -150,32 +137,21 @@ function sendAttributeDataToServer(devicePath, attributeKey, attributeVal) {
 
 function onAttributesDataPublished(store) {
     return (listOfChanges) => {
-        console.log("Published data");
-        console.log(listOfChanges);
 
         for(let i=0; i<listOfChanges.length; i++) {
             let data = listOfChanges[i];
+            let attributeValue = data.value.value;
+            let attributeName = getAttributeName(attributeValue);
 
-            // TODO: This check is required to avoid timesync'd data from getting published!
-            //       We should be able to remove this check once we figure out why time sync
-            //       is getting published
-            //if(data.path.split('/').length <= 2) {
-                let attributeValue = data.value.value;
-                let attributeName = getAttributeName(attributeValue);
-
-                if(attributeName != null) {
-                    let deviceAttribute = {
-                        'path': data.path.split('/')[1].replace(/~1/g, '/'),
-                        'attribute': attributeName,
-                        'value': data.value
-                    };
-                    store.dispatch(addDataAttributeForDevicePath(deviceAttribute));
-                }
-
-            //}
-
+            if(attributeName != null) {
+                let deviceAttribute = {
+                    'path': data.path.split('/')[1].replace(/~1/g, '/'),
+                    'attribute': attributeName,
+                    'value': data.value
+                };
+                store.dispatch(addDataAttributeForDevicePath(deviceAttribute));
+            }
         }
-
     }
 }
 
@@ -222,7 +198,7 @@ function connectToDevice(device, attributes) {
     if(attributes.length > 0) {
         api.connect(options, (response) => {
             if(response) {
-                let deviceCommandQ = new DeviceCommandQueue(path, api, onDataReceived(store));
+                let deviceCommandQ = new DeviceCommandQueue(path, api, onDataReceived());
                 deviceCommandQ.start();
                 commandQs[path] = deviceCommandQ;
                 commandResponses[path] = [];
@@ -254,17 +230,20 @@ function applyFunctionToEachDevice(devices, fn) {
 
 
 function setupDevice() {
+
+}
+
+
+function setupDevices() {
     let devices = store.getState().devices;
     let deviceAttributes = store.getState().deviceAttributes;
-    console.log(devices);
-    console.log(deviceAttributes);
 
     // check for attributes for those devices
     let devicesWithAttributesNotSet = getDevicesWithAttributesNotSet(
         devices,
         deviceAttributes,
         attributeCommands,
-        api.getServerTime);
+        api.getServerTimeFunction());
 
     console.log(devicesWithAttributesNotSet);
 
@@ -280,7 +259,7 @@ function setupDevice() {
 
 function checkAttributesPeriodically() {
     setInterval(() => {
-        setupDevice();
+        setupDevices();
     }, 30000);
 }
 
@@ -295,7 +274,7 @@ function onConnectedToServer(store) {
                 console.error(err);
 
             } else {
-                console.log(api.getServerTime());
+                console.log(api.getServerTimeFunction()());
 
                 // add device to store
                 applyFunctionToEachDevice(devices, (device) => {

@@ -2,8 +2,32 @@
  * Created by Praveen on 12/11/2015.
  */
 
+import * as attributeNames from '../constants/attributeNames';
+
+// NB: The name is supposed to be unique for all these commands.
+export const DEVICE_METADATA_ATTRIBUTES = [
+    {
+        'command': 'SAMPLE 1\r\n',
+        'frequency_in_seconds': 60,
+        'name': attributeNames.BATTERY
+    },
+    {
+        'command': 'ID\r\n',
+        'frequency_in_seconds': 0,
+        'name': attributeNames.VERSION
+    }
+];
+
 const ATTRIBUTE_FREQ_THRESHOLD_IN_SECS = 60;
 
+
+/**
+ *
+ * @param devices
+ * @param deviceAttributes
+ * @param attributes
+ * @param serverTimeFn
+ */
 export function getDevicesWithAttributesNotSet(
                         devices:Array<object>,
                         deviceAttributes:Object,
@@ -18,6 +42,13 @@ export function getDevicesWithAttributesNotSet(
                         serverTimeFn);
 }
 
+
+/**
+ *
+ * @param devices
+ * @param devicePath
+ * @returns {*}
+ */
 export function findDeviceByPath(devices:Array<Object>, devicePath: string) : ?Object {
     for(let i=0; i<devices.length; i++) {
         let device = devices[i];
@@ -28,9 +59,6 @@ export function findDeviceByPath(devices:Array<Object>, devicePath: string) : ?O
     return null;
 }
 
-export function updateAttribute() {
-
-}
 
 function checkAttributesForEachDevice(devices, deviceAttributes, checker, attributes, serverTimeFn) {
 
@@ -66,14 +94,16 @@ function attributesChecker(deviceAttribute, attributes, serverTimeFn) {
         let attribute = attributes[i];
         let attributeName = attribute.name;
 
+        console.log(attribute);
+
         if(!deviceAttribute.hasOwnProperty(attributeName)) {
             attributesNotSet.push(attribute);
         } else {
             let devAttribute = deviceAttribute[attributeName];
-            let frequency = attribute.frequency;
-            if (isContinuouslyUpdatingAttribute(devAttribute)) {
+            let frequency = attribute.frequency_in_seconds;
+            if (isContinuouslyUpdatingAttribute(frequency)) {
                 if(hasNotUpdatedForTheFrequencyPeriod(devAttribute, frequency, serverTimeFn)) {
-                    attributesNotSet.push(devAttribute);
+                    attributesNotSet.push(attribute);
                 }
             }
         }
@@ -81,8 +111,8 @@ function attributesChecker(deviceAttribute, attributes, serverTimeFn) {
     return attributesNotSet;
 }
 
-function isContinuouslyUpdatingAttribute(attr) {
-    return attr.frequency > 0;
+function isContinuouslyUpdatingAttribute(frequency) {
+    return frequency > 0;
 }
 
 function hasNotUpdatedForTheFrequencyPeriod(attr, frequency, serverTimeFn) {

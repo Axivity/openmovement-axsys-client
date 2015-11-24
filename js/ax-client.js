@@ -53,8 +53,11 @@ export default class AXApi {
         });
     }
 
-    getServerTime() {
-        return this.api.getCurrentTime();
+    getServerTimeFunction() {
+        let self = this;
+        return () => {
+            return self.api.getCurrentTime();
+        }
     }
 
 }
