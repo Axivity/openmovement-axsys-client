@@ -204,6 +204,16 @@ div.list-item-wrapper:hover {
     margin: 1rem 0.2rem 0 2rem;
 }
 
+/* Accordion/collapse */
+.rc-collapse {
+    background-color: #333333;
+}
+
+.rc-collapse > .rc-collapse-item > .rc-collapse-header {
+    color: #FFFFFF;
+}
+
+
 /* Details screen */
 .ax-detail-panels {
     margin-left: 0;
