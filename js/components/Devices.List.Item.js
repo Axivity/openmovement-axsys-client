@@ -48,12 +48,12 @@ export default class DevicesListItem extends Component {
     }
 
 
-    getDeviceAttributesForGivenDevicePath(deviceAttributes, path) {
+    static getDeviceAttributesForGivenDevicePath(deviceAttributes, path) {
         return deviceAttributes[path];
     }
 
 
-    parseBatteryLevel(attributes) {
+    static parseBatteryLevel(attributes) {
         if(attributes) {
             let batteryData = attributes[attributeNames.BATTERY];
             if(batteryData) {
@@ -74,7 +74,7 @@ export default class DevicesListItem extends Component {
 
 
     getBatteryIconName(attributes) {
-        let batteryLevel = this.parseBatteryLevel(attributes);
+        let batteryLevel = this.constructor.parseBatteryLevel(attributes);
         if(batteryLevel) {
             if(batteryLevel <= 50) {
                 return {
@@ -110,7 +110,7 @@ export default class DevicesListItem extends Component {
         }
     }
 
-    getHardwareAndSoftwareVersions(attributes) {
+    static getHardwareAndSoftwareVersions(attributes) {
         if(attributes) {
             let versionsData = attributes[attributeNames.VERSION];
             if(versionsData) {
@@ -134,7 +134,7 @@ export default class DevicesListItem extends Component {
     }
 
 
-    presentInSelectedDevices(selectedDevices, deviceId) {
+    static presentInSelectedDevices(selectedDevices, deviceId) {
         for(let i=0; i < selectedDevices.length; i++) {
             let dev = selectedDevices[i];
             if(dev._id === deviceId) {
@@ -156,9 +156,9 @@ export default class DevicesListItem extends Component {
 
         //console.log(deviceAttributes);
 
-        let attributes = this.getDeviceAttributesForGivenDevicePath(deviceAttributes, device._id);
+        let attributes = this.constructor.getDeviceAttributesForGivenDevicePath(deviceAttributes, device._id);
 
-        let batteryLevel = this.parseBatteryLevel(attributes);
+        let batteryLevel = this.constructor.parseBatteryLevel(attributes);
 
         let batteryLevelForUI = (batteryLevel === null) ? 'N/A' : batteryLevel + '%';
 
@@ -166,12 +166,12 @@ export default class DevicesListItem extends Component {
 
         let batteryIconNameWithColor = this.getBatteryIconName(attributes);
 
-        let versions = this.getHardwareAndSoftwareVersions(attributes);
+        let versions = this.constructor.getHardwareAndSoftwareVersions(attributes);
 
         batteryClasses += " " + batteryIconNameWithColor.className;
 
         //var iconName = this.state.selected ? 'check_box' : 'check_box_outline_blank';
-        let selectIconName = this.presentInSelectedDevices(selectedDevices, device._id) ? 'check_box' : 'check_box_outline_blank';
+        let selectIconName = this.constructor.presentInSelectedDevices(selectedDevices, device._id) ? 'check_box' : 'check_box_outline_blank';
 
         return (
             <div className="row list-item-wrapper list-item-top-spacer list-item-bottom-spacer">

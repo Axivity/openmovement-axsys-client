@@ -9,11 +9,11 @@ import moment from 'moment';
 import * as binUtils from './binutils';
 import * as stringUtils from './string-utils';
 
-const TIMEOUT_IN_SECONDS = 10;
-
-const WRITTEN = Symbol();
-
-const WRITTEN_AND_READ = Symbol();
+//const TIMEOUT_IN_SECONDS = 10;
+//
+//const WRITTEN = Symbol();
+//
+//const WRITTEN_AND_READ = Symbol();
 
 // TODO: This constant should probably live in a separate constants module!
 export const END_OF_LINE = '\r\n';
@@ -31,24 +31,6 @@ export class CommandOptions {
         this.callback = callback;
     }
 }
-
-
-//export class DeviceCommandQueue {
-//
-//    constructor(commandOptions:Array<CommandOptions>, devicePath:string, api:Object) {
-//        this.commandOptions = commandOptions;
-//        this.devicePath = devicePath;
-//        this.api = api;
-//    }
-//
-//    runAllCommands() {
-//        this.api.connect(() => {
-//
-//        });
-//
-//    }
-//
-//}
 
 
 export class DeviceCommandQueue {

@@ -1,5 +1,7 @@
 /**
  * Created by Praveen on 09/09/2015.
+ *
+ * This is a facade for Axsys API - you could add any internal transformations required for the app here.
  */
 
 export default class AXApi {

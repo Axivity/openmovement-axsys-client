@@ -31,7 +31,6 @@ let commandResponses = {};
 
 let commandQs = {};
 
-let attributeCommands = DEVICE_METADATA_ATTRIBUTES;
 
 let api = new AXApi(
     onDeviceAdded(store),
@@ -43,13 +42,10 @@ let api = new AXApi(
 );
 
 
-//console.log(store.getState());
-
-
 function onDeviceAdded(store) {
     return (device) => {
         store.dispatch(addDevice(device));
-        setupDevices();
+        setupDevice(device);
     }
 }
 
@@ -174,13 +170,13 @@ function prepareCommandOptions(path, attributes) {
     return allCommandOptions;
 }
 
-function checkForResponsesAndCloseConnection(device, commandResponses) {
+function checkForResponsesAndCloseConnection(device, commandsWaitingForResponses) {
     let checker = setInterval(() => {
         let devicePath = device._id;
         let options = {};
 
         options.path = devicePath;
-        if(commandResponses[devicePath].length === 0) {
+        if(commandsWaitingForResponses[devicePath].length === 0) {
             clearInterval(checker);
             api.disconnect(options, () => {
                 console.log('Closed connection to device ' + devicePath);
@@ -229,22 +225,7 @@ function applyFunctionToEachDevice(devices, fn) {
 }
 
 
-function setupDevice() {
-
-}
-
-
-function setupDevices() {
-    let devices = store.getState().devices;
-    let deviceAttributes = store.getState().deviceAttributes;
-
-    // check for attributes for those devices
-    let devicesWithAttributesNotSet = getDevicesWithAttributesNotSet(
-        devices,
-        deviceAttributes,
-        attributeCommands,
-        api.getServerTimeFunction());
-
+function runCommandsToGetAttributes(devices, devicesWithAttributesNotSet) {
     console.log(devicesWithAttributesNotSet);
 
     for(let devicePath in devicesWithAttributesNotSet) {
@@ -254,6 +235,35 @@ function setupDevices() {
             connectToDevice(device, attributes);
         }
     }
+}
+
+
+function setupDevice(device) {
+    let devices = [];
+    if(device.constructor === Array) {
+        devices = device;
+    } else {
+        devices.push(device);
+    }
+
+    let deviceAttributes = store.getState().deviceAttributes;
+
+    // check for attributes for those devices
+    let devicesWithAttributesNotSet = getDevicesWithAttributesNotSet(
+        devices,
+        deviceAttributes,
+        DEVICE_METADATA_ATTRIBUTES,
+        api.getServerTimeFunction());
+
+    runCommandsToGetAttributes(devices, devicesWithAttributesNotSet);
+}
+
+
+function setupDevices() {
+    let devices = store.getState().devices;
+    devices.forEach((device) => {
+        setupDevice(device);
+    });
 }
 
 

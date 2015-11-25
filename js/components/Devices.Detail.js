@@ -235,13 +235,6 @@ export default class DevicesDetail extends Component {
             return (
                 <div className="small-12 large-8 medium-7 columns ax-detail-content">
                     <div className="row">
-                        {/*
-                        <div className="large-12 medium-12 columns">
-                            <div className="back-button-wrapper">
-                                <i className="material-icons">chevron_left</i>
-                            </div>
-                        </div>
-                         */}
                         <div className="large-12 medium-12 columns device-details-section-main">
                             <span className="">
                                 <h4 className="device-details-main-msg"> No devices selected, select a device to view more details </h4>
