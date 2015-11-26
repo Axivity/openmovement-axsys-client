@@ -149,6 +149,7 @@ export default class DevicesIconBar extends Component {
 
                                      <DevicesConfigurationForm
                                         closeModalFn={this.closeModal.bind(this)}
+                                        selectedDevices={selectedDevices}
                                      />
 
                                 </Modal>

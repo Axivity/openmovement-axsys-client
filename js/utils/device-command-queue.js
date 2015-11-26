@@ -107,26 +107,4 @@ export class DeviceCommandQueue {
         }
     }
 
-    // NB: No check needed for timeout - checked with @Dan
-    //ifCommandHasNotReturnedWithinTimeOutMarkAsDone() {
-    //    let endTime = moment().add(TIMEOUT_IN_SECONDS, 'second');
-    //    this.checker = setInterval(() => {
-    //        if(this.writingCommand) {
-    //            let current = moment();
-    //            if (current >= endTime) {
-    //                console.warn('Command did not finish execution within timeout on ' +  this.devicePath);
-    //
-    //                this.writingCommand = false;
-    //                clearInterval(this.checker);
-    //            }
-    //
-    //        } else {
-    //            // No command running so clear this checker
-    //            clearInterval(this.checker);
-    //        }
-    //
-    //    }, this.checkFrequencyInMilliSeconds);
-    //}
-
-
 }

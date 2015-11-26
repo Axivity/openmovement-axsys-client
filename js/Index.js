@@ -71,7 +71,7 @@ function onDisconnected(store) {
 }
 
 
-function removeAttributeFromList(attributeName, attributeCommandOptions, devicePath) {
+function removeAttributeFromWaitingList(attributeName, attributeCommandOptions, devicePath) {
     let index = -1;
     for(let i=0; i< attributeCommandOptions[devicePath].length; i++) {
         let attributeCommand = attributeCommandOptions[devicePath][i];
@@ -89,9 +89,6 @@ function removeAttributeFromList(attributeName, attributeCommandOptions, deviceP
 
 function onDataReceived() {
     return (data) => {
-        //console.log('Data is in the app');
-        //console.log(data);
-
         let returnedString = binUtils.bufferToString(data.buffer);
         let attributeName = getAttributeName(returnedString);
         let devicePath = data.path;
@@ -99,7 +96,7 @@ function onDataReceived() {
         // we only care about the attributes we know of.
         if(attributeName !== null) {
             // We need to remove the command from list, which holds all commands awaiting response
-            removeAttributeFromList(attributeName, commandResponses, devicePath);
+            removeAttributeFromWaitingList(attributeName, commandResponses, devicePath);
             // Publish data attribute to server
             sendAttributeDataToServer(devicePath, attributeName, returnedString);
         }

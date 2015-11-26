@@ -4,9 +4,10 @@
 
 import React, {Component} from 'react';
 
-import {getFormattedCurrentDateTime,
-        getNextDayAtMidnightFromGiven, getMidnightFromNowAndNumberOfDays} from '../utils/time-utils';
 import {END_OF_LINE} from '../utils/device-command-queue';
+import { getFormattedCurrentDateTime,
+         getNextDayAtMidnightFromGiven,
+         getMidnightFromNowAndNumberOfDays } from '../utils/time-utils';
 
 
 export default class DevicesConfigurationForm extends Component {
@@ -15,7 +16,21 @@ export default class DevicesConfigurationForm extends Component {
         return '7,4a';
     }
 
+    static configure() {
+
+    }
+
+    static validate(devices) {
+        //devices.filter(
+        //);
+        return devices;
+    }
+
     submitConfiguration() {
+        let {selectedDevices} = this.props;
+
+        let validatedDevices = this.constructor.validate(selectedDevices);
+
         let currentDateTime = getFormattedCurrentDateTime(),
             timeCmd = "TIME=" + currentDateTime + END_OF_LINE ,
             accelCmd = "RATE=" + this.constructor.getAccelerometerRateAndRange() + END_OF_LINE,
@@ -24,6 +39,7 @@ export default class DevicesConfigurationForm extends Component {
             stopCmd = "STOP " + getMidnightFromNowAndNumberOfDays(8) + END_OF_LINE,
             formatCmd = "FORMAT WC" + END_OF_LINE;
 
+        validatedDevices.map(device => this.constructor.configure(device));
     }
 
     render() {
