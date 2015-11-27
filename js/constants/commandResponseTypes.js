@@ -22,6 +22,18 @@ export const MAP_RESPONSES_TO_ATTRIBUTE_NAMES = {
     [BATTERY_RESPONSE_STARTS_WITH]: attributeNames.BATTERY
 };
 
+export function checkResponse (returnedString) {
+    let response = null;
+    for(let prop in MAP_RESPONSES_TO_ATTRIBUTE_NAMES) {
+        if(MAP_RESPONSES_TO_ATTRIBUTE_NAMES.hasOwnProperty(prop)) {
+            if(returnedString && returnedString.startsWith(prop)) {
+                response = MAP_RESPONSES_TO_ATTRIBUTE_NAMES[prop];
+            }
+        }
+    }
+    return response;
+}
+
 //export const ATTRIBUTES_PARSER_USING_NAME = {
 //
 //    [ID_RESPONSE_STARTS_WITH]: (versionType) => {

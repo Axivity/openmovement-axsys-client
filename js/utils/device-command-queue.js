@@ -8,7 +8,7 @@ import moment from 'moment';
 
 import * as binUtils from './binutils';
 import * as stringUtils from './string-utils';
-
+import {checkResponse} from '../constants/commandResponseTypes';
 //const TIMEOUT_IN_SECONDS = 10;
 //
 //const WRITTEN = Symbol();
@@ -32,33 +32,69 @@ export class CommandOptions {
     }
 }
 
-
+// TODO: Hate this god class it's become - can we just refactor it into plain functions?
 export class DeviceCommandQueue {
     constructor(devicePath:string,
                 api:object,
+                commands: Array<CommandOptions>,
                 dataListener: (obj: {buffer: ArrayBuffer; updatedEpoch: number}) => void) {
         this.devicePath = devicePath;
         this.commands = [];
+        this.commandsAwaitingResponse = [];
         this.api = api;
         this.checkFrequencyInMilliSeconds = 1000;
         this.dataListener = dataListener;
-        //this.checker = null;
         this.dataBuffer = new ArrayBuffer(0);
         // replacing ondatareceived data listener
         this.api.replaceDataListener(this.wrappedDataListener.bind(this));
+        this.runner = null;
+        this.checker = null;
+        this.connected = false;
+
+        this.connectToDevice(() => {
+            this.addAllCommands(commands);
+            this.checkForResponsesAndCloseConnection();
+        });
+
+
     }
 
     start() {
-        setInterval(() => {
-            if (!this.isEmpty()) {
-                let commandOptions = this.commands.pop();
-
-                // Write command
-                this.api.write(commandOptions.options, () => {
-                    commandOptions.callback();
-                });
-            }
+        this.runner = setInterval(() => {
+            this.run();
         }, this.checkFrequencyInMilliSeconds);
+    }
+
+    addAllCommands(commands) {
+        commands.map((command) => {
+            this.addCommand(command);
+        });
+    }
+
+    connectToDevice(cb) {
+        var self = this;
+        let options = {};
+        options.path = this.devicePath;
+        this.api.connect(options, () => {
+            console.log('Connected to device');
+            self.connected = true;
+            cb();
+        });
+    }
+
+    run() {
+        if (this.connected && !this.isEmpty()) {
+            let commandOptions = this.commands.pop();
+            let options = commandOptions.options;
+
+            // Write command
+            this.api.write(options, () => {
+                // NB: mark the command written and keep a check
+                // on whether response has come back
+                this.commandsAwaitingResponse.push(options);
+                commandOptions.callback();
+            });
+        }
     }
 
     addCommand(commandWithOptions:CommandOptions) {
@@ -100,11 +136,57 @@ export class DeviceCommandQueue {
                 this.dataBuffer = new ArrayBuffer(0);
                 this.dataBuffer = dataBuffFromCRLF;
 
+                let returnedString = binUtils.bufferToString(response.buffer);
+                let foundResponse = checkResponse(returnedString);
+
+                response.response = foundResponse;
+                response.string = returnedString;
+
+                if(foundResponse!==null) {
+                    this.removeCommandFromWaitingList(foundResponse);
+                }
+
                 // call the original listener with full data till end of line
                 this.dataListener(response);
+
             }
 
         }
     }
 
+    removeCommandFromWaitingList(commandName) {
+        let index = -1;
+        for(let i=0; i< this.commandsAwaitingResponse.length; i++) {
+            let attributeCommand = this.commandsAwaitingResponse[i];
+
+            if(attributeCommand.options.name === commandName) {
+                index = i;
+            }
+        }
+
+        if(index > -1) {
+            this.commandsAwaitingResponse.splice(index, 1);
+        }
+    }
+
+    checkForResponsesAndCloseConnection() {
+        this.checker = setInterval(() => {
+            let options = {};
+            options.path = this.devicePath;
+
+            console.log(this.commandsAwaitingResponse);
+            if(this.connected && this.commandsAwaitingResponse.length === 0) {
+                clearInterval(this.checker);
+                this.api.disconnect(options, () => {
+                    console.log('Closed connection to device ' + this.devicePath);
+                });
+            }
+        }, 1000);
+    }
+
+
+
 }
+
+
+

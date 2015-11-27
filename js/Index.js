@@ -20,17 +20,12 @@ import { addDevice, removeDevice, addDataAttributeForDevicePath,
 import AXApi from './ax-client';
 import { DeviceCommandQueue, CommandOptions } from './utils/device-command-queue';
 import axsysApp from './reducers/reducers';
-import {MAP_RESPONSES_TO_ATTRIBUTE_NAMES} from './constants/commandResponseTypes';
+import {checkResponse} from './constants/commandResponseTypes';
 import * as binUtils from './utils/binutils';
 import * as attributeNames from './constants/attributeNames';
 import {DEVICE_METADATA_ATTRIBUTES, getDevicesWithAttributesNotSet, findDeviceByPath} from './utils/device-attributes';
 
 let store = createStore(axsysApp);
-
-let commandResponses = {};
-
-let commandQs = {};
-
 
 let api = new AXApi(
     onDeviceAdded(store),
@@ -71,50 +66,60 @@ function onDisconnected(store) {
 }
 
 
-function removeAttributeFromWaitingList(attributeName, attributeCommandOptions, devicePath) {
-    let index = -1;
-    for(let i=0; i< attributeCommandOptions[devicePath].length; i++) {
-        let attributeCommand = attributeCommandOptions[devicePath][i];
-
-        if(attributeCommand.options.name === attributeName) {
-            index = i;
-        }
-    }
-
-    if(index > -1) {
-        attributeCommandOptions[devicePath].splice(index, 1);
-    }
-}
-
 
 function onDataReceived() {
     return (data) => {
-        let returnedString = binUtils.bufferToString(data.buffer);
-        let attributeName = getAttributeName(returnedString);
+        let returnedDataAsString = data.string;
+        let attributeName = data.response;
         let devicePath = data.path;
-
-        // we only care about the attributes we know of.
-        if(attributeName !== null) {
-            // We need to remove the command from list, which holds all commands awaiting response
-            removeAttributeFromWaitingList(attributeName, commandResponses, devicePath);
-            // Publish data attribute to server
-            sendAttributeDataToServer(devicePath, attributeName, returnedString);
-        }
-
+        sendAttributeDataToServer(devicePath, attributeName, returnedDataAsString);
     }
 }
 
-function getAttributeName(returnedString) {
-    let attributeName = null;
-    for(let prop in MAP_RESPONSES_TO_ATTRIBUTE_NAMES) {
-        if(MAP_RESPONSES_TO_ATTRIBUTE_NAMES.hasOwnProperty(prop)) {
-            if(returnedString && returnedString.startsWith(prop)) {
-                attributeName = MAP_RESPONSES_TO_ATTRIBUTE_NAMES[prop];
+
+function onConnectedToServer(store) {
+    return () => {
+        api.getDevices((devices) => {
+            let err = null;
+            if(err) {
+                // Need to handle error?
+                console.error(err);
+
+            } else {
+                console.log(api.getServerTimeFunction()());
+
+                // add device to store
+                applyFunctionToEachDevice(devices, (device) => {
+                    store.dispatch(addDevice(device));
+                });
+
+                checkAttributesPeriodically();
+            }
+        });
+    }
+}
+
+
+function onAttributesDataPublished(store) {
+    return (listOfChanges) => {
+
+        for(let i=0; i<listOfChanges.length; i++) {
+            let data = listOfChanges[i];
+            let attributeValue = data.value.value;
+            let attributeName = checkResponse(attributeValue);
+
+            if(attributeName != null) {
+                let deviceAttribute = {
+                    'path': data.path.split('/')[1].replace(/~1/g, '/'),
+                    'attribute': attributeName,
+                    'value': data.value
+                };
+                store.dispatch(addDataAttributeForDevicePath(deviceAttribute));
             }
         }
     }
-    return attributeName;
 }
+
 
 function sendAttributeDataToServer(devicePath, attributeKey, attributeVal) {
     let options = {
@@ -128,25 +133,6 @@ function sendAttributeDataToServer(devicePath, attributeKey, attributeVal) {
     });
 }
 
-function onAttributesDataPublished(store) {
-    return (listOfChanges) => {
-
-        for(let i=0; i<listOfChanges.length; i++) {
-            let data = listOfChanges[i];
-            let attributeValue = data.value.value;
-            let attributeName = getAttributeName(attributeValue);
-
-            if(attributeName != null) {
-                let deviceAttribute = {
-                    'path': data.path.split('/')[1].replace(/~1/g, '/'),
-                    'attribute': attributeName,
-                    'value': data.value
-                };
-                store.dispatch(addDataAttributeForDevicePath(deviceAttribute));
-            }
-        }
-    }
-}
 
 function prepareCommandOptions(path, attributes) {
     let allCommandOptions = [];
@@ -167,50 +153,15 @@ function prepareCommandOptions(path, attributes) {
     return allCommandOptions;
 }
 
-function checkForResponsesAndCloseConnection(device, commandsWaitingForResponses) {
-    let checker = setInterval(() => {
-        let devicePath = device._id;
-        let options = {};
-
-        options.path = devicePath;
-        if(commandsWaitingForResponses[devicePath].length === 0) {
-            clearInterval(checker);
-            api.disconnect(options, () => {
-                console.log('Closed connection to device ' + devicePath);
-            });
-        }
-    }, 1000);
-}
 
 function connectToDevice(device, attributes) {
-    let options = {};
     let path = device._id;
-    options.path = path;
-    console.log('Connecting to device: ' + path);
-
-    if(attributes.length > 0) {
-        api.connect(options, (response) => {
-            if(response) {
-                let deviceCommandQ = new DeviceCommandQueue(path, api, onDataReceived());
-                deviceCommandQ.start();
-                commandQs[path] = deviceCommandQ;
-                commandResponses[path] = [];
-                console.log('Started command Q for ' + path);
-
-                let commands = prepareCommandOptions(path, attributes);
-                for(let i=0; i< commands.length; i++) {
-                    deviceCommandQ.addCommand(commands[i]);
-                    commandResponses[path].push(commands[i]);
-                }
-
-                checkForResponsesAndCloseConnection(device, commandResponses);
-
-            } else {
-                console.warn('Unexpected internal error in connecting to device ' + path);
-            }
-        });
-    }
+    let commands = prepareCommandOptions(path, attributes);
+    let deviceCommandQ = new DeviceCommandQueue(path, api, commands, onDataReceived());
+    deviceCommandQ.start();
+    console.log('Started command Q for ' + path);
 }
+
 
 function applyFunctionToEachDevice(devices, fn) {
     for(let devicePath in devices) {
@@ -268,30 +219,6 @@ function checkAttributesPeriodically() {
     setInterval(() => {
         setupDevices();
     }, 30000);
-}
-
-
-
-function onConnectedToServer(store) {
-    return () => {
-        api.getDevices((devices) => {
-            let err = null;
-            if(err) {
-                // Need to handle error?
-                console.error(err);
-
-            } else {
-                console.log(api.getServerTimeFunction()());
-
-                // add device to store
-                applyFunctionToEachDevice(devices, (device) => {
-                    store.dispatch(addDevice(device));
-                });
-
-                checkAttributesPeriodically();
-            }
-        });
-    }
 }
 
 
