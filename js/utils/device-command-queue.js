@@ -32,11 +32,11 @@ export class CommandOptions {
     }
 }
 
-// TODO: Hate this god class it's become - can we just refactor it into plain functions?
+// TODO: Hate how this has become a god class - can we just refactor it into plain functions?
 export class DeviceCommandQueue {
     constructor(devicePath:string,
                 api:object,
-                commands: Array<CommandOptions>,
+                commandOptions: Array<CommandOptions>,
                 dataListener: (obj: {buffer: ArrayBuffer; updatedEpoch: number}) => void) {
         this.devicePath = devicePath;
         this.commands = [];
@@ -46,17 +46,16 @@ export class DeviceCommandQueue {
         this.dataListener = dataListener;
         this.dataBuffer = new ArrayBuffer(0);
         // replacing ondatareceived data listener
-        this.api.replaceDataListener(this.wrappedDataListener.bind(this));
+        this.api.addDataListenerForDevice(this.devicePath, this.wrappedDataListener.bind(this));
         this.runner = null;
         this.checker = null;
         this.connected = false;
+        this.commandOptions = commandOptions;
+        this.commandsResponded = [];
 
         this.connectToDevice(() => {
-            this.addAllCommands(commands);
-            this.checkForResponsesAndCloseConnection();
+            this.addAllCommands();
         });
-
-
     }
 
     start() {
@@ -65,10 +64,11 @@ export class DeviceCommandQueue {
         }, this.checkFrequencyInMilliSeconds);
     }
 
-    addAllCommands(commands) {
-        commands.map((command) => {
+    addAllCommands() {
+        this.commandOptions.map((command) => {
             this.addCommand(command);
         });
+
     }
 
     connectToDevice(cb) {
@@ -89,12 +89,20 @@ export class DeviceCommandQueue {
 
             // Write command
             this.api.write(options, () => {
+                console.log('Written command' + commandOptions);
                 // NB: mark the command written and keep a check
                 // on whether response has come back
-                this.commandsAwaitingResponse.push(options);
+                this.commandsAwaitingResponse.push(commandOptions);
+                if(this.allCommandsWritten()) {
+                    this.checkForResponsesAndCloseConnection();
+                }
                 commandOptions.callback();
             });
         }
+    }
+
+    allCommandsWritten() {
+        return (this.commandsAwaitingResponse.length === this.commandOptions.length);
     }
 
     addCommand(commandWithOptions:CommandOptions) {
@@ -113,6 +121,8 @@ export class DeviceCommandQueue {
     }
 
     wrappedDataListener (response) {
+        console.log('Called wrapped data listener');
+        console.log(response);
         if(response) {
             let chunk = response.buffer.data;
 
@@ -137,13 +147,14 @@ export class DeviceCommandQueue {
                 this.dataBuffer = dataBuffFromCRLF;
 
                 let returnedString = binUtils.bufferToString(response.buffer);
-                let foundResponse = checkResponse(returnedString);
+                let matchedResponseType = checkResponse(returnedString);
 
-                response.response = foundResponse;
+                response.response = matchedResponseType;
                 response.string = returnedString;
 
-                if(foundResponse!==null) {
-                    this.removeCommandFromWaitingList(foundResponse);
+                if(matchedResponseType!==null) {
+                    console.log(this.commandsAwaitingResponse);
+                    this.addCommandToRespondedList(matchedResponseType);
                 }
 
                 // call the original listener with full data till end of line
@@ -154,19 +165,12 @@ export class DeviceCommandQueue {
         }
     }
 
-    removeCommandFromWaitingList(commandName) {
-        let index = -1;
-        for(let i=0; i< this.commandsAwaitingResponse.length; i++) {
-            let attributeCommand = this.commandsAwaitingResponse[i];
+    addCommandToRespondedList(responseType){
+        this.commandsResponded.push(responseType);
+    }
 
-            if(attributeCommand.options.name === commandName) {
-                index = i;
-            }
-        }
-
-        if(index > -1) {
-            this.commandsAwaitingResponse.splice(index, 1);
-        }
+    allCommandsResponded() {
+        return (this.commandsResponded.length === this.commandsAwaitingResponse.length);
     }
 
     checkForResponsesAndCloseConnection() {
@@ -174,8 +178,10 @@ export class DeviceCommandQueue {
             let options = {};
             options.path = this.devicePath;
 
+            console.log(this.devicePath);
             console.log(this.commandsAwaitingResponse);
-            if(this.connected && this.commandsAwaitingResponse.length === 0) {
+            console.log(this.commandsResponded);
+            if(this.connected && this.allCommandsResponded()) {
                 clearInterval(this.checker);
                 this.api.disconnect(options, () => {
                     console.log('Closed connection to device ' + this.devicePath);
@@ -184,9 +190,5 @@ export class DeviceCommandQueue {
         }, 1000);
     }
 
-
-
 }
-
-
 

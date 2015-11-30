@@ -11,13 +11,23 @@ describe('With Device Queue', () => {
     describe('when data is received in callback', () => {
 
         let q = new DeviceCommandQueue('serial://sample-path', {
-            // this is a mock to get around replacing data listener
-            'replaceDataListener': () => {console.log('Called replace')}
+                                // this is a mock to get around replacing data listener
+                                'replaceDataListener': () => {console.log('Called replace')},
+                                'connect': (options, cb) => {
+                                    console.log('Called connect');
+                                    cb();
 
-        }, (response) => {
-            // this is a mock data listener function
-            console.log(response);
-        });
+                                },
+                                'disconnect': (options, cb) => {
+                                    console.log('Called disconnect');
+                                    cb();
+                                }
+                            },
+                            [], // command options
+                            (response) => {
+                                // this is a mock data listener function
+                                console.log(response);
+                            });
 
         it('should add data to the data buffer ', () => {
             let str = 'boo';

@@ -32,7 +32,7 @@ export function getDevicesWithAttributesNotSet(
                         devices:Array<object>,
                         deviceAttributes:Object,
                         attributes:Array<Object>,
-                        serverTimeFn: () => number) {
+                        serverTimeFn: () => number) : ?Object {
 
     return checkAttributesForEachDevice(
                         devices,
@@ -40,6 +40,36 @@ export function getDevicesWithAttributesNotSet(
                         attributesChecker,
                         attributes,
                         serverTimeFn);
+}
+
+/**
+ *
+ * @param device
+ * @param deviceAttributes
+ * @param attributes
+ * @param serverTimeFn
+ * @returns {Array.<Object>}
+ */
+export function getAttributesNotSetForDevice(
+                        device: Object,
+                        deviceAttributes:Object,
+                        attributes:Array<Object>,
+                        serverTimeFn: () => number) : ?Object {
+
+    let attributesNotSetForDevice = {};
+    let devicePath = device._id;
+    console.log(devicePath);
+
+    if(deviceAttributes.hasOwnProperty(devicePath)) {
+        let deviceAttributesInState = deviceAttributes[devicePath];
+        attributesNotSetForDevice[devicePath] = attributesChecker(deviceAttributesInState, attributes, serverTimeFn);
+
+    } else {
+        attributesNotSetForDevice[devicePath] = attributes;
+    }
+
+    return attributesNotSetForDevice;
+
 }
 
 
@@ -83,7 +113,7 @@ function checkAttributesForEachDevice(devices, deviceAttributes, checker, attrib
     return devicesWithAttributesNotFound;
 }
 
-function attributesChecker(deviceAttribute, attributes, serverTimeFn) {
+function attributesChecker(deviceAttribute, attributes, serverTimeFn) : Array<Object> {
     // Attributes are set of commands that are pre-configured
     // deviceAttribute is an attribute key and value store in state tree.
     // This will not have configuration related keys like 'frequency' for
@@ -98,6 +128,7 @@ function attributesChecker(deviceAttribute, attributes, serverTimeFn) {
 
         if(!deviceAttribute.hasOwnProperty(attributeName)) {
             attributesNotSet.push(attribute);
+
         } else {
             let devAttribute = deviceAttribute[attributeName];
             let frequency = attribute.frequency_in_seconds;

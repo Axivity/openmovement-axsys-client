@@ -23,7 +23,7 @@ import axsysApp from './reducers/reducers';
 import {checkResponse} from './constants/commandResponseTypes';
 import * as binUtils from './utils/binutils';
 import * as attributeNames from './constants/attributeNames';
-import {DEVICE_METADATA_ATTRIBUTES, getDevicesWithAttributesNotSet, findDeviceByPath} from './utils/device-attributes';
+import {DEVICE_METADATA_ATTRIBUTES, getAttributesNotSetForDevice, findDeviceByPath} from './utils/device-attributes';
 
 let store = createStore(axsysApp);
 
@@ -32,7 +32,6 @@ let api = new AXApi(
     onDeviceRemoved(store),
     onConnectedToServer(store),
     onDisconnected(store),
-    onDataReceived,
     onAttributesDataPublished(store)
 );
 
@@ -89,7 +88,8 @@ function onConnectedToServer(store) {
                 console.log(api.getServerTimeFunction()());
 
                 // add device to store
-                applyFunctionToEachDevice(devices, (device) => {
+                Object.keys(devices).map((devicePath) => {
+                    let device = devices[devicePath];
                     store.dispatch(addDevice(device));
                 });
 
@@ -153,7 +153,6 @@ function prepareCommandOptions(path, attributes) {
     return allCommandOptions;
 }
 
-
 function connectToDevice(device, attributes) {
     let path = device._id;
     let commands = prepareCommandOptions(path, attributes);
@@ -163,47 +162,24 @@ function connectToDevice(device, attributes) {
 }
 
 
-function applyFunctionToEachDevice(devices, fn) {
-    for(let devicePath in devices) {
-        if(devices.hasOwnProperty(devicePath)) {
-            let device = devices[devicePath];
-            fn(device);
-        }
-    }
-}
-
-
-function runCommandsToGetAttributes(devices, devicesWithAttributesNotSet) {
-    console.log(devicesWithAttributesNotSet);
-
-    for(let devicePath in devicesWithAttributesNotSet) {
-        if(devicesWithAttributesNotSet.hasOwnProperty(devicePath)) {
-            let attributes = devicesWithAttributesNotSet[devicePath];
-            let device = findDeviceByPath(devices, devicePath);
-            connectToDevice(device, attributes);
-        }
-    }
+function runCommandsToGetAttributes(device, attributesNotSetForDevice) {
+    console.log(attributesNotSetForDevice);
+    let devicePath = device._id;
+    let attributesNotSet = attributesNotSetForDevice[devicePath];
+    connectToDevice(device, attributesNotSet);
 }
 
 
 function setupDevice(device) {
-    let devices = [];
-    if(device.constructor === Array) {
-        devices = device;
-    } else {
-        devices.push(device);
-    }
-
     let deviceAttributes = store.getState().deviceAttributes;
-
     // check for attributes for those devices
-    let devicesWithAttributesNotSet = getDevicesWithAttributesNotSet(
-        devices,
-        deviceAttributes,
-        DEVICE_METADATA_ATTRIBUTES,
-        api.getServerTimeFunction());
+    let deviceWithAttributesNotSet = getAttributesNotSetForDevice(
+                                            device,
+                                            deviceAttributes,
+                                            DEVICE_METADATA_ATTRIBUTES,
+                                            api.getServerTimeFunction());
 
-    runCommandsToGetAttributes(devices, devicesWithAttributesNotSet);
+    runCommandsToGetAttributes(device, deviceWithAttributesNotSet);
 }
 
 

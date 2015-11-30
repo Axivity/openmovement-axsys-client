@@ -9,7 +9,6 @@ export default class AXApi {
                 onDeviceRemoved,
                 onConnected,
                 onDisconnected,
-                onDataReceived,
                 onAttributesDataPublished) {
 
         this.api = new AX.API(
@@ -17,7 +16,6 @@ export default class AXApi {
             onDeviceRemoved,
             onConnected,
             onDisconnected,
-            onDataReceived,
             onAttributesDataPublished);
     }
 
@@ -60,6 +58,11 @@ export default class AXApi {
         return () => {
             return self.api.getCurrentTime();
         }
+    }
+
+    addDataListenerForDevice(devicePath, cb) {
+        // This will replace any existing listeners as well
+        this.api.addDataListenerForDevice(devicePath, cb);
     }
 
 }

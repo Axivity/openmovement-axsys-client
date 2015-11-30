@@ -134,6 +134,89 @@ describe('Device attributes', () => {
             console.log(devicesWithNoAttributes['path2']);
         });
 
+        it('should return only a single device when device attributes are checked for 1 device', () => {
+
+            let device = {
+                z: 'z',
+                y: 'y',
+                _id: 'path1'
+            };
+
+            let deviceAttributes = {};
+
+            let attributes = [
+                {
+                    name: 'c',
+                    frequency: 0
+
+                },
+                {
+                    name: 'd',
+                    frequency: 60
+                }
+            ];
+
+            let deviceAttributesNotSet = deviceAttributesHelper.getAttributesNotSetForDevice(
+                device,
+                deviceAttributes,
+                attributes,
+                () => { return 1234567810000 }
+            );
+
+
+            let expectedPath1 = [ { name: 'c', frequency: 0 }, { name: 'd', frequency: 60 } ];
+
+            console.log(deviceAttributesNotSet);
+            expect(deviceAttributesNotSet['path1']).to.deep.equal(expectedPath1);
+            console.log(deviceAttributesNotSet['path1']);
+
+        });
+
+        it('should return only a single device when device attributes are checked for 1 device even if it already exists', () => {
+
+            let device = {
+                z: 'z',
+                y: 'y',
+                _id: 'path1'
+            };
+
+            let deviceAttributes = {
+                path1: {
+                    c: {
+                        val: 'c',
+                        timeUpdatedInMillis: 1234567890000
+                    }
+                }
+            };
+
+            let attributes = [
+                {
+                    name: 'c',
+                    frequency: 0
+
+                },
+                {
+                    name: 'd',
+                    frequency: 60
+                }
+            ];
+
+            let deviceAttributesNotSet = deviceAttributesHelper.getAttributesNotSetForDevice(
+                device,
+                deviceAttributes,
+                attributes,
+                () => { return 1234567810000 }
+            );
+
+
+            let expectedPath1 = [ { name: 'd', frequency: 60 } ];
+
+            console.log(deviceAttributesNotSet);
+            expect(deviceAttributesNotSet['path1']).to.deep.equal(expectedPath1);
+            console.log(deviceAttributesNotSet['path1']);
+
+        });
+
     });
 
     describe('when findDeviceByPath is called', () => {
