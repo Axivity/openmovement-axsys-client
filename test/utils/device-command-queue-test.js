@@ -21,6 +21,10 @@ describe('With Device Queue', () => {
                                 'disconnect': (options, cb) => {
                                     console.log('Called disconnect');
                                     cb();
+                                },
+                                'addDataListenerForDevice': (path, cb) => {
+                                    console.log('Called data listener');
+                                    cb();
                                 }
                             },
                             [], // command options
