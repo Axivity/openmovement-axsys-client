@@ -18,7 +18,7 @@ export const DEVICE_METADATA_ATTRIBUTES = [
     }
 ];
 
-const ATTRIBUTE_FREQ_THRESHOLD_IN_SECS = 60;
+//const ATTRIBUTE_FREQ_THRESHOLD_IN_MILLIS = 60 * 1000;
 
 
 /**
@@ -90,6 +90,19 @@ export function findDeviceByPath(devices:Array<Object>, devicePath: string) : ?O
 }
 
 
+export function getKnownAttributes(deviceAttributes : Map<String, Object>) : Array<Object> {
+    let keys = Object.keys(attributeNames);
+    return keys.map((key) => {
+        let value = deviceAttributes[key];
+        if(value !== undefined) {
+            return {
+                [key]: value
+            };
+        }
+    });
+}
+
+
 function checkAttributesForEachDevice(devices, deviceAttributes, checker, attributes, serverTimeFn) {
 
     let devicesWithAttributesNotFound = {};
@@ -133,7 +146,7 @@ function attributesChecker(deviceAttribute, attributes, serverTimeFn) : Array<Ob
             let devAttribute = deviceAttribute[attributeName];
             let frequency = attribute.frequency_in_seconds;
             if (isContinuouslyUpdatingAttribute(frequency)) {
-                if(hasNotUpdatedForTheFrequencyPeriod(devAttribute, frequency, serverTimeFn)) {
+                if(timeToUpdate(devAttribute, frequency, serverTimeFn)) {
                     attributesNotSet.push(attribute);
                 }
             }
@@ -146,8 +159,10 @@ function isContinuouslyUpdatingAttribute(frequency) {
     return frequency > 0;
 }
 
-function hasNotUpdatedForTheFrequencyPeriod(attr, frequency, serverTimeFn) {
-    let serverTimeInMillis = serverTimeFn();
-    console.log(serverTimeInMillis);
-    return serverTimeInMillis > (attr.timeUpdatedInMillis + frequency + ATTRIBUTE_FREQ_THRESHOLD_IN_SECS)
+function timeToUpdate(attr, frequencyInSecs, serverTimeFn) {
+    let serverTimeInMillis = parseInt(serverTimeFn());
+    console.log('Server time in millis ' + serverTimeInMillis);
+    console.log('Server time in millis ' + attr.timeUpdatedInMillis);
+    let frequencyInMillis = frequencyInSecs * 1000;
+    return serverTimeInMillis > (attr.timeUpdatedInMillis + frequencyInMillis);
 }

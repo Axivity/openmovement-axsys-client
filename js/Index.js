@@ -16,14 +16,17 @@ import moment from 'moment';
 /* internal imports*/
 import App from './containers/AxsysApp';
 import { addDevice, removeDevice, addDataAttributeForDevicePath,
-    deSelectDevice, removeDetailViewForDevice } from './actions/actionCreators';
+    deSelectDevice, removeDetailViewForDevice, DeviceAttributeData } from './actions/actionCreators';
 import AXApi from './ax-client';
 import { DeviceCommandQueue, CommandOptions } from './utils/device-command-queue';
 import axsysApp from './reducers/reducers';
 import {checkResponse} from './constants/commandResponseTypes';
 import * as binUtils from './utils/binutils';
 import * as attributeNames from './constants/attributeNames';
-import {DEVICE_METADATA_ATTRIBUTES, getAttributesNotSetForDevice, findDeviceByPath} from './utils/device-attributes';
+import {DEVICE_METADATA_ATTRIBUTES,
+        getAttributesNotSetForDevice,
+        findDeviceByPath,
+        getKnownAttributes} from './utils/device-attributes';
 
 let store = createStore(axsysApp);
 
@@ -91,6 +94,18 @@ function onConnectedToServer(store) {
                 Object.keys(devices).map((devicePath) => {
                     let device = devices[devicePath];
                     store.dispatch(addDevice(device));
+                    // also update device attributes - known attributes from attributeNames!
+                    let attributes = getKnownAttributes(device);
+                    attributes.forEach((attribute) => {
+                        Object.keys(attribute).map((key) => {
+                            let path = device._id;
+                            let attributeName = key;
+                            let value = attribute[key];
+                            let deviceAttribute = new DeviceAttributeData(path, attributeName, value);
+                            store.dispatch(addDataAttributeForDevicePath(deviceAttribute));
+                        })
+
+                    });
                 });
 
                 checkAttributesPeriodically();
@@ -102,18 +117,15 @@ function onConnectedToServer(store) {
 
 function onAttributesDataPublished(store) {
     return (listOfChanges) => {
-
+        console.log('Published data pushed back');
         for(let i=0; i<listOfChanges.length; i++) {
             let data = listOfChanges[i];
             let attributeValue = data.value.value;
             let attributeName = checkResponse(attributeValue);
+            let path = data.path.split('/')[1].replace(/~1/g, '/');
 
             if(attributeName != null) {
-                let deviceAttribute = {
-                    'path': data.path.split('/')[1].replace(/~1/g, '/'),
-                    'attribute': attributeName,
-                    'value': data.value
-                };
+                let deviceAttribute = new DeviceAttributeData(path, attributeName, data.value);
                 store.dispatch(addDataAttributeForDevicePath(deviceAttribute));
             }
         }
@@ -153,6 +165,7 @@ function prepareCommandOptions(path, attributes) {
     return allCommandOptions;
 }
 
+
 function connectToDevice(device, attributes) {
     let path = device._id;
     let commands = prepareCommandOptions(path, attributes);
@@ -166,7 +179,12 @@ function runCommandsToGetAttributes(device, attributesNotSetForDevice) {
     console.log(attributesNotSetForDevice);
     let devicePath = device._id;
     let attributesNotSet = attributesNotSetForDevice[devicePath];
-    connectToDevice(device, attributesNotSet);
+    if(attributesNotSet.length > 0) {
+        connectToDevice(device, attributesNotSet);
+    } else {
+        console.log('All attributes are up to date');
+    }
+
 }
 
 

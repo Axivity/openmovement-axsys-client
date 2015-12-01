@@ -183,7 +183,60 @@ describe('Device attributes', () => {
             let deviceAttributes = {
                 path1: {
                     c: {
-                        val: 'c',
+                        val:'c',
+                        timeUpdatedInMillis: 1234567890000
+                    },
+                    d: {
+                        val: 'd',
+                        timeUpdatedInMillis: 1234567810000
+                    }
+                }
+            };
+
+            let attributes = [
+                {
+                    name: 'c',
+                    frequency_in_seconds: 0
+
+                },
+                {
+                    name: 'd',
+                    frequency_in_seconds: 60
+                }
+            ];
+
+            let deviceAttributesNotSet = deviceAttributesHelper.getAttributesNotSetForDevice(
+                device,
+                deviceAttributes,
+                attributes,
+                () => { return 1234567890000  }
+            );
+
+
+            let expectedPath1 = [ { name: 'd', frequency_in_seconds: 60 } ];
+
+            console.log(deviceAttributesNotSet);
+            expect(deviceAttributesNotSet['path1']).to.deep.equal(expectedPath1);
+            console.log(deviceAttributesNotSet['path1']);
+
+        });
+
+        it('should not return any device when attribute has NOT expired comparing with server time', () => {
+
+            let device = {
+                z: 'z',
+                y: 'y',
+                _id: 'path1'
+            };
+
+            let deviceAttributes = {
+                path1: {
+                    c: {
+                        val:'c',
+                        timeUpdatedInMillis: 1234567890000
+                    },
+                    d: {
+                        val: 'd',
                         timeUpdatedInMillis: 1234567890000
                     }
                 }
@@ -192,12 +245,12 @@ describe('Device attributes', () => {
             let attributes = [
                 {
                     name: 'c',
-                    frequency: 0
+                    frequency_in_seconds: 0
 
                 },
                 {
                     name: 'd',
-                    frequency: 60
+                    frequency_in_seconds: 60
                 }
             ];
 
@@ -209,7 +262,7 @@ describe('Device attributes', () => {
             );
 
 
-            let expectedPath1 = [ { name: 'd', frequency: 60 } ];
+            let expectedPath1 = [];
 
             console.log(deviceAttributesNotSet);
             expect(deviceAttributesNotSet['path1']).to.deep.equal(expectedPath1);

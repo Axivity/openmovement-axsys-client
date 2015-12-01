@@ -4,7 +4,30 @@
 
 import * as actionTypes from '../constants/actionTypes';
 
+/**
+ *
+ */
+export class DeviceAttributeData {
 
+    /**
+     *
+     * @param path
+     * @param attributeName
+     * @param attributeVal
+     */
+    constructor(path : String, attributeName : String, attributeVal : ?any) {
+        this.path = path;
+        this.attribute = attributeName;
+        this.value = attributeVal;
+    }
+}
+
+
+/**
+ *
+ * @param device
+ * @returns {{type, device: *}}
+ */
 export function addDevice(device) {
     return {
         type: actionTypes.ADD_DEVICE,
@@ -13,6 +36,12 @@ export function addDevice(device) {
 
 }
 
+
+/**
+ *
+ * @param device
+ * @returns {{type, device: *}}
+ */
 export function removeDevice(device) {
     return {
         type: actionTypes.REMOVE_DEVICE,
@@ -20,6 +49,12 @@ export function removeDevice(device) {
     }
 }
 
+
+/**
+ *
+ * @param deviceAttribute
+ * @returns {{type, deviceAttribute: *}}
+ */
 export function addDataAttributeForDevicePath(deviceAttribute) {
     return {
         type: actionTypes.ADD_DEVICE_ATTRIBUTES,
@@ -27,6 +62,12 @@ export function addDataAttributeForDevicePath(deviceAttribute) {
     }
 }
 
+
+/**
+ *
+ * @param device
+ * @returns {{type, device: *}}
+ */
 export function selectDevice(device) {
     return {
         type: actionTypes.SELECT_DEVICE,
@@ -35,6 +76,11 @@ export function selectDevice(device) {
 }
 
 
+/**
+ *
+ * @param device
+ * @returns {{type, device: *}}
+ */
 export function deSelectDevice(device) {
     return {
         type: actionTypes.DESELECT_DEVICE,
@@ -43,6 +89,11 @@ export function deSelectDevice(device) {
 }
 
 
+/**
+ *
+ * @param device
+ * @returns {{type, device: *}}
+ */
 export function setDetailViewForDevice(device) {
     return {
         type: actionTypes.SET_DETAIL_VIEW_FOR_DEVICE,
@@ -50,6 +101,12 @@ export function setDetailViewForDevice(device) {
     }
 }
 
+
+/**
+ *
+ * @param device
+ * @returns {{type, device: *}}
+ */
 export function removeDetailViewForDevice(device) {
     return {
         type: actionTypes.REMOVE_DETAIL_VIEW_FOR_DEVICE,
