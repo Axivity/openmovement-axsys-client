@@ -96,15 +96,11 @@ function onConnectedToServer(store) {
                     store.dispatch(addDevice(device));
                     // also update device attributes - known attributes from attributeNames!
                     let attributes = getKnownAttributes(device);
-                    attributes.forEach((attribute) => {
-                        Object.keys(attribute).map((key) => {
-                            let path = device._id;
-                            let attributeName = key;
-                            let value = attribute[key];
-                            let deviceAttribute = new DeviceAttributeData(path, attributeName, value);
-                            store.dispatch(addDataAttributeForDevicePath(deviceAttribute));
-                        })
-
+                    attributes.forEach((key) => {
+                        let path = device._id;
+                        let value = device[key];
+                        let deviceAttribute = new DeviceAttributeData(path, key, value);
+                        store.dispatch(addDataAttributeForDevicePath(deviceAttribute));
                     });
                 });
 
@@ -121,17 +117,41 @@ function onAttributesDataPublished(store) {
         for(let i=0; i<listOfChanges.length; i++) {
             let data = listOfChanges[i];
             let attributeValue = data.value.value;
-            let attributeName = checkResponse(attributeValue);
-            let path = data.path.split('/')[1].replace(/~1/g, '/');
+            let pathSize = data.path.split('/').length;
 
-            if(attributeName != null) {
-                let deviceAttribute = new DeviceAttributeData(path, attributeName, data.value);
-                store.dispatch(addDataAttributeForDevicePath(deviceAttribute));
+            if(isAnAttributePath(pathSize)) {
+                // attributes for a device is published
+                let attributeName = checkResponse(attributeValue);
+                let path = data.path.split('/')[1].replace(/~1/g, '/');
+                if(attributeName != null) {
+                    let deviceAttribute = new DeviceAttributeData(path, attributeName, data.value);
+                    store.dispatch(addDataAttributeForDevicePath(deviceAttribute));
+                }
+
+            } else if(isADevicePath(pathSize)) {
+                // device added or removed is published
+                if(data.op === 'add') {
+                    let device = data.value;
+                    store.dispatch(addDevice(device));
+
+                } else {
+                    let device = data.value;
+                    store.dispatch(removeDevice(device));
+                }
+
             }
+
         }
     }
 }
 
+function isAnAttributePath(pathSize) {
+    return pathSize > 2;
+}
+
+function isADevicePath(pathSize) {
+    return pathSize === 2;
+}
 
 function sendAttributeDataToServer(devicePath, attributeKey, attributeVal) {
     let options = {
@@ -223,3 +243,12 @@ ReactDOM.render(
     </Provider>,
     document.getElementById('ax-ui-content')
 );
+
+/*
+
+ {"event":"ax-attribute-cache-publish",
+ "data":{"error":null,
+    "data":[{"op":"add","path":"/serial:~1~1COM9~1","value":
+        {"port":"\\\\.\\COM9","usbComposite":"USB\\VID_04D8&PID_0057\\CWA17_16221","usb":"USB\\VID_04D8&PID_0057\\8&17860904&0","volumeName":"\\\\?\\Volume{ceab40ac-6c58-11e5-82a0-346895ede8f0}\\","serialString":"CWA17_16221","usbStor":"USBSTOR\\DISK&VEN_AX3&PROD_AX3_MASS_STORAGE&REV_0017\\9&1EE32F56&0&CWA17_16221&0","physicalVolume":"\\Device\\HarddiskVolume18","_id":"serial://COM9/","vidPid":81264727,"serialNumber":16221,"deviceNumber":2,"volumePath":"I:\\"}}],"path":null}}
+
+ */

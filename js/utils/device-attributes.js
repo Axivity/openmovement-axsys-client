@@ -90,15 +90,11 @@ export function findDeviceByPath(devices:Array<Object>, devicePath: string) : ?O
 }
 
 
-export function getKnownAttributes(deviceAttributes : Map<String, Object>) : Array<Object> {
+export function getKnownAttributes(deviceAttributes : Map<String, Object>) : Array<String> {
     let keys = Object.keys(attributeNames);
-    return keys.map((key) => {
+    return keys.filter((key) => {
         let value = deviceAttributes[key];
-        if(value !== undefined) {
-            return {
-                [key]: value
-            };
-        }
+        return (value !== undefined);
     });
 }
 
