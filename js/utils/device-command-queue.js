@@ -9,14 +9,10 @@ import moment from 'moment';
 import * as binUtils from './binutils';
 import * as stringUtils from './string-utils';
 import {checkResponse} from '../constants/commandResponseTypes';
-//const TIMEOUT_IN_SECONDS = 10;
-//
-//const WRITTEN = Symbol();
-//
-//const WRITTEN_AND_READ = Symbol();
 
 // TODO: This constant should probably live in a separate constants module!
 export const END_OF_LINE = '\r\n';
+
 
 export class CommandOptions {
     constructor(options: object, callback: (param: T) => any) {
@@ -32,12 +28,37 @@ export class CommandOptions {
     }
 }
 
+export function prepareCommandOptions(path, attributes) {
+    let allCommandOptions = [];
+    for(let i=0; i<attributes.length; i++) {
+        let options = {
+            'command': attributes[i].command,
+            'path': path,
+            'frequency_in_seconds': attributes[i].frequency_in_seconds,
+            'name': attributes[i].name
+        };
+        let commandOptions = new CommandOptions(options, (writeResponse) => {
+            if(writeResponse) {
+                console.log('Written command to device ' + path);
+            }
+        });
+        allCommandOptions.push(commandOptions);
+    }
+    return allCommandOptions;
+}
+
 // TODO: Hate how this has become a god class - can we just refactor it into plain functions?
 export class DeviceCommandQueue {
+
     constructor(devicePath:string,
                 api:object,
                 commandOptions: Array<CommandOptions>,
                 dataListener: (obj: {buffer: ArrayBuffer; updatedEpoch: number}) => void) {
+
+        if(this.constructor.RUNNING) {
+            throw new Error("Command queue is already running for this device");
+        }
+
         this.devicePath = devicePath;
         this.commands = [];
         this.commandsAwaitingResponse = [];
@@ -45,6 +66,7 @@ export class DeviceCommandQueue {
         this.checkFrequencyInMilliSeconds = 1000;
         this.dataListener = dataListener;
         this.dataBuffer = new ArrayBuffer(0);
+        this.constructor.RUNNING = true;
         // replacing ondatareceived data listener
         this.api.addDataListenerForDevice(this.devicePath, this.wrappedDataListener.bind(this));
         this.runner = null;
@@ -89,7 +111,7 @@ export class DeviceCommandQueue {
 
             // Write command
             this.api.write(options, () => {
-                console.log('Written command' + commandOptions);
+                console.log('Written command' + options);
                 // NB: mark the command written and keep a check
                 // on whether response has come back
                 this.commandsAwaitingResponse.push(commandOptions);
@@ -147,6 +169,7 @@ export class DeviceCommandQueue {
                 this.dataBuffer = dataBuffFromCRLF;
 
                 let returnedString = binUtils.bufferToString(response.buffer);
+                console.log("The returned string is " + returnedString);
                 let matchedResponseType = checkResponse(returnedString);
 
                 response.response = matchedResponseType;
@@ -178,12 +201,10 @@ export class DeviceCommandQueue {
             let options = {};
             options.path = this.devicePath;
 
-            console.log(this.devicePath);
-            console.log(this.commandsAwaitingResponse);
-            console.log(this.commandsResponded);
             if(this.connected && this.allCommandsResponded()) {
                 clearInterval(this.checker);
                 this.api.disconnect(options, () => {
+                    this.constructor.RUNNING = false;
                     console.log('Closed connection to device ' + this.devicePath);
                 });
             }
@@ -192,3 +213,4 @@ export class DeviceCommandQueue {
 
 }
 
+DeviceCommandQueue.RUNNING = false;

@@ -12,12 +12,13 @@ export default class DevicesMaster extends Component {
     }
 
     render() {
-        let {devices, dispatch, deviceAttributes, selectedDevices} = this.props;
+        let {devices, api, dispatch, deviceAttributes, selectedDevices} = this.props;
 
         return (
             <div className="small-12 medium-4 large-3 columns ax-master-content slide">
                 <DevicesIconBar
                     dispatch={dispatch}
+                    api={api}
                     selectedDevices={selectedDevices}
                     devices={devices}
                 />

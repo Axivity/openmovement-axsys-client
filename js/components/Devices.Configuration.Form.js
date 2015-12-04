@@ -4,42 +4,83 @@
 
 import React, {Component} from 'react';
 
-import {END_OF_LINE} from '../utils/device-command-queue';
+import {DeviceCommandQueue, prepareCommandOptions, END_OF_LINE} from '../utils/device-command-queue';
+import * as attributeNames from '../constants/attributeNames';
+
 import { getFormattedCurrentDateTime,
          getNextDayAtMidnightFromGiven,
          getMidnightFromNowAndNumberOfDays } from '../utils/time-utils';
 
+function getAccelerometerRateAndRange() {
+    return '7,4a';
+}
+
+const CONFIGURATION_COMMANDS =[
+    {
+        'command': "TIME=" + getFormattedCurrentDateTime() + END_OF_LINE ,
+        'frequency_in_seconds': 0,
+        'name': attributeNames.TIME
+    },
+    {
+        'command': "RATE=" + getAccelerometerRateAndRange() + END_OF_LINE,
+        'frequency_in_seconds': 0,
+        'name': attributeNames.RATE
+    },
+    {
+        'command': "SESSION=1" + END_OF_LINE ,
+        'frequency_in_seconds': 0,
+        'name': attributeNames.SESSION
+    },
+    {
+        'command': "HIBERNATE=" + getNextDayAtMidnightFromGiven() + END_OF_LINE,
+        'frequency_in_seconds': 0,
+        'name': attributeNames.HIBERNATE
+    },
+    {
+        'command': "STOP=" + getMidnightFromNowAndNumberOfDays(8) + END_OF_LINE,
+        'frequency_in_seconds': 0,
+        'name': attributeNames.STOP
+    },
+    {
+        'command': "FORMAT=WC" + END_OF_LINE,
+        'frequency_in_seconds': 0,
+        'name': attributeNames.FORMAT
+    }
+];
+
+
 
 export default class DevicesConfigurationForm extends Component {
 
-    static getAccelerometerRateAndRange() {
-        return '7,4a';
-    }
-
-    static configure() {
+    static configure(device, api, commands) {
+        let path = device._id;
+        let commandOptions = prepareCommandOptions(path, commands);
+        let deviceCommandQ = new DeviceCommandQueue(path, api, commandOptions, () => {
+            console.log('Done configuring');
+        });
+        deviceCommandQ.start();
+        //console.log('Started command Q for ' + path);
 
     }
 
     static validate(devices) {
-        //devices.filter(
-        //);
         return devices;
     }
 
     submitConfiguration() {
-        let {selectedDevices} = this.props;
+        let {api, selectedDevices} = this.props;
 
         let validatedDevices = this.constructor.validate(selectedDevices);
 
-        let currentDateTime = getFormattedCurrentDateTime(),
-            timeCmd = "TIME=" + currentDateTime + END_OF_LINE ,
-            accelCmd = "RATE=" + this.constructor.getAccelerometerRateAndRange() + END_OF_LINE,
-            sessionCmd = "SESSION=1" + END_OF_LINE,
-            hibernateCmd = "HIBERNATE " + getNextDayAtMidnightFromGiven() + END_OF_LINE,
-            stopCmd = "STOP " + getMidnightFromNowAndNumberOfDays(8) + END_OF_LINE,
-            formatCmd = "FORMAT WC" + END_OF_LINE;
+        //let currentDateTime = getFormattedCurrentDateTime(),
+        //    timeCmd = "TIME=" + currentDateTime + END_OF_LINE ,
+        //    accelCmd = "RATE=" + this.constructor.getAccelerometerRateAndRange() + END_OF_LINE,
+        //    sessionCmd = "SESSION=1" + END_OF_LINE,
+        //    hibernateCmd = "HIBERNATE " + getNextDayAtMidnightFromGiven() + END_OF_LINE,
+        //    stopCmd = "STOP " + getMidnightFromNowAndNumberOfDays(8) + END_OF_LINE,
+        //    formatCmd = "FORMAT WC" + END_OF_LINE;
 
-        validatedDevices.map(device => this.constructor.configure(device));
+        validatedDevices.map(device => this.constructor.configure(device, api, CONFIGURATION_COMMANDS));
     }
 
     render() {

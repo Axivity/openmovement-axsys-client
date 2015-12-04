@@ -19,13 +19,14 @@ export default class Devices extends Component {
 
     render() {
 
-        let {devices, dispatch, deviceAttributes, selectedDevices, detailViewDevice } = this.props;
+        let {devices, api, dispatch, deviceAttributes, selectedDevices, detailViewDevice } = this.props;
         if(this.constructor.hasDevices(devices)) {
             return(
                 <div>
                     <DevicesMaster
                         devices={devices}
                         dispatch={dispatch}
+                        api={api}
                         deviceAttributes={deviceAttributes}
                         selectedDevices={selectedDevices}
                     />

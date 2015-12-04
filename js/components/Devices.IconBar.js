@@ -105,7 +105,7 @@ export default class DevicesIconBar extends Component {
 
 
     render() {
-        let { actions, selectedDevices, devices } = this.props;
+        let { actions, api, selectedDevices, devices } = this.props;
 
         let shouldEnableIcons = this.isSelected();
 
@@ -148,8 +148,9 @@ export default class DevicesIconBar extends Component {
                                     style={customStyles} >
 
                                      <DevicesConfigurationForm
-                                        closeModalFn={this.closeModal.bind(this)}
-                                        selectedDevices={selectedDevices}
+                                         api={api}
+                                         closeModalFn={this.closeModal.bind(this)}
+                                         selectedDevices={selectedDevices}
                                      />
 
                                 </Modal>

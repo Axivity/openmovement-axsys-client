@@ -61,7 +61,7 @@ let handleRequestHide = (notification) => {
 class App extends Component {
     render() {
         //console.log(this.props);
-        const { devices, dispatch, deviceAttributes, selectedDevices, detailViewDevice } = this.props;
+        const { devices, api, dispatch, deviceAttributes, selectedDevices, detailViewDevice } = this.props;
         //const actions = bindActionCreators(actionCreators, dispatch);
         //console.log(deviceAttributes);
 
@@ -73,6 +73,7 @@ class App extends Component {
                 />
                 <Devices
                     devices={devices}
+                    api={api}
                     dispatch={dispatch}
                     deviceAttributes={deviceAttributes}
                     selectedDevices={selectedDevices}

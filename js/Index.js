@@ -18,7 +18,7 @@ import App from './containers/AxsysApp';
 import { addDevice, removeDevice, addDataAttributeForDevicePath,
     deSelectDevice, removeDetailViewForDevice, DeviceAttributeData } from './actions/actionCreators';
 import AXApi from './ax-client';
-import { DeviceCommandQueue, CommandOptions } from './utils/device-command-queue';
+import { DeviceCommandQueue, prepareCommandOptions, CommandOptions } from './utils/device-command-queue';
 import axsysApp from './reducers/reducers';
 import {checkResponse} from './constants/commandResponseTypes';
 import * as binUtils from './utils/binutils';
@@ -165,33 +165,19 @@ function sendAttributeDataToServer(devicePath, attributeKey, attributeVal) {
     });
 }
 
-
-function prepareCommandOptions(path, attributes) {
-    let allCommandOptions = [];
-    for(let i=0; i<attributes.length; i++) {
-        let options = {
-            'command': attributes[i].command,
-            'path': path,
-            'frequency_in_seconds': attributes[i].frequency_in_seconds,
-            'name': attributes[i].name
-        };
-        let commandOptions = new CommandOptions(options, (writeResponse) => {
-            if(writeResponse) {
-                console.log('Written command to device ' + path);
-            }
-        });
-        allCommandOptions.push(commandOptions);
-    }
-    return allCommandOptions;
-}
-
-
 function connectToDevice(device, attributes) {
     let path = device._id;
     let commands = prepareCommandOptions(path, attributes);
-    let deviceCommandQ = new DeviceCommandQueue(path, api, commands, onDataReceived());
-    deviceCommandQ.start();
-    console.log('Started command Q for ' + path);
+    try {
+        let deviceCommandQ = new DeviceCommandQueue(path, api, commands, onDataReceived());
+        deviceCommandQ.start();
+        console.log('Started command Q for ' + path);
+
+    } catch (err){
+        console.warn('Could not run device queue ' + err);
+    }
+
+
 }
 
 
@@ -239,16 +225,8 @@ function checkAttributesPeriodically() {
 // Entry point to the views
 ReactDOM.render(
     <Provider store={store}>
-        <App />
+        <App api={api} />
     </Provider>,
     document.getElementById('ax-ui-content')
 );
 
-/*
-
- {"event":"ax-attribute-cache-publish",
- "data":{"error":null,
-    "data":[{"op":"add","path":"/serial:~1~1COM9~1","value":
-        {"port":"\\\\.\\COM9","usbComposite":"USB\\VID_04D8&PID_0057\\CWA17_16221","usb":"USB\\VID_04D8&PID_0057\\8&17860904&0","volumeName":"\\\\?\\Volume{ceab40ac-6c58-11e5-82a0-346895ede8f0}\\","serialString":"CWA17_16221","usbStor":"USBSTOR\\DISK&VEN_AX3&PROD_AX3_MASS_STORAGE&REV_0017\\9&1EE32F56&0&CWA17_16221&0","physicalVolume":"\\Device\\HarddiskVolume18","_id":"serial://COM9/","vidPid":81264727,"serialNumber":16221,"deviceNumber":2,"volumePath":"I:\\"}}],"path":null}}
-
- */

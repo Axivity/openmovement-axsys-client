@@ -13,13 +13,36 @@ export const ID_RESPONSE_STARTS_WITH = 'ID=';
 // Error in response starts with ERROR=...
 export const ERROR_RESPONSE_STARTS_WITH = 'ERROR=';
 
+export const TIME_RESPONSE_STARTS_WITH = '$TIME=';
+
+export const RATE_RESPONSE_STARTS_WITH = 'RATE=';
+
+export const SESSION_RESPONSE_STARTS_WITH = 'SESSION';
+
+export const HIBERNATE_RESPONSE_STARTS_WITH = 'HIBERNATE';
+
+export const STOP_RESPONSE_STARTS_WITH = 'STOP';
+
+export const FORMAT_RESPONSE_STARTS_WITH = 'FORMAT';
 
 export const MAP_RESPONSES_TO_ATTRIBUTE_NAMES = {
 
     [ID_RESPONSE_STARTS_WITH]: attributeNames.VERSION,
 
+    [BATTERY_RESPONSE_STARTS_WITH]: attributeNames.BATTERY,
 
-    [BATTERY_RESPONSE_STARTS_WITH]: attributeNames.BATTERY
+    [TIME_RESPONSE_STARTS_WITH]: attributeNames.TIME,
+
+    [RATE_RESPONSE_STARTS_WITH]: attributeNames.RATE,
+
+    [SESSION_RESPONSE_STARTS_WITH]: attributeNames.SESSION,
+
+    [HIBERNATE_RESPONSE_STARTS_WITH]: attributeNames.HIBERNATE,
+
+    [STOP_RESPONSE_STARTS_WITH]: attributeNames.STOP,
+
+    [FORMAT_RESPONSE_STARTS_WITH]: attributeNames.FORMAT
+
 };
 
 export function checkResponse (returnedString) {
@@ -34,17 +57,4 @@ export function checkResponse (returnedString) {
     return response;
 }
 
-//export const ATTRIBUTES_PARSER_USING_NAME = {
-//
-//    [ID_RESPONSE_STARTS_WITH]: (versionType) => {
-//        return (data) => {
-//            if(versionType === 'hardware') {
-//                return data.split(',')[1];
-//            } else {
-//                return data.split(',')[2];
-//            }
-//
-//        }
-//    }
-//
-//};
+
