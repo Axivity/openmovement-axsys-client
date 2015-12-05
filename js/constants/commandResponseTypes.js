@@ -2,6 +2,20 @@
  * Created by Praveen on 22/10/2015.
  */
 
+/*
+
+ The returned string is $TIME=2015/12/05,12:20:47
+ device-command-queue.js:179 The returned string is RATE=74,100
+ device-command-queue.js:179 The returned string is SESSION=1
+ device-command-queue.js:179 The returned string is HIBERNATE=2015/12/06,00:00:00
+ device-command-queue.js:179 The returned string is STOP=2015/12/13,00:00:00
+ device-command-queue.js:179 The returned string is FORMAT: Delayed activation.
+ device-command-queue.js:179 The returned string is $BATT=715,4189,mV,96,1
+ device-command-queue.js:179 The returned string is ID=CWA,17,44,13385,1
+
+ */
+
+
 import * as attributeNames from './attributeNames';
 
 // Battery command returns with $BATT=

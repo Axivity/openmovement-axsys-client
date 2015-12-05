@@ -27,12 +27,12 @@ const CONFIGURATION_COMMANDS =[
         'name': attributeNames.RATE
     },
     {
-        'command': "SESSION=1" + END_OF_LINE ,
+        'command': "SESSION 1" + END_OF_LINE ,
         'frequency_in_seconds': 0,
         'name': attributeNames.SESSION
     },
     {
-        'command': "HIBERNATE=" + getNextDayAtMidnightFromGiven() + END_OF_LINE,
+        'command': "HIBERNATE " + getNextDayAtMidnightFromGiven() + END_OF_LINE,
         'frequency_in_seconds': 0,
         'name': attributeNames.HIBERNATE
     },
@@ -55,11 +55,18 @@ export default class DevicesConfigurationForm extends Component {
     static configure(device, api, commands) {
         let path = device._id;
         let commandOptions = prepareCommandOptions(path, commands);
-        let deviceCommandQ = new DeviceCommandQueue(path, api, commandOptions, () => {
-            console.log('Done configuring');
-        });
-        deviceCommandQ.start();
-        //console.log('Started command Q for ' + path);
+        try {
+            let deviceCommandQ = new DeviceCommandQueue(path, api, commandOptions, (data) => {
+                console.log(data);
+                console.log('Done configuring');
+            });
+            deviceCommandQ.start();
+            console.log('Started config commands Q for ' + path);
+
+        } catch (err) {
+            console.warn('Another instance of device command queue is running already for device ' + path);
+        }
+
 
     }
 

@@ -103,15 +103,22 @@ export class DeviceCommandQueue {
             cb();
         });
     }
+    
+    getFirstIn() {
+        // it's expected to call after checking if this.commands array is not empty
+        let item = this.commands.slice(0,1).pop();
+        this.commands.shift();
+        return item;
+    }
 
     run() {
         if (this.connected && !this.isEmpty()) {
-            let commandOptions = this.commands.pop();
+            let commandOptions = this.getFirstIn();
             let options = commandOptions.options;
 
             // Write command
             this.api.write(options, () => {
-                console.log('Written command' + options);
+                console.log('Written command' + options.name);
                 // NB: mark the command written and keep a check
                 // on whether response has come back
                 this.commandsAwaitingResponse.push(commandOptions);
