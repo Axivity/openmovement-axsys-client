@@ -53,9 +53,6 @@ function selectedDevices(state=[], action=null) {
 
 
 function deviceAttributes(state={}, action=null) {
-    //console.log('device attributes');
-    //console.log(state);
-
     switch(action.type) {
         case actionTypes.ADD_DEVICE_ATTRIBUTES:
             let newState = {};
@@ -89,6 +86,13 @@ function devices(state = [], action = null) {
             // remove device from state and return new state
             return state.filter(device =>
                 device._id !== action.device._id
+            );
+
+        // NB: This extra functionality is to remove device from state using device
+        //     path rather than getting whole device object.
+        case actionTypes.REMOVE_DEVICE_WITH_ATTRIBUTES:
+            return state.filter(device =>
+                device._id !== action.devicePath
             );
 
         default:

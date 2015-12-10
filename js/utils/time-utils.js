@@ -3,6 +3,9 @@
  */
 import moment from 'moment';
 
+export const UK_DATE_FORMAT = "DD-MM-YYYY";
+export const TIME_FORMAT = "HH:mm:ss";
+
 export const DATE_TIME_FORMAT_IN_DEVICE = "YYYY/MM/DD,HH:mm:ss";
 export const DATE_TIME_MIDNIGHT_FORMAT = "YYYY/MM/DD,00:00:00";
 
@@ -32,4 +35,12 @@ export function getNextTwoHoursFromGivenDateAndTime(format) {
     var givenDateTime = moment();
     var f = format || DATE_TIME_FORMAT_IN_DEVICE;
     return givenDateTime.add(2, 'hours').format(f);
+}
+
+export function getCurrentDateUKLocale() {
+    return moment().format(UK_DATE_FORMAT);
+}
+
+export function getCurrentTime() {
+    return moment().format(TIME_FORMAT);
 }

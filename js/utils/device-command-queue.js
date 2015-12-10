@@ -31,8 +31,9 @@ export class CommandOptions {
 export function prepareCommandOptions(path, attributes) {
     let allCommandOptions = [];
     for(let i=0; i<attributes.length; i++) {
+        let command = attributes[i].command;
         let options = {
-            'command': attributes[i].command,
+            'command': typeof command === 'function' ? command() : command,
             'path': path,
             'frequency_in_seconds': attributes[i].frequency_in_seconds,
             'name': attributes[i].name

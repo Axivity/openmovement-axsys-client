@@ -36,6 +36,18 @@ export function addDevice(device) {
 
 }
 
+/**
+ *
+ * @param devicePath
+ * @returns {{type, devicePath: *}}
+ */
+export function removeDeviceWithAttributes(devicePath) {
+    return {
+        type: actionTypes.REMOVE_DEVICE_WITH_ATTRIBUTES,
+        devicePath: devicePath
+    }
+}
+
 
 /**
  *

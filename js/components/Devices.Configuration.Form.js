@@ -15,14 +15,23 @@ function getAccelerometerRateAndRange() {
     return '7,4a';
 }
 
-const CONFIGURATION_COMMANDS =[
+function getTimeCommand() {
+    return "TIME=" + getFormattedCurrentDateTime() + END_OF_LINE;
+}
+
+function getAccelRateAndRangeCommand() {
+    return "RATE=" + getAccelerometerRateAndRange() + END_OF_LINE;
+}
+
+
+const CONFIGURATION_COMMANDS = [
     {
-        'command': "TIME=" + getFormattedCurrentDateTime() + END_OF_LINE ,
+        'command': getTimeCommand ,
         'frequency_in_seconds': 0,
         'name': attributeNames.TIME
     },
     {
-        'command': "RATE=" + getAccelerometerRateAndRange() + END_OF_LINE,
+        'command': getAccelRateAndRangeCommand,
         'frequency_in_seconds': 0,
         'name': attributeNames.RATE
     },
@@ -49,12 +58,38 @@ const CONFIGURATION_COMMANDS =[
 ];
 
 
-
 export default class DevicesConfigurationForm extends Component {
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            startDate: 'DD-MM-YYYY',
+            startTime: 'HH:mm',
+            endDate: 'DD-MM-YYYY',
+            endTime: 'HH:mm'
+        };
+    }
+
+    handleStartDateChange(event) {
+        this.state.startDate = event.target.value;
+    }
+
+    handleStartTimeChange(event) {
+        this.state.startTime = event.target.value;
+    }
+
+    handleEndDateChange(event) {
+        this.state.endDate = event.target.value;
+    }
+
+    handleEndTimeChange(event) {
+        this.state.endTime = event.target.value;
+    }
 
     static configure(device, api, commands) {
         let path = device._id;
         let commandOptions = prepareCommandOptions(path, commands);
+
         try {
             let deviceCommandQ = new DeviceCommandQueue(path, api, commandOptions, (data) => {
                 console.log(data);
@@ -66,8 +101,6 @@ export default class DevicesConfigurationForm extends Component {
         } catch (err) {
             console.warn('Another instance of device command queue is running already for device ' + path);
         }
-
-
     }
 
     static validate(devices) {
@@ -78,15 +111,6 @@ export default class DevicesConfigurationForm extends Component {
         let {api, selectedDevices} = this.props;
 
         let validatedDevices = this.constructor.validate(selectedDevices);
-
-        //let currentDateTime = getFormattedCurrentDateTime(),
-        //    timeCmd = "TIME=" + currentDateTime + END_OF_LINE ,
-        //    accelCmd = "RATE=" + this.constructor.getAccelerometerRateAndRange() + END_OF_LINE,
-        //    sessionCmd = "SESSION=1" + END_OF_LINE,
-        //    hibernateCmd = "HIBERNATE " + getNextDayAtMidnightFromGiven() + END_OF_LINE,
-        //    stopCmd = "STOP " + getMidnightFromNowAndNumberOfDays(8) + END_OF_LINE,
-        //    formatCmd = "FORMAT WC" + END_OF_LINE;
-
         validatedDevices.map(device => this.constructor.configure(device, api, CONFIGURATION_COMMANDS));
     }
 
@@ -150,7 +174,7 @@ export default class DevicesConfigurationForm extends Component {
                                         <input
                                             type="radio"
                                             name="recording_form_record_immediately"
-                                            value="record_immediately"
+                                            value="record_interval"
                                             id="recording_form_record_immediately" />
                                         <label>Interval</label>
                                     </div>
@@ -159,23 +183,43 @@ export default class DevicesConfigurationForm extends Component {
                                         <div className="row">
                                             <div className="large-6 medium-6 small-12 columns">
                                                 <label>Start Date
-                                                    <input type="text" placeholder="" />
+                                                    <input
+                                                        type="text"
+                                                        placeholder={this.state.startDate}
+                                                        value={this.state.startDate}
+                                                        onChange={this.handleStartDateChange}
+                                                    />
                                                 </label>
                                             </div>
                                             <div className="large-6 medium-6 small-12 columns">
                                                 <label>Start Time
-                                                    <input type="text" placeholder="" />
+                                                    <input
+                                                        type="text"
+                                                        placeholder={this.state.startTime}
+                                                        value={this.state.startTime}
+                                                        onChange={this.handleStartTimeChange}
+                                                    />
                                                 </label>
                                             </div>
 
                                             <div className="large-6 medium-6 small-12 columns">
                                                 <label>End Date
-                                                    <input type="text" placeholder="" />
+                                                    <input
+                                                        type="text"
+                                                        placeholder={this.state.endDate}
+                                                        value={this.state.endDate}
+                                                        onChange={this.handleEndDateChange}
+                                                    />
                                                 </label>
                                             </div>
                                             <div className="large-6 medium-6 small-12 columns">
                                                 <label>End Time
-                                                    <input type="text" placeholder="" />
+                                                    <input
+                                                        type="text"
+                                                        placeholder={this.state.endTime}
+                                                        value={this.state.endTime}
+                                                        onChange={this.handleEndTimeChange}
+                                                    />
                                                 </label>
                                             </div>
                                         </div>
@@ -222,64 +266,6 @@ export default class DevicesConfigurationForm extends Component {
                     </div>
                 </div>
             </div>
-
-            /*
-            <div>
-
-                <form>
-                    <div className="row">
-                        <div className="large-12 columns">
-                            <label>Recording Session ID
-                                <input type="text" placeholder="" />
-                            </label>
-                        </div>
-                    </div>
-
-                    <fieldset>
-                        <legend>Sampling</legend>
-                        <div className="row">
-                            <div className="large-4 columns">
-                                <label>Sampling Freq
-                                    <select>
-                                        <option value="100">100</option>
-                                        <option value="200">200</option>
-                                        <option value="500">500</option>
-                                        <option value="1000">1000</option>
-                                    </select>
-                                </label>
-                            </div>
-
-                            <div className="large-4 columns">
-                                <label>Range(+/- g)
-                                    <select>
-                                        <option value="2">2</option>
-                                        <option value="4">4</option>
-                                        <option value="8">8</option>
-                                        <option value="16">16</option>
-                                    </select>
-                                </label>
-                            </div>
-
-                        </div>
-                    </fieldset>
-
-
-
-                    <div className="row">
-                        <div className="large-6 medium-6 small-12 columns">
-
-                        </div>
-
-                        <div className="large-6 medium-6 small-12 columns">
-
-                        </div>
-                    </div>
-
-
-                </form>
-
-            </div>
-            */
         );
     }
 

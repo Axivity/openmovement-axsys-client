@@ -15,8 +15,13 @@ import moment from 'moment';
 
 /* internal imports*/
 import App from './containers/AxsysApp';
-import { addDevice, removeDevice, addDataAttributeForDevicePath,
-    deSelectDevice, removeDetailViewForDevice, DeviceAttributeData } from './actions/actionCreators';
+import { addDevice,
+    removeDevice,
+    removeDeviceWithAttributes,
+    addDataAttributeForDevicePath,
+    deSelectDevice,
+    removeDetailViewForDevice,
+    DeviceAttributeData } from './actions/actionCreators';
 import AXApi from './ax-client';
 import { DeviceCommandQueue, prepareCommandOptions, CommandOptions } from './utils/device-command-queue';
 import axsysApp from './reducers/reducers';
@@ -110,19 +115,24 @@ function onConnectedToServer(store) {
     }
 }
 
+function constructDevicePathWithForwardSlashSeparator(path) {
+    // param: "/serial:~1~1COM4~1" or "/serial:~1~1COM4~1/version"
+    return path.split('/')[1].replace(/~1/g, '/');
+}
 
 function onAttributesDataPublished(store) {
     return (listOfChanges) => {
         console.log('Published data pushed back');
+        console.log(listOfChanges);
         for(let i=0; i<listOfChanges.length; i++) {
             let data = listOfChanges[i];
-            let attributeValue = data.value.value;
             let pathSize = data.path.split('/').length;
 
             if(isAnAttributePath(pathSize)) {
                 // attributes for a device is published
+                let attributeValue = data.value.value;
                 let attributeName = checkResponse(attributeValue);
-                let path = data.path.split('/')[1].replace(/~1/g, '/');
+                let path = constructDevicePathWithForwardSlashSeparator(data.path);
                 if(attributeName != null) {
                     let deviceAttribute = new DeviceAttributeData(path, attributeName, data.value);
                     store.dispatch(addDataAttributeForDevicePath(deviceAttribute));
@@ -135,8 +145,8 @@ function onAttributesDataPublished(store) {
                     store.dispatch(addDevice(device));
 
                 } else {
-                    let device = data.value;
-                    store.dispatch(removeDevice(device));
+                    let devicePath = constructDevicePathWithForwardSlashSeparator(data.path);
+                    store.dispatch(removeDeviceWithAttributes(devicePath));
                 }
 
             }
