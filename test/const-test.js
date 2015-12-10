@@ -16,18 +16,11 @@ describe("const keyword variables", () => {
     describe("when used with dynamic values returned by a function execution", () => {
 
         it("will change the value each time the const variable is accessed?", (done) => {
-            let count = 0;
-            let runner = setInterval(() => {
-                console.log(COMMANDS.command);
-
+            console.log(COMMANDS.command());
+            let runner = setTimeout(() => {
                 console.log(COMMANDS.command() + " ");
-                console.log(count);
-                if(count > 2) {
-                    done();
-                    clearInterval(runner);
-                }
-                count += 1;
-
+                clearTimeout(runner);
+                done();
             }, 500);
         });
 
