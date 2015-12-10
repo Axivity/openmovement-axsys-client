@@ -81,7 +81,7 @@ function onDataReceived() {
         let returnedDataAsString = data.string;
         let attributeName = data.response;
         let devicePath = data.path;
-        sendAttributeDataToServer(devicePath, attributeName, returnedDataAsString);
+        sendAttributeDataToServer(devicePath, attributeName, returnedDataAsString, api);
     }
 }
 

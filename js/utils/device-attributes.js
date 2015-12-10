@@ -171,8 +171,9 @@ function attributesChecker(deviceAttribute, attributes, serverTimeFn) : Array<Ob
  * @param devicePath
  * @param attributeKey
  * @param attributeVal
+ * @param api
  */
-export function sendAttributeDataToServer(devicePath, attributeKey, attributeVal) {
+export function sendAttributeDataToServer(devicePath, attributeKey, attributeVal, api) {
     let options = {
         'devicePath': devicePath,
         'attributeKey': attributeKey,

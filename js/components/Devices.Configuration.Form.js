@@ -7,13 +7,16 @@ import Modal from 'react-modal';
 
 import {DeviceCommandQueue, prepareCommandOptions, END_OF_LINE} from '../utils/device-command-queue';
 import * as attributeNames from '../constants/attributeNames';
-import {findDeviceByPath} from '../utils/device-attributes';
+import {findDeviceByPath, sendAttributeDataToServer} from '../utils/device-attributes';
 
 import { getFormattedCurrentDateTime,
          getNextDayAtMidnightFromGiven,
          getMidnightFromNowAndNumberOfDays } from '../utils/time-utils';
 
 import SelectedDevicesList from './Selected.Devices.List.js';
+
+
+const APPEND_SECONDS = ":00";
 
 const customStyles = {
     content : {
@@ -43,6 +46,9 @@ function getAccelRateAndRangeCommand() {
     return "RATE=" + getAccelerometerRateAndRange() + END_OF_LINE;
 }
 
+function getFormatCommand() {
+    return "FORMAT=WC" + END_OF_LINE;
+}
 
 const CONFIGURATION_COMMANDS = [
     {
@@ -55,23 +61,26 @@ const CONFIGURATION_COMMANDS = [
         'frequency_in_seconds': 0,
         'name': attributeNames.RATE
     },
+    // The following commands need to be pre-parsed
     {
-        'command': "SESSION 1" + END_OF_LINE ,
+        'command': "SESSION=[Needs Filling up]" + END_OF_LINE ,
         'frequency_in_seconds': 0,
         'name': attributeNames.SESSION
     },
     {
-        'command': "HIBERNATE " + getNextDayAtMidnightFromGiven() + END_OF_LINE,
+        'command': "HIBERNATE=[Needs Filling up]" + END_OF_LINE,
         'frequency_in_seconds': 0,
         'name': attributeNames.HIBERNATE
     },
     {
-        'command': "STOP=" + getMidnightFromNowAndNumberOfDays(8) + END_OF_LINE,
+        'command': "STOP=[Needs Filling up]"  + END_OF_LINE,
         'frequency_in_seconds': 0,
         'name': attributeNames.STOP
+
     },
+    // Pre parsing stops
     {
-        'command': "FORMAT=WC" + END_OF_LINE,
+        'command': getFormatCommand,
         'frequency_in_seconds': 0,
         'name': attributeNames.FORMAT
     }
@@ -83,12 +92,42 @@ export default class DevicesConfigurationForm extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            startDate: 'DD-MM-YYYY',
+            startDate: 'YYYY-MM-DD',
             startTime: 'HH:mm',
-            endDate: 'DD-MM-YYYY',
+            endDate: 'YYYY-MM-DD',
             endTime: 'HH:mm',
-            submitModalIsOpen: false
+            submitModalIsOpen: false,
+            sessionId: ""
         };
+    }
+
+    preParseCommands(commands) {
+        let substitutes = {
+            [attributeNames.SESSION]: this.getSessionCommand.bind(this),
+            [attributeNames.HIBERNATE]: this.getHibernateCommand.bind(this),
+            [attributeNames.STOP]: this.getStopDateTimeCommand.bind(this)
+        };
+
+        return commands.map(c => {
+            if(substitutes.hasOwnProperty(c.name)) {
+                let substitutionFn = substitutes[c.name];
+                c.command = substitutionFn();
+            }
+            return c;
+        });
+
+    }
+
+    getSessionCommand() {
+        return "SESSION=" + this.state.sessionId + END_OF_LINE;
+    }
+
+    getHibernateCommand() {
+        return "HIBERNATE=" + this.state.startDate + " " + this.state.startTime + APPEND_SECONDS + END_OF_LINE;
+    }
+
+    getStopDateTimeCommand() {
+        return "STOP=" + this.state.endDate + " " + this.state.endTime + APPEND_SECONDS + END_OF_LINE;
     }
 
     openSubmitModal() {
@@ -115,7 +154,11 @@ export default class DevicesConfigurationForm extends Component {
         this.setState({endTime: event.target.value});
     }
 
-    static configure(device, api, commands) {
+    handleSessionIdChange(event) {
+        this.setState({sessionId: event.target.value});
+    }
+
+    configure(device, api, commands) {
         let { closeModalFn } = this.props;
         // close modal windows first
         this.closeSubmitModal();
@@ -123,7 +166,11 @@ export default class DevicesConfigurationForm extends Component {
 
         // then start configuring - boohahaha!
         let path = device._id;
-        let commandOptions = prepareCommandOptions(path, commands);
+        let parsedCommands = this.preParseCommands(commands);
+        console.log(parsedCommands);
+
+        let commandOptions = prepareCommandOptions(path, parsedCommands);
+        console.log(commandOptions);
 
         try {
             let deviceCommandQ = new DeviceCommandQueue(path, api, commandOptions, (data) => {
@@ -146,7 +193,7 @@ export default class DevicesConfigurationForm extends Component {
     submitConfiguration() {
         let {api, selectedDevices} = this.props;
         let validatedDevices = this.constructor.validate(selectedDevices);
-        validatedDevices.map(device => this.constructor.configure(device, api, CONFIGURATION_COMMANDS));
+        validatedDevices.map(device => this.configure(device, api, CONFIGURATION_COMMANDS));
     }
 
     render() {
@@ -181,30 +228,26 @@ export default class DevicesConfigurationForm extends Component {
                             <div className="large-12 small-12 medium-12 columns">
                                 <form>
                                     <fieldset>
-                                        <legend>Sampling</legend>
+                                        <legend>Subject</legend>
                                         <div className="row">
-                                            <div className="large-6 columns">
-                                                <label>Sampling Freq
-                                                    <select>
-                                                        <option value="100">100</option>
-                                                        <option value="200">200</option>
-                                                        <option value="500">500</option>
-                                                        <option value="1000">1000</option>
-                                                    </select>
-                                                </label>
+                                            <div className="large-6 medium-6 small-12 columns">
+                                                Code
                                             </div>
-
-                                            <div className="large-6 columns">
-                                                <label>Range(+/- g)
-                                                    <select>
-                                                        <option value="2">2</option>
-                                                        <option value="4">4</option>
-                                                        <option value="8">8</option>
-                                                        <option value="16">16</option>
-                                                    </select>
-                                                </label>
+                                            <div className="large-6 medium-6 small-12 columns">
+                                                <input type="text" placeholder="" />
                                             </div>
-
+                                        </div>
+                                        <div className="row">
+                                            <div className="large-6 medium-6 small-12 columns">
+                                                Session ID
+                                            </div>
+                                            <div className="large-6 medium-6 small-12 columns">
+                                                <input
+                                                    type="text"
+                                                    value={this.state.sessionId}
+                                                    onChange={this.handleSessionIdChange.bind(this)}
+                                                />
+                                            </div>
                                         </div>
                                     </fieldset>
 
@@ -292,14 +335,30 @@ export default class DevicesConfigurationForm extends Component {
                                     </fieldset>
 
                                     <fieldset>
-                                        <legend>Subject</legend>
+                                        <legend>Sampling</legend>
                                         <div className="row">
-                                            <div className="large-6 medium-6 small-12 columns">
-                                                Code
+                                            <div className="large-6 columns">
+                                                <label>Sampling Freq
+                                                    <select>
+                                                        <option value="100">100</option>
+                                                        <option value="200">200</option>
+                                                        <option value="500">500</option>
+                                                        <option value="1000">1000</option>
+                                                    </select>
+                                                </label>
                                             </div>
-                                            <div className="large-6 medium-6 small-12 columns">
-                                                <input type="text" placeholder="" />
+
+                                            <div className="large-6 columns">
+                                                <label>Range(+/- g)
+                                                    <select>
+                                                        <option value="2">2</option>
+                                                        <option value="4">4</option>
+                                                        <option value="8">8</option>
+                                                        <option value="16">16</option>
+                                                    </select>
+                                                </label>
                                             </div>
+
                                         </div>
                                     </fieldset>
 
