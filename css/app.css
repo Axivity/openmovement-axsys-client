@@ -214,6 +214,18 @@ div.list-item-wrapper:hover {
 }
 
 
+/* selected devices class */
+
+.selected-device-name {
+    padding-left: 0;
+    padding-top: 0.535rem;
+    font-size: x-large;
+}
+
+
+/* selected devices class ends */
+
+
 /* Details screen */
 .ax-detail-panels {
     margin-left: 0;

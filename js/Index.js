@@ -28,8 +28,10 @@ import axsysApp from './reducers/reducers';
 import {checkResponse} from './constants/commandResponseTypes';
 import * as binUtils from './utils/binutils';
 import * as attributeNames from './constants/attributeNames';
+
 import {DEVICE_METADATA_ATTRIBUTES,
         getAttributesNotSetForDevice,
+        sendAttributeDataToServer,
         findDeviceByPath,
         getKnownAttributes} from './utils/device-attributes';
 
@@ -163,17 +165,6 @@ function isADevicePath(pathSize) {
     return pathSize === 2;
 }
 
-function sendAttributeDataToServer(devicePath, attributeKey, attributeVal) {
-    let options = {
-        'devicePath': devicePath,
-        'attributeKey': attributeKey,
-        'attributeVal': attributeVal.replace('\r\n', '')
-    };
-    api.publish(options, (data) => {
-        console.log('Data Published');
-        console.log(data);
-    });
-}
 
 function connectToDevice(device, attributes) {
     let path = device._id;

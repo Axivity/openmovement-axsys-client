@@ -90,6 +90,11 @@ export function findDeviceByPath(devices:Array<Object>, devicePath: string) : ?O
 }
 
 
+/**
+ *
+ * @param deviceAttributes
+ * @returns {Array.<T>|Array}
+ */
 export function getKnownAttributes(deviceAttributes : Map<String, Object>) : Array<String> {
     let keys = Object.keys(attributeNames);
     return keys.filter((key) => {
@@ -99,6 +104,15 @@ export function getKnownAttributes(deviceAttributes : Map<String, Object>) : Arr
 }
 
 
+/**
+ *
+ * @param devices
+ * @param deviceAttributes
+ * @param checker
+ * @param attributes
+ * @param serverTimeFn
+ * @returns {{}}
+ */
 function checkAttributesForEachDevice(devices, deviceAttributes, checker, attributes, serverTimeFn) {
 
     let devicesWithAttributesNotFound = {};
@@ -149,6 +163,25 @@ function attributesChecker(deviceAttribute, attributes, serverTimeFn) : Array<Ob
         }
     }
     return attributesNotSet;
+}
+
+
+/**
+ *
+ * @param devicePath
+ * @param attributeKey
+ * @param attributeVal
+ */
+export function sendAttributeDataToServer(devicePath, attributeKey, attributeVal) {
+    let options = {
+        'devicePath': devicePath,
+        'attributeKey': attributeKey,
+        'attributeVal': attributeVal.replace('\r\n', '')
+    };
+    api.publish(options, (data) => {
+        console.log('Data Published');
+        console.log(data);
+    });
 }
 
 function isContinuouslyUpdatingAttribute(frequency) {
