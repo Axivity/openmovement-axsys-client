@@ -18,8 +18,9 @@ export class CommandOptions {
     constructor(options: object, callback: (param: T) => any) {
         /**
          * Options for holding command and extra attributes for command
-         * */
+         */
         this.options = options;
+
         /**
          * Callback should follow node style (err, data) => {} convention
          * for function arguments.
