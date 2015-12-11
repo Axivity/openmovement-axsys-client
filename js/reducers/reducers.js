@@ -5,7 +5,7 @@
 import { combineReducers } from 'redux';
 import * as actionTypes from '../constants/actionTypes';
 import * as actions from '../actions/actionCreators';
-
+import {notifications} from './notifications-reducer';
 
 function _itemPresentAlready(listOfObjects, item, itemKey) {
     for(let i=0; i<listOfObjects.length; i++) {
@@ -81,16 +81,14 @@ function devices(state = [], action = null) {
             return [...state, action.device];
 
         case actionTypes.REMOVE_DEVICE:
-            console.log(state);
-            console.log(action.device);
             // remove device from state and return new state
             return state.filter(device =>
                 device._id !== action.device._id
             );
 
-        // NB: This extra functionality is to remove device from state using device
-        //     path rather than getting whole device object.
         case actionTypes.REMOVE_DEVICE_WITH_ATTRIBUTES:
+            // NB: This extra functionality is to remove device from state using device
+            //     path rather than getting whole device object.
             return state.filter(device =>
                 device._id !== action.devicePath
             );
@@ -117,5 +115,6 @@ export default combineReducers({
     devices,
     deviceAttributes,
     selectedDevices,
-    detailViewDevice
+    detailViewDevice,
+    notifications
 });

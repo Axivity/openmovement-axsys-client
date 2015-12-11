@@ -13,6 +13,7 @@ import { getFormattedCurrentDateTime,
          getNextDayAtMidnightFromGiven,
          getMidnightFromNowAndNumberOfDays } from '../utils/time-utils';
 
+import {addNotification} from '../actions/actionCreators';
 import SelectedDevicesList from './Selected.Devices.List.js';
 
 
@@ -164,13 +165,14 @@ export default class DevicesConfigurationForm extends Component {
     }
 
     configure(device, api, commands) {
-        let { closeModalFn } = this.props;
+        let { closeModalFn, dispatch } = this.props;
         // close modal windows first
         this.closeSubmitModal();
         closeModalFn();
 
         // then start configuring - boohahaha!
         let path = device._id;
+        let serialNumber = device.serialNumber;
         let parsedCommands = this.preParseCommands(commands);
         console.log(parsedCommands);
 
@@ -178,16 +180,40 @@ export default class DevicesConfigurationForm extends Component {
         console.log(commandOptions);
 
         try {
-            let deviceCommandQ = new DeviceCommandQueue(path, api, commandOptions, (data) => {
-                console.log(data);
-                console.log('Done configuring');
-            });
+            let deviceCommandQ = new DeviceCommandQueue(path,
+                api,
+                commandOptions,
+                (data) => {
+                    console.log(data);
+                    console.log('Done configuring');
+                },
+                () => {
+                    // All commands have completed running and responded.
+                    let notification = {
+                        id: path + '-config-success-notification',
+                        type: 'success',
+                        title: serialNumber,
+                        message: 'Device Configured',
+                        timeOut: 3000
+
+                    };
+                    dispatch(addNotification(notification));
+                }
+            );
             deviceCommandQ.start();
             console.log('Started config commands Q for ' + path);
 
         } catch (err) {
             // should push it as notifications... to main state
             console.warn('Another instance of device command queue is running already for device ' + path);
+            let notification = {
+                id: path + '-config-success-notification',
+                type: 'error',
+                title: serialNumber,
+                message: 'Configuration failed - try again in 10 seconds',
+                timeOut: 3000
+            };
+            dispatch(addNotification(notification));
         }
     }
 
@@ -196,9 +222,12 @@ export default class DevicesConfigurationForm extends Component {
     }
 
     submitConfiguration() {
-        let {api, selectedDevices} = this.props;
+        let {api, selectedDevices, devices} = this.props;
         let validatedDevices = this.constructor.validate(selectedDevices);
-        validatedDevices.map(device => this.configure(device, api, CONFIGURATION_COMMANDS));
+        validatedDevices.map(device => this.configure(
+            findDeviceByPath(devices, device._id),
+            api,
+            CONFIGURATION_COMMANDS));
     }
 
     render() {

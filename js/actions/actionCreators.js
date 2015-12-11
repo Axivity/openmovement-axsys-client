@@ -126,3 +126,23 @@ export function removeDetailViewForDevice(device) {
     }
 }
 
+
+/**
+ *
+ * @param notification
+ * @returns {{type, notification: *}}
+ */
+export function addNotification(notification) {
+    return {
+        type: actionTypes.ADD_NOTIFICATION,
+        notification
+    }
+}
+
+
+export function removeNotification(notification) {
+    return {
+        type: actionTypes.REMOVE_NOTIFICATION,
+        notification
+    }
+}

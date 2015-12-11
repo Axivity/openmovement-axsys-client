@@ -189,7 +189,7 @@ export default class DevicesListItem extends Component {
                             <div className="row">
                                 <div className="small-12 large-12 medium-12 columns">
                                     <span className="list-item-main-header">{device.serialNumber}</span>
-                                    <span className="list-item-main-sub-header">  downloading..</span>
+                                    <span className="list-item-main-sub-header">  Available</span>
                                 </div>
                             </div>
 

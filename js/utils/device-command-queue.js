@@ -56,7 +56,8 @@ export class DeviceCommandQueue {
     constructor(devicePath:string,
                 api:object,
                 commandOptions: Array<CommandOptions>,
-                dataListener: (obj: {buffer: ArrayBuffer; updatedEpoch: number}) => void) {
+                dataListener: (obj: {buffer: ArrayBuffer; updatedEpoch: number}) => void,
+                allCommandsCompletedListener: () => void = null) {
 
         if(this.constructor.RUNNING) {
             throw new Error("Command queue is already running for this device");
@@ -76,6 +77,7 @@ export class DeviceCommandQueue {
         this.connected = false;
         this.commandOptions = commandOptions;
         this.commandsResponded = [];
+        this.allCommandsCompletedListener = allCommandsCompletedListener;
 
         this.connectToDevice(() => {
             this.addAllCommands();
@@ -219,6 +221,9 @@ export class DeviceCommandQueue {
                 clearInterval(this.checker);
                 this.api.disconnect(options, () => {
                     this.constructor.RUNNING = false;
+                    if(this.allCommandsCompletedListener !== null) {
+                        this.allCommandsCompletedListener();
+                    }
                     console.log('Closed connection to device ' + this.devicePath);
                 });
             }
