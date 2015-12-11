@@ -37,7 +37,8 @@ export function prepareCommandOptions(path, attributes) {
             'command': typeof command === 'function' ? command() : command,
             'path': path,
             'frequency_in_seconds': attributes[i].frequency_in_seconds,
-            'name': attributes[i].name
+            'name': attributes[i].name,
+            'timeout_in_seconds': attributes[i].timeout_in_seconds
         };
         let commandOptions = new CommandOptions(options, (writeResponse) => {
             if(writeResponse) {
@@ -71,7 +72,6 @@ export class DeviceCommandQueue {
         this.constructor.RUNNING = true;
         // replacing ondatareceived data listener
         this.api.addDataListenerForDevice(this.devicePath, this.wrappedDataListener.bind(this));
-        this.runner = null;
         this.checker = null;
         this.connected = false;
         this.commandOptions = commandOptions;
@@ -83,7 +83,8 @@ export class DeviceCommandQueue {
     }
 
     start() {
-        this.runner = setInterval(() => {
+        // Start after a predefined timeout frequency
+        setTimeout(() => {
             this.run();
         }, this.checkFrequencyInMilliSeconds);
     }
@@ -117,6 +118,7 @@ export class DeviceCommandQueue {
         if (this.connected && !this.isEmpty()) {
             let commandOptions = this.getFirstIn();
             let options = commandOptions.options;
+            let timeoutInMillis = options.timeout_in_seconds * 1000;
 
             // Write command
             this.api.write(options, () => {
@@ -125,10 +127,13 @@ export class DeviceCommandQueue {
                 // on whether response has come back
                 this.commandsAwaitingResponse.push(commandOptions);
                 if(this.allCommandsWritten()) {
-                    this.checkForResponsesAndCloseConnection();
+                    this.checkIfAllCommandsRespondedAndCloseConnection();
                 }
                 commandOptions.callback();
             });
+            // NB: We are just waiting for an allowed timeout for a given command
+            //     before we write to server again.
+            setTimeout(() => this.run(), timeoutInMillis);
         }
     }
 
@@ -205,7 +210,7 @@ export class DeviceCommandQueue {
         return (this.commandsResponded.length === this.commandsAwaitingResponse.length);
     }
 
-    checkForResponsesAndCloseConnection() {
+    checkIfAllCommandsRespondedAndCloseConnection() {
         this.checker = setInterval(() => {
             let options = {};
             options.path = this.devicePath;

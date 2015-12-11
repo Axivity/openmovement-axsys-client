@@ -54,35 +54,40 @@ const CONFIGURATION_COMMANDS = [
     {
         'command': getTimeCommand ,
         'frequency_in_seconds': 0,
-        'name': attributeNames.TIME
+        'name': attributeNames.TIME,
+        'timeout_in_seconds': 1
     },
     {
         'command': getAccelRateAndRangeCommand,
         'frequency_in_seconds': 0,
-        'name': attributeNames.RATE
+        'name': attributeNames.RATE,
+        'timeout_in_seconds': 1
     },
     // The following commands need to be pre-parsed
     {
         'command': "SESSION=[Needs Filling up]" + END_OF_LINE ,
         'frequency_in_seconds': 0,
-        'name': attributeNames.SESSION
+        'name': attributeNames.SESSION,
+        'timeout_in_seconds': 1
     },
     {
         'command': "HIBERNATE=[Needs Filling up]" + END_OF_LINE,
         'frequency_in_seconds': 0,
-        'name': attributeNames.HIBERNATE
+        'name': attributeNames.HIBERNATE,
+        'timeout_in_seconds': 1
     },
     {
         'command': "STOP=[Needs Filling up]"  + END_OF_LINE,
         'frequency_in_seconds': 0,
-        'name': attributeNames.STOP
-
+        'name': attributeNames.STOP,
+        'timeout_in_seconds': 1
     },
     // Pre parsing stops
     {
         'command': getFormatCommand,
         'frequency_in_seconds': 0,
-        'name': attributeNames.FORMAT
+        'name': attributeNames.FORMAT,
+        'timeout_in_seconds': 30
     }
 ];
 

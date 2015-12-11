@@ -9,12 +9,14 @@ export const DEVICE_METADATA_ATTRIBUTES = [
     {
         'command': 'SAMPLE 1\r\n',
         'frequency_in_seconds': 60,
-        'name': attributeNames.BATTERY
+        'name': attributeNames.BATTERY,
+        'timeout_in_seconds': 1
     },
     {
         'command': 'ID\r\n',
         'frequency_in_seconds': 0,
-        'name': attributeNames.VERSION
+        'name': attributeNames.VERSION,
+        'timeout_in_seconds': 1
     }
 ];
 
