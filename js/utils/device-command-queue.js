@@ -57,7 +57,8 @@ export class DeviceCommandQueue {
                 api:object,
                 commandOptions: Array<CommandOptions>,
                 dataListener: (obj: {buffer: ArrayBuffer; updatedEpoch: number}) => void,
-                allCommandsCompletedListener: () => void = null) {
+                allCommandsCompletedListener: () => void = null,
+                writeLock: boolean = false) {
 
         if(this.constructor.RUNNING) {
             throw new Error("Command queue is already running for this device");
@@ -74,6 +75,7 @@ export class DeviceCommandQueue {
         // replacing ondatareceived data listener
         this.api.addDataListenerForDevice(this.devicePath, this.wrappedDataListener.bind(this));
         this.checker = null;
+        this.writeLock = writeLock;
         this.connected = false;
         this.commandOptions = commandOptions;
         this.commandsResponded = [];
@@ -102,6 +104,7 @@ export class DeviceCommandQueue {
         var self = this;
         let options = {};
         options.path = this.devicePath;
+        options.writeLock = this.writeLock;
         this.api.connect(options, () => {
             console.log('Connected to device');
             self.connected = true;

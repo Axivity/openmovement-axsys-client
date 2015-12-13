@@ -372,7 +372,7 @@ export default class DevicesConfigurationForm extends Component {
                                         <legend>Sampling</legend>
                                         <div className="row">
                                             <div className="large-6 columns">
-                                                <label>Sampling Freq
+                                                <label>Sampling Freqp
                                                     <select>
                                                         <option value="100">100</option>
                                                         <option value="200">200</option>
