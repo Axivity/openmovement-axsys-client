@@ -185,7 +185,7 @@ export default class DevicesConfigurationForm extends Component {
                 commandOptions,
                 (data) => {
                     console.log(data);
-                    console.log('Done configuring');
+                    //console.log('Written config command');
                 },
                 () => {
                     // All commands have completed running and responded.
@@ -198,7 +198,8 @@ export default class DevicesConfigurationForm extends Component {
 
                     };
                     dispatch(addNotification(notification));
-                }
+                },
+                true // write lock
             );
             deviceCommandQ.start();
             console.log('Started config commands Q for ' + path);
