@@ -205,7 +205,7 @@ export default class DevicesConfigurationForm extends Component {
             console.log('Started config commands Q for ' + path);
 
         } catch (err) {
-            // should push it as notifications... to main state
+            //  push it as notifications...
             console.warn('Another instance of device command queue is running already for device ' + path);
             let notification = {
                 id: path + '-config-success-notification',
