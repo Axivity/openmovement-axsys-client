@@ -9,14 +9,16 @@ export default class AXApi {
                 onDeviceRemoved,
                 onConnected,
                 onDisconnected,
-                onAttributesDataPublished) {
+                onAttributesDataPublished,
+                token) {
 
         this.api = new AX.API(
             onDeviceAdded,
             onDeviceRemoved,
             onConnected,
             onDisconnected,
-            onAttributesDataPublished);
+            onAttributesDataPublished,
+            token);
     }
 
     getDevices(callback) {

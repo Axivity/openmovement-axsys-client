@@ -22,12 +22,14 @@ import { addDevice,
     deSelectDevice,
     removeDetailViewForDevice,
     DeviceAttributeData } from './actions/actionCreators';
+
 import AXApi from './ax-client';
 import { DeviceCommandQueue, prepareCommandOptions, CommandOptions } from './utils/device-command-queue';
 import axsysApp from './reducers/reducers';
 import {checkResponse} from './constants/commandResponseTypes';
 import * as binUtils from './utils/binutils';
 import * as attributeNames from './constants/attributeNames';
+import * as tokenUtils from './utils/token-utils';
 
 import {DEVICE_METADATA_ATTRIBUTES,
         getAttributesNotSetForDevice,
@@ -42,7 +44,8 @@ let api = new AXApi(
     onDeviceRemoved(store),
     onConnectedToServer(store),
     onDisconnected(store),
-    onAttributesDataPublished(store)
+    onAttributesDataPublished(store),
+    tokenUtils.getToken()
 );
 
 
