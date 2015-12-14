@@ -12,6 +12,9 @@ import { connect } from 'react-redux';
 
 import * as actionCreators from '../actions/actionCreators';
 import Devices from '../components/Devices';
+import Files from '../components/Files';
+import TopNavigation from '../components/TopNavigation';
+import {CURRENT_VIEW_KEY} from '../reducers/navigation-reducer';
 
 function onNotificationHide(dispatch) {
     return (notification) => {
@@ -29,7 +32,8 @@ class App extends Component {
             dispatch,
             deviceAttributes,
             selectedDevices,
-            detailViewDevice } = this.props;
+            detailViewDevice,
+            navigation} = this.props;
 
         return (
             <div>
@@ -37,14 +41,33 @@ class App extends Component {
                     notifications={notifications}
                     onRequestHide={onNotificationHide(dispatch)}
                 />
-                <Devices
-                    devices={devices}
-                    api={api}
+                <TopNavigation
                     dispatch={dispatch}
-                    deviceAttributes={deviceAttributes}
-                    selectedDevices={selectedDevices}
-                    detailViewDevice={detailViewDevice}
+                    navigation={navigation}
                 />
+                <div className="ax-ui-content">
+                    {(() => {
+                        console.log(navigation[CURRENT_VIEW_KEY]);
+                        if(navigation[CURRENT_VIEW_KEY] === 'Files') {
+                            return (
+                                <Files />
+                            );
+                        } else {
+                            // Default view is devices
+                            return (
+                                <Devices
+                                    devices={devices}
+                                    api={api}
+                                    dispatch={dispatch}
+                                    deviceAttributes={deviceAttributes}
+                                    selectedDevices={selectedDevices}
+                                    detailViewDevice={detailViewDevice}
+                                />
+                            )
+                        }
+                    })()}
+
+                </div>
             </div>
         );
     }
@@ -59,7 +82,8 @@ function mapStateToProps(state) {
         deviceAttributes: state.deviceAttributes,
         selectedDevices: state.selectedDevices,
         detailViewDevice: state.detailViewDevice,
-        notifications: state.notifications
+        notifications: state.notifications,
+        navigation: state.navigation
     };
 }
 

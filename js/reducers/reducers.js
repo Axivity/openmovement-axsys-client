@@ -6,6 +6,7 @@ import { combineReducers } from 'redux';
 import * as actionTypes from '../constants/actionTypes';
 import * as actions from '../actions/actionCreators';
 import {notifications} from './notifications-reducer';
+import {navigation} from './navigation-reducer';
 
 function _itemPresentAlready(listOfObjects, item, itemKey) {
     for(let i=0; i<listOfObjects.length; i++) {
@@ -116,5 +117,6 @@ export default combineReducers({
     deviceAttributes,
     selectedDevices,
     detailViewDevice,
-    notifications
+    notifications,
+    navigation
 });

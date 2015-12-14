@@ -140,9 +140,27 @@ export function addNotification(notification) {
 }
 
 
+/**
+ *
+ * @param notification
+ * @returns {{type, notification: *}}
+ */
 export function removeNotification(notification) {
     return {
         type: actionTypes.REMOVE_NOTIFICATION,
         notification
+    }
+}
+
+
+/**
+ *
+ * @param navigationItem
+ * @returns {{type, navigationItemName: *}}
+ */
+export function selectNavigationItem(navigationItem) {
+    return {
+        type: actionTypes.SELECT_NAVIGATION_ITEM,
+        navigationItemName: navigationItem
     }
 }
