@@ -35,16 +35,34 @@ export default class SelectedDevicesListItem extends Component {
         });
     }
 
+    isLastItem() {
+        let {selectedDevices} = this.props;
+        console.log(selectedDevices);
+        return (selectedDevices.length === 1);
+    }
+
     render() {
         let {device, key, dispatch} = this.props;
 
         return (
             <div key={key} className="row">
                 <div className="large-2 small-4 medium-2 columns">
-                    <i
-                        className="material-icons list-item-header-icon"
-                        onClick={this.handleSelect.bind(this)}
-                    >delete</i>
+                    {
+                        (
+                            () => {
+                                console.log(this.isLastItem());
+                                if(!this.isLastItem()) {
+                                    return(
+                                        <i
+                                            className="material-icons list-item-header-icon"
+                                            onClick={this.handleSelect.bind(this)}
+                                        >close</i>
+                                    )
+                                }
+                            }
+                        )()
+
+                    }
                 </div>
                 <div className="large-10 small-8 medium-10 columns selected-device-name">
                     {device.serialNumber}

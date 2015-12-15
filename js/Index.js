@@ -45,7 +45,7 @@ let api = new AXApi(
     onConnectedToServer(store),
     onDisconnected(store),
     onAttributesDataPublished(store),
-    tokenUtils.getToken()
+    tokenUtils.getClientTokenFromLocalStorage()
 );
 
 
@@ -194,7 +194,6 @@ function runCommandsToGetAttributes(device, attributesNotSetForDevice) {
     } else {
         console.log('All attributes are up to date');
     }
-
 }
 
 

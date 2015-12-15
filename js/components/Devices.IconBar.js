@@ -8,6 +8,22 @@ import Modal from 'react-modal';
 
 import DevicesConfigurationForm from './Devices.Configuration.Form.js';
 import * as actionCreators from '../actions/actionCreators';
+import SelectedDevicesList from './Selected.Devices.List';
+
+const modalButtonStyle = {
+    margin: "0 1rem 0 0"
+};
+
+const downloadModalStyles = {
+    content : {
+        top                   : '50%',
+        left                  : '50%',
+        right                 : 'auto',
+        bottom                : 'auto',
+        marginRight           : '-50%',
+        transform             : 'translate(-50%, -50%)'
+    }
+};
 
 const customStyles = {
     //content : {
@@ -55,16 +71,25 @@ export default class DevicesIconBar extends Component {
         super(props);
         this.state = {
             selectedAll: false,
-            modalIsOpen: false
+            configModalIsOpen: false,
+            downloadModalIsOpen: false
         };
     }
 
-    openModal() {
-        this.setState({modalIsOpen: true});
+    openConfigModal() {
+        this.setState({configModalIsOpen: true});
     }
 
-    closeModal() {
-        this.setState({modalIsOpen: false});
+    closeConfigModal() {
+        this.setState({configModalIsOpen: false});
+    }
+
+    openDownloadModal() {
+        this.setState({downloadModalIsOpen: true});
+    }
+
+    closeDownloadModal() {
+        this.setState({downloadModalIsOpen: false});
     }
 
     isSelected() {
@@ -76,6 +101,11 @@ export default class DevicesIconBar extends Component {
             // selectedDevices property not set yet.
             return false;
         }
+    }
+
+    downloadFiles() {
+        let {selectedDevices} = this.props;
+        console.log(selectedDevices);
     }
 
     handleSelectAll(event) {
@@ -140,16 +170,16 @@ export default class DevicesIconBar extends Component {
                             transitionName={'rc-tooltip-zoom'}>
 
                             <a className={iconKlassNames}
-                               onClick={this.openModal.bind(this)}>
+                               onClick={this.openConfigModal.bind(this)}>
                                 <i className="material-icons">radio_button_checked</i>
                                 <Modal
-                                    isOpen={this.state.modalIsOpen}
-                                    onRequestClose={this.closeModal.bind(this)}
+                                    isOpen={this.state.configModalIsOpen}
+                                    onRequestClose={this.closeConfigModal.bind(this)}
                                     style={customStyles} >
 
                                      <DevicesConfigurationForm
                                          api={api}
-                                         closeModalFn={this.closeModal.bind(this)}
+                                         closeModalFn={this.closeConfigModal.bind(this)}
                                          selectedDevices={selectedDevices}
                                          devices={devices}
                                          dispatch={dispatch}
@@ -203,8 +233,34 @@ export default class DevicesIconBar extends Component {
                             overlay={<div style={tooltipStyles}><strong>Download data</strong></div>}
                             transitionName={'rc-tooltip-zoom'}>
 
-                            <a className={iconKlassNames}>
+                            <a
+                                className={iconKlassNames}
+                                onClick={this.openDownloadModal.bind(this)}>
                                 <i className="material-icons">file_download</i>
+                                <Modal
+                                    isOpen={this.state.downloadModalIsOpen}
+                                    onRequestClose={this.closeDownloadModal.bind(this)}
+                                    style={downloadModalStyles} >
+                                    <p className="lead">Are you sure you want to start downloading data from selected devices?</p>
+                                    <SelectedDevicesList
+                                        selectedDevices={selectedDevices}
+                                        devices={devices}
+                                        dispatch={dispatch}
+                                    />
+                                    <a
+                                        className="button"
+                                        style={modalButtonStyle}
+                                        onClick={this.downloadFiles.bind(this)}
+                                    > OK
+                                    </a>
+                                    <a
+                                        className="button"
+                                        style={modalButtonStyle}
+                                        onClick={this.closeDownloadModal.bind(this)}
+                                    > Cancel
+                                    </a>
+
+                                </Modal>
                             </a>
                         </Tooltip>
                     </div>

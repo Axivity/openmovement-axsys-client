@@ -28,6 +28,7 @@ export default class SelectedDevicesList extends Component {
                         return (
                             <SelectedDevicesListItem
                                 key={device._id}
+                                selectedDevices={selectedDevices}
                                 device={device}
                                 dispatch={dispatch}
                             />

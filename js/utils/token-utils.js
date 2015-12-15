@@ -19,14 +19,16 @@ export function createClientToken(text) : string {
  *
  * @returns {*}
  */
-export function getToken() : string {
+export function getClientTokenFromLocalStorage() : string {
     let token = ls.get(CLIENT_TOKEN_KEY);
 
     if(token !== null) {
         return token;
 
     } else {
-        return createClientToken(Date.now().toString());
+        let newToken = createClientToken(Date.now().toString());
+        ls.set(newToken);
+        return newToken;
 
     }
 }

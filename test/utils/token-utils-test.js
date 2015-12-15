@@ -15,7 +15,7 @@ describe('Token utils', () => {
     describe('when asked for a token when one is already created', () => {
         it('should return existing token', () => {
             ls.set(tokenUtils.CLIENT_TOKEN_KEY, STATIC_TOKEN);
-            expect(tokenUtils.getToken()).to.equal(STATIC_TOKEN);
+            expect(tokenUtils.getClientTokenFromLocalStorage()).to.equal(STATIC_TOKEN);
 
         });
 
@@ -24,7 +24,7 @@ describe('Token utils', () => {
     describe('when asked for a token when not created previously or deleted', () => {
         it('should create a new token and return it', () => {
             ls.remove(tokenUtils.CLIENT_TOKEN_KEY);
-            let newToken = tokenUtils.getToken();
+            let newToken = tokenUtils.getClientTokenFromLocalStorage();
             console.log(newToken);
             expect(newToken).to.not.equal(STATIC_TOKEN);
 
