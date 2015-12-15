@@ -62,6 +62,10 @@ export default class AXApi {
         }
     }
 
+    createProcess(options, callback) {
+        this.api.createProcess(options, callback);
+    }
+
     addDataListenerForDevice(devicePath, cb) {
         // This will replace any existing listeners as well
         this.api.addDataListenerForDevice(devicePath, cb);

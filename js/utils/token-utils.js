@@ -32,3 +32,13 @@ export function getClientTokenFromLocalStorage() : string {
 
     }
 }
+
+
+/**
+ *
+ * @param str
+ * @returns {string}
+ */
+export function getUniqueKeyFromString(str) {
+    return createClientToken(str);
+}

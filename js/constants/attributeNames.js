@@ -18,4 +18,6 @@ export const STOP = 'STOP';
 
 export const FORMAT = 'FORMAT';
 
+export const STATUS = 'STATUS';
+
 

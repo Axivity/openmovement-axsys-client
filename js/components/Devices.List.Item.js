@@ -144,6 +144,24 @@ export default class DevicesListItem extends Component {
         return false;
     }
 
+    static getDeviceStatus(attributes) {
+        if(attributes) {
+            let currentStatus = attributes[attributeNames.STATUS];
+            if(currentStatus !== undefined) {
+                return currentStatus;
+
+            } else {
+
+                return 'Available';
+            }
+
+
+        } else {
+            return 'Available';
+        }
+
+    }
+
     handleListItemClicked(ev) {
         let dispatch = this.props.dispatch;
         dispatch(actionCreators.setDetailViewForDevice(this.props.device));
@@ -168,6 +186,8 @@ export default class DevicesListItem extends Component {
 
         let versions = this.constructor.getHardwareAndSoftwareVersions(attributes);
 
+        let status = this.constructor.getDeviceStatus(attributes);
+
         batteryClasses += " " + batteryIconNameWithColor.className;
 
         //var iconName = this.state.selected ? 'check_box' : 'check_box_outline_blank';
@@ -189,7 +209,7 @@ export default class DevicesListItem extends Component {
                             <div className="row">
                                 <div className="small-12 large-12 medium-12 columns">
                                     <span className="list-item-main-header">{device.serialNumber}</span>
-                                    <span className="list-item-main-sub-header">  Available</span>
+                                    <span className="list-item-main-sub-header">  {status}</span>
                                 </div>
                             </div>
 

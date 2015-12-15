@@ -7,8 +7,11 @@ import Tooltip from 'rc-tooltip';
 import Modal from 'react-modal';
 
 import DevicesConfigurationForm from './Devices.Configuration.Form.js';
-import * as actionCreators from '../actions/actionCreators';
 import SelectedDevicesList from './Selected.Devices.List';
+
+import {findDeviceByPath} from '../utils/device-attributes';
+import * as actionCreators from '../actions/actionCreators';
+import * as process from '../process';
 
 const modalButtonStyle = {
     margin: "0 1rem 0 0"
@@ -104,8 +107,25 @@ export default class DevicesIconBar extends Component {
     }
 
     downloadFiles() {
-        let {selectedDevices} = this.props;
+        this.closeDownloadModal();
+        let {devices, selectedDevices, api} = this.props;
+
         console.log(selectedDevices);
+        let allDeviceObjs = selectedDevices.map((dev) => {
+            return findDeviceByPath(devices, dev._id)
+        });
+
+        for(let i=0; i<allDeviceObjs.length; i++) {
+            let device = allDeviceObjs[i];
+            let name = 'download-file';
+            // arg[0] = source, arg[1] = destination
+            let args = [ device.volumePath + '/CWA-DATA.CWA', device.serialNumber + '.CWA' ];
+            let key = process.getUniqueKey(name, args, device._id);
+            let proc = new process.ProcessOptions(name, args, key, device._id);
+            process.createProcess(proc, api);
+            console.log('created process');
+        }
+
     }
 
     handleSelectAll(event) {
