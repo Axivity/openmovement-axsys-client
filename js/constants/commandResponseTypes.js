@@ -39,6 +39,8 @@ export const STOP_RESPONSE_STARTS_WITH = 'STOP';
 
 export const FORMAT_RESPONSE_STARTS_WITH = 'FORMAT';
 
+export const DOWNLOADING_RESPONSE_STARTS_WITH = 'Downloading';
+
 export const MAP_RESPONSES_TO_ATTRIBUTE_NAMES = {
 
     [ID_RESPONSE_STARTS_WITH]: attributeNames.VERSION,
@@ -55,7 +57,9 @@ export const MAP_RESPONSES_TO_ATTRIBUTE_NAMES = {
 
     [STOP_RESPONSE_STARTS_WITH]: attributeNames.STOP,
 
-    [FORMAT_RESPONSE_STARTS_WITH]: attributeNames.FORMAT
+    [FORMAT_RESPONSE_STARTS_WITH]: attributeNames.FORMAT,
+
+    [DOWNLOADING_RESPONSE_STARTS_WITH]: attributeNames.STATUS
 
 };
 

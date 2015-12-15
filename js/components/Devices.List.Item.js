@@ -147,8 +147,11 @@ export default class DevicesListItem extends Component {
     static getDeviceStatus(attributes) {
         if(attributes) {
             let currentStatus = attributes[attributeNames.STATUS];
+            //console.log(currentStatus);
+            //console.log('The status is ' + currentStatus);
+
             if(currentStatus !== undefined) {
-                return currentStatus;
+                return currentStatus.value;
 
             } else {
 
