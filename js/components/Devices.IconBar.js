@@ -149,6 +149,30 @@ export default class DevicesIconBar extends Component {
         });
     }
 
+    _getDeviceObjects() {
+        let {selectedDevices, devices} = this.props;
+        return selectedDevices.map((dev) => {
+            return findDeviceByPath(devices, dev._id);
+        });
+    }
+
+    handleOnStopClicked() {
+        let {selectedDevices, devices} = this.props;
+        let allDeviceObjs = this._getDeviceObjects();
+
+
+
+    }
+
+    handleOnIdentifyClicked() {
+        let {selectedDevices} = this.props;
+
+    }
+
+    handleOnClearClicked() {
+        let {selectedDevices} = this.props;
+    }
+
     areAllDevicesSelected(selectedDevices, devices) {
         return (devices.length > 0 && devices.length === selectedDevices.length);
     }
@@ -216,7 +240,7 @@ export default class DevicesIconBar extends Component {
                             overlay={<div style={tooltipStyles}><strong>Stop Recording</strong></div>}
                             transitionName={'rc-tooltip-zoom'}>
 
-                            <a className={iconKlassNames}>
+                            <a className={iconKlassNames} onClick={this.handleOnStopClicked.bind(this)}>
                                 <i className="material-icons">stop</i>
                             </a>
 
@@ -229,7 +253,7 @@ export default class DevicesIconBar extends Component {
                             overlay={<div style={tooltipStyles}><strong>Identify</strong></div>}
                             transitionName={'rc-tooltip-zoom'}>
 
-                            <a className={iconKlassNames}>
+                            <a className={iconKlassNames} onClick={this.handleOnIdentifyClicked.bind(this)}>
                                 <i className="material-icons">my_location</i>
                             </a>
                         </Tooltip>
@@ -241,7 +265,7 @@ export default class DevicesIconBar extends Component {
                             overlay={<div style={tooltipStyles}><strong>Clear data</strong></div>}
                             transitionName={'rc-tooltip-zoom'}>
 
-                            <a className={iconKlassNames}>
+                            <a className={iconKlassNames} onClick={this.handleOnClearClicked.bind(this)}>
                                 <i className="material-icons">clear</i>
                             </a>
                         </Tooltip>

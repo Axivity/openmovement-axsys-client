@@ -50,6 +50,36 @@ export function prepareCommandOptions(path, attributes) {
     return allCommandOptions;
 }
 
+
+class CommandQChecker {
+    constructor() {
+        this.runners = [];
+    }
+
+    addDevicePath(path) {
+        this.runners.push(path);
+    }
+
+    checkIfRunning(path) {
+        let found = this._getRunningIndex(path);
+        return (found > -1);
+    }
+
+    removeDevicePath(path) {
+        let index = this._getRunningIndex(path);
+        if (index > -1) {
+            this.runners.splice(index, 1);
+        }
+    }
+
+    _getRunningIndex(path) {
+        return this.runners.indexOf(path);
+    }
+}
+
+let commandQChecker = new CommandQChecker();
+
+
 // TODO: Hate how this has become a god class - can we just refactor it into plain functions?
 export class DeviceCommandQueue {
 
@@ -60,7 +90,7 @@ export class DeviceCommandQueue {
                 allCommandsCompletedListener: () => void = null,
                 writeLock: boolean = false) {
 
-        if(this.constructor.RUNNING) {
+        if(commandQChecker.checkIfRunning(devicePath)) {
             throw new Error("Command queue is already running for this device");
         }
 
@@ -71,7 +101,7 @@ export class DeviceCommandQueue {
         this.checkFrequencyInMilliSeconds = 1000;
         this.dataListener = dataListener;
         this.dataBuffer = new ArrayBuffer(0);
-        this.constructor.RUNNING = true;
+        commandQChecker.addDevicePath(devicePath);
         // replacing ondatareceived data listener
         this.api.addDataListenerForDevice(this.devicePath, this.wrappedDataListener.bind(this));
         this.checker = null;
@@ -223,7 +253,7 @@ export class DeviceCommandQueue {
             if(this.connected && this.allCommandsResponded()) {
                 clearInterval(this.checker);
                 this.api.disconnect(options, () => {
-                    this.constructor.RUNNING = false;
+                    commandQChecker.removeDevicePath(this.devicePath);
                     if(this.allCommandsCompletedListener !== null) {
                         this.allCommandsCompletedListener();
                     }
@@ -235,4 +265,4 @@ export class DeviceCommandQueue {
 
 }
 
-DeviceCommandQueue.RUNNING = false;
+//DeviceCommandQueue.RUNNING = false;

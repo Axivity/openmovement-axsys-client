@@ -5,26 +5,18 @@
 import { combineReducers } from 'redux';
 import * as actionTypes from '../constants/actionTypes';
 import * as actions from '../actions/actionCreators';
+
 import {notifications} from './notifications-reducer';
 import {navigation} from './navigation-reducer';
+import {files, selectedFiles} from './files-reducer';
 
-function _itemPresentAlready(listOfObjects, item, itemKey) {
-    for(let i=0; i<listOfObjects.length; i++) {
-        let obj = listOfObjects[i];
-        if(obj[itemKey]) {
-            if(obj[itemKey] === item[itemKey]) {
-                return true;
-            }
-        }
-    }
-    return false;
-}
+import {itemPresentAlready} from '../utils/general-utils';
 
 
 function selectedDevices(state=[], action=null) {
     switch (action.type) {
         case actionTypes.SELECT_DEVICE:
-            let presentAlready = _itemPresentAlready(state, action.device, '_id');
+            let presentAlready = itemPresentAlready(state, action.device, '_id');
             //console.log('Present already: ' + presentAlready);
             // add device to list of devices in selected state
             if(presentAlready) {
@@ -118,5 +110,7 @@ export default combineReducers({
     selectedDevices,
     detailViewDevice,
     notifications,
-    navigation
+    navigation,
+    files,
+    selectedFiles
 });

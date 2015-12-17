@@ -21,6 +21,7 @@ import { addDevice,
     addDataAttributeForDevicePath,
     deSelectDevice,
     removeDetailViewForDevice,
+    addFile,
     DeviceAttributeData } from './actions/actionCreators';
 
 import AXApi from './ax-client';
@@ -116,6 +117,13 @@ function onConnectedToServer(store) {
 
                 checkAttributesPeriodically();
             }
+        });
+
+        api.getFiles((files) => {
+            console.log(files);
+            files.forEach((file) => {
+               store.dispatch(addFile(file));
+            });
         });
     }
 }

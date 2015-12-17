@@ -33,7 +33,9 @@ class App extends Component {
             deviceAttributes,
             selectedDevices,
             detailViewDevice,
-            navigation} = this.props;
+            navigation,
+            files,
+            selectedFiles } = this.props;
 
         return (
             <div>
@@ -47,10 +49,15 @@ class App extends Component {
                 />
                 <div className="ax-ui-content">
                     {(() => {
-                        console.log(navigation[CURRENT_VIEW_KEY]);
+                        // console.log(navigation[CURRENT_VIEW_KEY]);
                         if(navigation[CURRENT_VIEW_KEY] === 'Files') {
                             return (
-                                <Files />
+                                <Files
+                                    files={files}
+                                    api={api}
+                                    dispatch={dispatch}
+                                    selectedFiles={selectedFiles}
+                                />
                             );
                         } else {
                             // Default view is devices
@@ -83,7 +90,9 @@ function mapStateToProps(state) {
         selectedDevices: state.selectedDevices,
         detailViewDevice: state.detailViewDevice,
         notifications: state.notifications,
-        navigation: state.navigation
+        navigation: state.navigation,
+        files: state.files,
+        selectedFiles: state.selectedFiles
     };
 }
 

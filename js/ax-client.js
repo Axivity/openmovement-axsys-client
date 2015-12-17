@@ -23,7 +23,13 @@ export default class AXApi {
 
     getDevices(callback) {
         this.api.getDevices((payload) => {
-            callback(payload)
+            callback(payload);
+        });
+    }
+
+    getFiles(callback) {
+        this.api.getFiles((payload) => {
+            callback(payload);
         });
     }
 

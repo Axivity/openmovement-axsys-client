@@ -164,3 +164,42 @@ export function selectNavigationItem(navigationItem) {
         navigationItemName: navigationItem
     }
 }
+
+
+/**
+ *
+ * @param file
+ * @returns {{type, file: *}}
+ */
+export function addFile(file) {
+    return {
+        type: actionTypes.ADD_FILE,
+        file
+    }
+}
+
+
+/**
+ *
+ * @param file
+ * @returns {{type: *, selectedFile: *}}
+ */
+export function selectFile(file) {
+    return {
+        type: actionTypes.SELECT_FILE,
+        file
+    }
+}
+
+
+/**
+ *
+ * @param file
+ * @returns {{type: *, selectedFile: *}}
+ */
+export function deSelectFile(file) {
+    return {
+        type: actionTypes.DESELECT_FILE,
+        file
+    }
+}
