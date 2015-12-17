@@ -217,8 +217,6 @@ export default class DevicesListItem extends Component {
 
         let { dispatch, device, deviceAttributes, selectedDevices, api } = this.props;
 
-        //console.log(deviceAttributes);
-
         let attributes = this.constructor.getDeviceAttributesForGivenDevicePath(deviceAttributes, device._id);
 
         let batteryLevel = this.constructor.parseBatteryLevel(attributes);
@@ -234,6 +232,7 @@ export default class DevicesListItem extends Component {
         let recording = this.constructor.getRecordingForDevice(attributes);
 
         let session = this.constructor.getSessionId(attributes);
+
 
         let progress = this.constructor.checkRecordingProgress(recording);
 
@@ -262,6 +261,7 @@ export default class DevicesListItem extends Component {
                                         <div className="large-3 small-12 medium-3 columns">
                                             <span className="list-item-main-header">{device.serialNumber}</span>
                                         </div>
+
                                         <div className="large-9 small-12 medium-9 columns">
                                             {
                                                 (() => {
@@ -308,6 +308,27 @@ export default class DevicesListItem extends Component {
                         </div>
                         <div className="small-3 large-3 medium-3 columns list-item-icons">
                             <span>
+                                <small>
+                                    {
+                                        (() => {
+                                            if(device.hasFile) {
+                                                return (
+                                                    <span className="list-item-main-content">
+                                                        <i className="material-icons device-icons standard">lock_outline</i>
+                                                    </span>
+                                                );
+
+                                            } else {
+                                                return (
+                                                    <span className="list-item-main-content">
+                                                        <i className="material-icons device-icons standard">lock_open</i>
+                                                    </span>
+                                                );
+                                            }
+                                        })()
+                                    }
+
+                                </small>
                                 <small>
                                     <i className="material-icons device-icons standard">usb</i>
                                 </small>

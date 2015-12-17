@@ -177,6 +177,10 @@ export default class DevicesIconBar extends Component {
         return (devices.length > 0 && devices.length === selectedDevices.length);
     }
 
+    selectedDevicesHaveFile() {
+
+    }
+
 
     render() {
         let { actions, api, selectedDevices, devices, dispatch } = this.props;
