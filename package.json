@@ -51,6 +51,7 @@
     "local-storage": "^1.4.2",
     "material-design-icons": "^2.1.1",
     "moment": "^2.10.6",
+    "moment-range": "^2.0.3",
     "normalize.css": "^3.0.3",
     "object-assign": "^2.1.1",
     "pubsub-js": "^1.5.3",

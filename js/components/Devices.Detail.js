@@ -5,6 +5,7 @@
 import React, { PropTypes, Component } from 'react';
 import Collapse from 'rc-collapse';
 
+import * as attributeNames from '../constants/attributeNames';
 
 export default class DevicesDetail extends Component {
     constructor(props) {
@@ -16,9 +17,6 @@ export default class DevicesDetail extends Component {
         return obj.hasOwnProperty(keyName);
     }
 
-    //componentDidMount() {
-    //    $(document).foundation('accordion', 'reflow');
-    //}
 
     shouldComponentUpdate(nextProps, nextState) {
         const {detailViewDevice} = this.props;
@@ -164,11 +162,45 @@ export default class DevicesDetail extends Component {
         } );
     }
 
+
+    static getHardwareAndSoftwareVersions(attributes) {
+        if(attributes) {
+            let versionsData = attributes[attributeNames.VERSION];
+            if(versionsData) {
+                let versionsString = versionsData.value;
+                return {
+                    hardwareVersion: versionsString.split(',')[1],
+                    softwareVersion: versionsString.split(',')[2]
+                }
+            } else {
+                return {
+                    hardwareVersion: 'N/A',
+                    softwareVersion: 'N/A'
+                }
+            }
+        } else {
+            return {
+                hardwareVersion: 'N/A',
+                softwareVersion: 'N/A'
+            }
+        }
+    }
+
+
+    static getDeviceAttributesForGivenDevicePath(deviceAttributes, path) {
+        return deviceAttributes[path];
+    }
+
+
     render() {
 
         let Panel = Collapse.Panel;
 
-        let {dispatch, detailViewDevice} =  this.props;
+        let {dispatch, detailViewDevice, deviceAttributes} =  this.props;
+
+        let attributes = this.constructor.getDeviceAttributesForGivenDevicePath(deviceAttributes, detailViewDevice._id);
+
+        let versions = this.constructor.getHardwareAndSoftwareVersions(attributes);
 
         if (this.hasDeviceKey(detailViewDevice)) {
             return (
@@ -214,6 +246,13 @@ export default class DevicesDetail extends Component {
                                             <div className="large-6 medium-6 small-6 columns">
                                                 {detailViewDevice.volumePath}
                                             </div>
+                                            <div className="large-6 medium-6 small-6 columns">
+                                                Hardware Version, Software Version:
+                                            </div>
+                                            <div className="large-6 medium-6 small-6 columns">
+                                                {versions.hardwareVersion}, {versions.softwareVersion}
+                                            </div>
+
                                         </div>
                                     </div>
                                 </Panel>

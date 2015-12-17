@@ -33,6 +33,7 @@ export default class Devices extends Component {
                     <DevicesDetail
                         dispatch={dispatch}
                         detailViewDevice={detailViewDevice}
+                        deviceAttributes={deviceAttributes}
                     />
                 </div>
             );

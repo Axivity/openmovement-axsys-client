@@ -19,7 +19,29 @@ export const DEVICE_METADATA_ATTRIBUTES = [
         'name': attributeNames.VERSION,
         'timeout_in_seconds': 1,
         'type': 'READ'
+    },
+    {
+        'command': 'HIBERNATE\r\n',
+        'frequency_in_seconds': 0,
+        'name': attributeNames.HIBERNATE,
+        'timeout_in_seconds': 1,
+        'type': 'READ'
+    },
+    {
+        'command': 'STOP\r\n',
+        'frequency_in_seconds': 0,
+        'name': attributeNames.STOP,
+        'timeout_in_seconds': 1,
+        'type': 'READ'
+    },
+    {
+        'command': 'SESSION\r\n',
+        'frequency_in_seconds': 0,
+        'name': attributeNames.SESSION,
+        'timeout_in_seconds': 1,
+        'type': 'READ'
     }
+
 ];
 
 //const ATTRIBUTE_FREQ_THRESHOLD_IN_MILLIS = 60 * 1000;

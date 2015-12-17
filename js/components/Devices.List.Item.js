@@ -8,6 +8,8 @@ import Tooltip from 'rc-tooltip';
 import * as attributeNames from '../constants/attributeNames';
 import * as actionCreators from '../actions/actionCreators';
 
+import {currentTimeInRange} from '../utils/time-utils';
+
 const tooltipStyles = {
     height: 20,
     width: 50,
@@ -110,29 +112,6 @@ export default class DevicesListItem extends Component {
         }
     }
 
-    static getHardwareAndSoftwareVersions(attributes) {
-        if(attributes) {
-            let versionsData = attributes[attributeNames.VERSION];
-            if(versionsData) {
-                let versionsString = versionsData.value;
-                return {
-                    hardwareVersion: versionsString.split(',')[1],
-                    softwareVersion: versionsString.split(',')[2]
-                }
-            } else {
-                return {
-                    hardwareVersion: 'N/A',
-                    softwareVersion: 'N/A'
-                }
-            }
-        } else {
-            return {
-                hardwareVersion: 'N/A',
-                softwareVersion: 'N/A'
-            }
-        }
-    }
-
 
     static presentInSelectedDevices(selectedDevices, deviceId) {
         for(let i=0; i < selectedDevices.length; i++) {
@@ -165,6 +144,69 @@ export default class DevicesListItem extends Component {
 
     }
 
+    static checkRecordingProgress(recording) {
+        if (recording !== "-") {
+            let [start, end] = recording.split('-');
+            return currentTimeInRange(start, end);
+
+        } else {
+            return null;
+        }
+    }
+
+
+    static getRecordingProgressLabelClass(recording) {
+        let progress = this.constructor.checkRecordingProgress(recording);
+        if(progress === 'N/A') {
+            return "secondary label";
+
+        } else {
+            return progress ? "success label" : "label";
+        }
+
+    }
+
+
+    static getRecordingForDevice(attributes) {
+        if(attributes) {
+            let recordingStartTime = attributes[attributeNames.HIBERNATE];
+            let recordingStopTime = attributes[attributeNames.STOP];
+
+            if(recordingStartTime !== undefined && recordingStopTime !== undefined) {
+                let start = recordingStartTime.value;
+                let stop = recordingStopTime.value;
+
+                let [startDate, startTime] = start.split('=')[1].split(',');
+                let [stopDate, stopTime] = stop.split('=')[1].split(',');
+                return startDate + " " + startTime + " - " + stopDate + " " + stopTime;
+
+            } else {
+
+                return "-";
+            }
+
+        } else {
+            return "-";
+        }
+
+    }
+
+    static getSessionId(attributes) {
+        if(attributes) {
+            let sessionId = attributes[attributeNames.SESSION];
+            if(sessionId !== undefined) {
+                return sessionId.value.split('=')[1];
+
+            } else {
+                return "Unknown";
+            }
+
+        } else {
+            return "Unknown";
+        }
+
+    }
+
     handleListItemClicked(ev) {
         let dispatch = this.props.dispatch;
         dispatch(actionCreators.setDetailViewForDevice(this.props.device));
@@ -173,7 +215,7 @@ export default class DevicesListItem extends Component {
 
     render() {
 
-        let { dispatch, device, deviceAttributes, selectedDevices } = this.props;
+        let { dispatch, device, deviceAttributes, selectedDevices, api } = this.props;
 
         //console.log(deviceAttributes);
 
@@ -187,13 +229,18 @@ export default class DevicesListItem extends Component {
 
         let batteryIconNameWithColor = this.getBatteryIconName(attributes);
 
-        let versions = this.constructor.getHardwareAndSoftwareVersions(attributes);
-
         let status = this.constructor.getDeviceStatus(attributes);
+
+        let recording = this.constructor.getRecordingForDevice(attributes);
+
+        let session = this.constructor.getSessionId(attributes);
+
+        let progress = this.constructor.checkRecordingProgress(recording);
+
+        //let dataFile = this.constructor.hasDataFile();
 
         batteryClasses += " " + batteryIconNameWithColor.className;
 
-        //var iconName = this.state.selected ? 'check_box' : 'check_box_outline_blank';
         let selectIconName = this.constructor.presentInSelectedDevices(selectedDevices, device._id) ? 'check_box' : 'check_box_outline_blank';
 
         return (
@@ -211,20 +258,50 @@ export default class DevicesListItem extends Component {
                         <div className="small-9 large-9 medium-9 columns">
                             <div className="row">
                                 <div className="small-12 large-12 medium-12 columns">
-                                    <span className="list-item-main-header">{device.serialNumber}</span>
+                                    <div className="row">
+                                        <div className="large-3 small-12 medium-3 columns">
+                                            <span className="list-item-main-header">{device.serialNumber}</span>
+                                        </div>
+                                        <div className="large-9 small-12 medium-9 columns">
+                                            {
+                                                (() => {
+                                                    if(progress === null) {
+                                                        return <span className="list-item-main-content secondary label">Unknown</span>;
+
+                                                    } else {
+                                                        if(progress) {
+                                                            return <span className="list-item-main-content success label">In Progress</span>;
+
+                                                        } else {
+
+                                                            return <span className="list-item-main-content label">Not In Progress</span>;
+                                                        }
+
+                                                    }
+                                                })()
+                                            }
+
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="row">
+                                <div className="small-12 large-12 medium-12 columns">
                                     <span className="list-item-main-sub-header">  {status}</span>
                                 </div>
                             </div>
 
                             <div className="row">
                                 <div className="small-12 large-12 medium-12 columns">
-                                    <span className="list-item-main-sub-header"> session: unknown</span>
+                                    <span className="list-item-main-sub-header"> Session: {session}</span>
                                 </div>
                             </div>
 
                             <div className="row">
                                 <div className="small-12 large-12 medium-12 columns">
-                                    <span className="list-item-main-content"> hardware:{versions.hardwareVersion} software:{versions.softwareVersion}</span>
+                                    <span className="list-item-main-content"> Recording: {recording}</span>
                                 </div>
                             </div>
 
@@ -249,13 +326,6 @@ export default class DevicesListItem extends Component {
                             </span>
                         </div>
                     </div>
-
-                    {/*
-                    <div className="row">
-                        <div className="small-12 large-12 medium-12 columns list-item-bottom-spacer">
-                        </div>
-                    </div>
-                     */}
 
                 </div>
 

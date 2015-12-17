@@ -82,6 +82,7 @@
 
 .list-item-main-header {
     font-size: large;
+    font-weight: 600;
 }
 
 .list-item-main-sub-header {
@@ -121,7 +122,7 @@ div.list-item-wrapper:hover {
 
 .list-item-header-icon {
     /*margin: 1rem auto;*/
-    margin: 1rem auto 1rem 0.3rem;
+    margin: 2.5rem auto 1rem 0.3rem;
     cursor: pointer;
     color: #008CBA;
 }

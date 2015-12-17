@@ -2,6 +2,7 @@
  * Created by Praveen on 25/11/2015.
  */
 import moment from 'moment';
+import range from 'moment-range';
 
 export const UK_DATE_FORMAT = "DD-MM-YYYY";
 export const TIME_FORMAT = "HH:mm:ss";
@@ -43,4 +44,11 @@ export function getCurrentDateUKLocale() {
 
 export function getCurrentTime() {
     return moment().format(TIME_FORMAT);
+}
+
+export function currentTimeInRange(start, end) {
+    let s = moment(start, DATE_TIME_FORMAT_IN_DEVICE);
+    let e = moment(end, DATE_TIME_FORMAT_IN_DEVICE);
+    let ra = moment.range(s, e);
+    return ra.contains(moment());
 }
