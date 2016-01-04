@@ -168,7 +168,6 @@ export default class DevicesDetail extends Component {
         } );
     }
 
-
     static getHardwareAndSoftwareVersions(attributes) {
         if(attributes) {
             let versionsData = attributes[attributeNames.VERSION];
