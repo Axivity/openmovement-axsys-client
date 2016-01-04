@@ -6,6 +6,7 @@ import React, { PropTypes, Component } from 'react';
 import Collapse from 'rc-collapse';
 
 import * as attributeNames from '../constants/attributeNames';
+import * as actionCreators from '../actions/actionCreators';
 
 export default class DevicesDetail extends Component {
     constructor(props) {
@@ -39,18 +40,23 @@ export default class DevicesDetail extends Component {
         }
     }
 
-    handleMinimizeButtonClick(ev) {
+    handleMinimizeButtonClick(dispatch, device) {
         console.log('clicked');
         var innerText = $('.back-button-wrapper > i').text();
         console.log(innerText);
         if(innerText === 'chevron_left') {
-            $('.back-button-wrapper > i').text('chevron_right');
 
-            $(".slide").animate({width:'toggle'},100, 'linear', () => {
-                $('.ax-detail-content').removeClass('large-8');
-                $('.ax-detail-content').addClass('large-12');
-            });
+            if(Foundation.utils.is_small_only()) {
+                dispatch(actionCreators.removeDetailViewForDevice(device));
 
+            } else {
+                $('.back-button-wrapper > i').text('chevron_right');
+
+                $(".slide").animate({width:'toggle'},100, 'linear', () => {
+                    $('.ax-detail-content').removeClass('large-8');
+                    $('.ax-detail-content').addClass('large-12');
+                });
+            }
 
         } else {
             $('.back-button-wrapper > i').text('chevron_left');
@@ -207,7 +213,7 @@ export default class DevicesDetail extends Component {
                 <div className="small-12 large-9 medium-8 columns ax-detail-content">
                     <div className="row">
                         <div className="large-12 medium-12 columns">
-                            <div className="back-button-wrapper" onClick={this.handleMinimizeButtonClick.bind(this)}>
+                            <div className="back-button-wrapper" onClick={this.handleMinimizeButtonClick.bind(this, dispatch, detailViewDevice)}>
                                 <i className="material-icons">chevron_left</i>
                             </div>
                         </div>

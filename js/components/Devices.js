@@ -21,22 +21,47 @@ export default class Devices extends Component {
 
         let {devices, api, dispatch, deviceAttributes, selectedDevices, detailViewDevice } = this.props;
         if(this.constructor.hasDevices(devices)) {
-            return(
-                <div>
-                    <DevicesMaster
-                        devices={devices}
-                        dispatch={dispatch}
-                        api={api}
-                        deviceAttributes={deviceAttributes}
-                        selectedDevices={selectedDevices}
-                    />
-                    <DevicesDetail
-                        dispatch={dispatch}
-                        detailViewDevice={detailViewDevice}
-                        deviceAttributes={deviceAttributes}
-                    />
-                </div>
-            );
+            if(Foundation.utils.is_small_only()) {
+                if(detailViewDevice.hasOwnProperty('_id')) {
+                    return (
+                        <DevicesDetail
+                            dispatch={dispatch}
+                            detailViewDevice={detailViewDevice}
+                            deviceAttributes={deviceAttributes}
+                        />
+                    );
+                } else {
+                    return (
+                        <DevicesMaster
+                            devices={devices}
+                            dispatch={dispatch}
+                            api={api}
+                            deviceAttributes={deviceAttributes}
+                            selectedDevices={selectedDevices}
+                        />
+                    );
+                }
+
+            } else{
+
+                return(
+                    <div>
+                        <DevicesMaster
+                            devices={devices}
+                            dispatch={dispatch}
+                            api={api}
+                            deviceAttributes={deviceAttributes}
+                            selectedDevices={selectedDevices}
+                        />
+                        <DevicesDetail
+                            dispatch={dispatch}
+                            detailViewDevice={detailViewDevice}
+                            deviceAttributes={deviceAttributes}
+                        />
+                    </div>
+                );
+
+            }
 
         } else {
             return (
